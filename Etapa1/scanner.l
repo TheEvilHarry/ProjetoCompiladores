@@ -7,6 +7,8 @@ void inc_lines();
 
 %}
 
+%x multi_line_comment
+
 letter [A-Za-z_]
 digit [0-9]
 identifier {letter}({digit}|{letter})*
@@ -18,7 +20,12 @@ exp [E|e]{integer}
  /* Comentarios */
 
 "//"[^\n]* {  }
-"/*"[^"*/"]*"*/" {  }
+
+"/*" { BEGIN(multi_line_comment); }
+
+<multi_line_comment>[^*\n]*
+<multi_line_comment>[\n] { inc_lines(); }
+<multi_line_comment>"*/" { BEGIN(INITIAL); }
 
  /* Palavras Reservadas da Linguagem */
 
@@ -95,7 +102,7 @@ exp [E|e]{integer}
 {integer}\.{digit}+{exp}? { return TK_LIT_FLOAT; }
 
 ['][^\']['] { return TK_LIT_CHAR; }
-["][^\"]*["] { return TK_LIT_STRING; }
+["][^\"\n]*["] { return TK_LIT_STRING; }
 
 true { return TK_LIT_TRUE; }
 false { return TK_LIT_FALSE; }
@@ -104,13 +111,15 @@ false { return TK_LIT_FALSE; }
 
 {identifier} { return TK_IDENTIFICADOR; }
 
-[-+]?{digit}+{letter}({letter}|{digit}|_)* { return TOKEN_ERRO ; }
+[-+]?{digit}+{letter}({letter}|{digit}|_)* { return TOKEN_ERRO; }
 
  /* Outros */
 
 [ \t]+ {  }
 
 [\n] { inc_lines(); }
+
+. { return TOKEN_ERRO; }
 
 %%
 
@@ -119,6 +128,5 @@ int get_line_number() {
 }
 
 void inc_lines() {
-    // printf("Incrementing line counter\n");
     lineCount++;
 }

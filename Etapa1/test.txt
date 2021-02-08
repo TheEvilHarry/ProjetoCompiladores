@@ -1,5 +1,5 @@
-int x = 5;
-float y = 5.5;
+int x = 5; // Comentario inline
+float y = 5.5e10; /* Comentario inline 2 */
 
 char teste = 'o';
 string teste1 = "eita";
@@ -12,6 +12,11 @@ string teste1 = "eita";
 com
 multiplas
 linhas
+// Comentario dentro do comentario
 */
 
 string valor = "int x  = 3";
+string valor2 = "oi // Comentario dentro da string";
+string valor3 = "opa /* Outro comentario dentro da string */";
+string valor4 = "Essa string deve estar na linha 21";
+string valor5 = "teste de string";
