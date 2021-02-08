@@ -1,0 +1,17 @@
+int x = 5;
+float y = 5.5;
+
+char teste = 'o';
+string teste1 = "eita";
+
+// Comentario 1
+// int x = 70;
+// Comentario 3
+
+/* Comentario
+com
+multiplas
+linhas
+*/
+
+string valor = "int x  = 3";

@@ -5,17 +5,22 @@ int lineCount = 1;
 
 void inc_lines();
 
-
 %}
 
-%x MULTIPLE_LINE_COMMENT
-
-letter [a-zA-Z_]
+letter [A-Za-z_]
 digit [0-9]
-identifier [{letter}{digit|letter}*]
+identifier {letter}({digit}|{letter})*
 integer [+|-]?{digit}+
+exp [E|e]{integer}
 
 %%
+
+ /* Comentarios */
+
+"//"[^\n]* {  }
+"/*"[^"*/"]*"*/" {  }
+
+ /* Palavras Reservadas da Linguagem */
 
 "int"       { return TK_PR_INT       ; }
 "float"     { return TK_PR_FLOAT     ; }
@@ -45,6 +50,8 @@ integer [+|-]?{digit}+
 "end"       { return TK_PR_END       ; }
 "default"   { return TK_PR_DEFAULT   ; }
 
+ /* Caracteres Especiais */
+
 "," { return yytext[0]; }
 ";" { return yytext[0]; }
 ":" { return yytext[0]; }
@@ -70,9 +77,9 @@ integer [+|-]?{digit}+
 "." { return yytext[0]; }
 "$" { return yytext[0]; }
 "@" { return yytext[0]; }
-"~" { return yytext[0]; }
-"`" { return yytext[0]; }
-"?" { return yytext[0]; }
+
+ /* Operadores Compostos */
+
 "<=" { return TK_OC_LE ; }
 ">=" { return TK_OC_GE ; }
 "==" { return TK_OC_EQ ; }
@@ -82,21 +89,28 @@ integer [+|-]?{digit}+
 ">>" { return TK_OC_SL ; }
 "<<" { return TK_OC_SR ; }
 
-"true" { return TK_LIT_TRUE; }
-"false" { return TK_LIT_FALSE; }
+ /* Literais */
+
+{integer} { return TK_LIT_INT; }
+{integer}\.{digit}+{exp}? { return TK_LIT_FLOAT; }
+
+['][^\']['] { return TK_LIT_CHAR; }
+["][^\"]*["] { return TK_LIT_STRING; }
+
+true { return TK_LIT_TRUE; }
+false { return TK_LIT_FALSE; }
+
+ /* Identificadores */
 
 {identifier} { return TK_IDENTIFICADOR; }
-{integer} { return TK_LIT_INT; }
-['][^\'"\n]['] { return TK_LIT_CHAR;}
-["][^\"\n]*["] { return TK_LIT_STRING; }
 
 [-+]?{digit}+{letter}({letter}|{digit}|_)* { return TOKEN_ERRO ; }
 
+ /* Outros */
+
+[ \t]+ {  }
+
 [\n] { inc_lines(); }
-
-"line" { printf("Line counter: %d", lineCount); }
-
-
 
 %%
 
@@ -105,6 +119,6 @@ int get_line_number() {
 }
 
 void inc_lines() {
-    printf("Incrementing line counter\n");
+    // printf("Incrementing line counter\n");
     lineCount++;
 }
