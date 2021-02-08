@@ -1176,7 +1176,7 @@ YY_RULE_SETUP
 case 68:
 YY_RULE_SETUP
 #line 90 "scanner.l"
-{ return TK_LIT_CHAR; }
+{ return TK_LIT_CHAR;}
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
