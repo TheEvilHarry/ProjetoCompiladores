@@ -8,6 +8,8 @@
 2 TK_ESPECIAL [=]
 2 TK_LIT_FLOAT [5.5e10]
 2 TK_ESPECIAL [;]
+2 Begin comment
+2 End comment
 4 TK_PR_CHAR [char]
 4 TK_IDENTIFICADOR [teste]
 4 TK_ESPECIAL [=]
@@ -18,6 +20,8 @@
 5 TK_ESPECIAL [=]
 5 TK_LIT_STRING ["eita"]
 5 TK_ESPECIAL [;]
+11 Begin comment
+16 End comment
 18 TK_PR_STRING [string]
 18 TK_IDENTIFICADOR [valor]
 18 TK_ESPECIAL [=]
@@ -38,8 +42,14 @@
 21 TK_ESPECIAL [=]
 21 TK_LIT_STRING ["Essa string deve estar na linha 21"]
 21 TK_ESPECIAL [;]
-22 TK_PR_STRING [string]
-22 TK_IDENTIFICADOR [valor5]
-22 TK_ESPECIAL [=]
-22 TK_LIT_STRING ["teste de string"]
-22 TK_ESPECIAL [;]
+23 Begin comment
+25 End comment
+29 Begin comment
+29 Begin comment
+29 Begin comment
+29 End comment
+31 TK_PR_FLOAT [float]
+31 TK_IDENTIFICADOR [z]
+31 TK_ESPECIAL [=]
+31 TK_LIT_FLOAT [73.36473027]
+31 TK_ESPECIAL [;]

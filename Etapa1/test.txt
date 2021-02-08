@@ -19,4 +19,13 @@ string valor = "int x  = 3";
 string valor2 = "oi // Comentario dentro da string";
 string valor3 = "opa /* Outro comentario dentro da string */";
 string valor4 = "Essa string deve estar na linha 21";
-string valor5 = "teste de string";
+
+/*
+  string valor5 = "teste de string dentro de um comentario";
+*/
+
+
+
+/* Comentario /* dentro de um /* comentario *** * / */
+
+float z = 73.36473027;

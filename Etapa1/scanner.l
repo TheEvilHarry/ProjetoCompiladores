@@ -7,7 +7,7 @@ void inc_lines();
 
 %}
 
-%x multi_line_comment
+%s multi_line_comment
 
 letter [A-Za-z_]
 digit [0-9]
@@ -23,9 +23,10 @@ exp [E|e]{integer}
 
 "/*" { BEGIN(multi_line_comment); }
 
-<multi_line_comment>[^*\n]*
-<multi_line_comment>[\n] { inc_lines(); }
 <multi_line_comment>"*/" { BEGIN(INITIAL); }
+<multi_line_comment>[^*/\n]*
+<multi_line_comment>[\n] { inc_lines(); }
+<multi_line_comment>. { }
 
  /* Palavras Reservadas da Linguagem */
 
