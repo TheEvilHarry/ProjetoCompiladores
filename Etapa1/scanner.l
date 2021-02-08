@@ -88,6 +88,7 @@ integer [+|-]?{digit}+
 {identifier} { return TK_IDENTIFICADOR; }
 {integer} { return TK_LIT_INT; }
 ['][^\'"\n]['] { return TK_LIT_CHAR;}
+["][^\"\n]*["] { return TK_LIT_STRING; }
 
 [-+]?{digit}+{letter}({letter}|{digit}|_)* { return TOKEN_ERRO ; }
 
