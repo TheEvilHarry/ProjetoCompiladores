@@ -3,14 +3,18 @@
 #include "tokens.h"
 int lineCount = 1;
 
+void inc_lines();
+
 %}
 
 %x MULTIPLE_LINE_COMMENT
 
+letter [a-zA-Z_]
+digit [0-9]
+identifier [{letter}{digit|letter}*]
+integer [+|-]?{digit}+
+
 %%
-
-
-/* Reserved Words */
 
 "int"       { return TK_PR_INT       ; }
 "float"     { return TK_PR_FLOAT     ; }
@@ -39,9 +43,6 @@ int lineCount = 1;
 "protected" { return TK_PR_PROTECTED ; }
 "end"       { return TK_PR_END       ; }
 "default"   { return TK_PR_DEFAULT   ; }
-
-
-/* Special Chars */
 
 "," { return yytext[0]; }
 ";" { return yytext[0]; }
@@ -77,11 +78,23 @@ int lineCount = 1;
 "!=" { return TK_OC_NE ; }
 "&&" { return TK_OC_AND ; }
 "||" { return TK_OC_OR ; }
-">>" { return TK_OC_SR ; }
-"<<" { return TK_OC_SL ; }
+">>" { return TK_OC_SL ; }
+"<<" { return TK_OC_SR ; }
+
+{identifier} { return TK_IDENTIFICADOR; }
+{integer} { return TK_LIT_INT; }
+
+[\n] { inc_lines(); }
+
+"line" { printf("Line counter: %d", lineCount); }
 
 %%
 
 int get_line_number() {
     return lineCount;
+}
+
+void inc_lines() {
+    printf("Incrementing line counter\n");
+    lineCount++;
 }
