@@ -5,6 +5,7 @@ int lineCount = 1;
 
 void inc_lines();
 
+
 %}
 
 %x MULTIPLE_LINE_COMMENT
@@ -80,6 +81,9 @@ integer [+|-]?{digit}+
 "||" { return TK_OC_OR ; }
 ">>" { return TK_OC_SL ; }
 "<<" { return TK_OC_SR ; }
+
+"true" { return TK_LIT_TRUE; }
+"false" { return TK_LIT_FALSE; }
 
 {identifier} { return TK_IDENTIFICADOR; }
 {integer} { return TK_LIT_INT; }
