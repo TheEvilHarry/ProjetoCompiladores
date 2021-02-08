@@ -87,10 +87,15 @@ integer [+|-]?{digit}+
 
 {identifier} { return TK_IDENTIFICADOR; }
 {integer} { return TK_LIT_INT; }
+"\'"[^'"\n]"\'" { return TK_LIT_CHAR; }
+
+[-+]?{digit}+{letter}({letter}|{digit}|_)* { return TOKEN_ERRO ; }
 
 [\n] { inc_lines(); }
 
 "line" { printf("Line counter: %d", lineCount); }
+
+
 
 %%
 
