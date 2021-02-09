@@ -103,6 +103,7 @@ exp [E|e]{integer}
 {integer}\.{digit}+{exp}? { return TK_LIT_FLOAT; }
 
 ['][^\']['] { return TK_LIT_CHAR; }
+[']\\[tbnrf]['] { return TK_LIT_CHAR; }
 ["][^\"\n]*["] { return TK_LIT_STRING; }
 
 true { return TK_LIT_TRUE; }

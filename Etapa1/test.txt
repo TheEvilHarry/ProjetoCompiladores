@@ -29,3 +29,74 @@ string valor4 = "Essa string deve estar na linha 21";
 /* Comentario /* dentro de um /* comentario *** * / */
 
 float z = 73.36473027;
+
+char tab = '\t';
+char backspace = '\b';
+char newline = '\n';
+char cr = '\r';
+char ff = '\f';
+
+int
+float
+bool
+char 
+string
+ if
+ then 
+else
+while 
+do 
+input 
+output 
+return 
+const
+ static
+foreach
+ for
+ switch
+case
+ break
+ continue 
+class
+private 
+public 
+protected 
+end 
+default 27
+
+,   ;   :   (   )   [   ]   {   }   +   -   |  * /  <   >   =   !   &   %   #   ^   .   $
+
+<=    >=    ==     !=    &&    ||    >>     <<
+
+identificadores 
+___
+_123
+teste12
+a
+
+0 123
++1 -2
+123-123
+123 - 123
+
+
+Float
+12.3
+0.56789
+-2.4
++1.2e10
+-1.2e-10
+1.2E-10
+1.2E+10
+
+true false
+
+'a' '5' '.' '*' '['
+
+"string" 
+
+// comentario 
+teste // comentario maior
+/* a
+a */
+_2linhas /**/
