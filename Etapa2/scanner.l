@@ -84,7 +84,7 @@ exp [E|e]{integer}
 "^" { return yytext[0]; }
 "." { return yytext[0]; }
 "$" { return yytext[0]; }
-"@" { return yytext[0]; }
+
 
  /* Operadores Compostos */
 
