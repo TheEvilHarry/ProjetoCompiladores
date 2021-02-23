@@ -1,1 +1,0 @@
-Error on line 10: syntax error, unexpected $undefined, expecting ';' or ',' or '[' or '('.

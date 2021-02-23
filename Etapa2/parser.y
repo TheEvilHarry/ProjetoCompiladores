@@ -86,25 +86,59 @@ value: TK_LIT_INT
 
 functionDefinition: functionHeader commandBlock;
 
-functionHeader: optionalStatic type TK_IDENTIFICADOR '(' parameters ')';
+functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')';
 
-parameters: optionalConst type TK_IDENTIFICADOR parametersList 
+headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList 
         | ;
-parametersList: ',' TK_PR_CONST type TK_IDENTIFICADOR parametersList
+headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList
         | ;
 
-commandBlock: '{' simpleCommandList '}';
-simpleCommandList: simpleCommand ';' simpleCommandList
+commandBlock: '{' commandList '}';
+commandList: command ';' commandList
         | ;
-simpleCommand: ;
-        /* variable_declaration
-        | attribution_command
-        | input_output_command
-        | function_call
-        | shift_command 
-        | execution_control_commands
-        | flux_control_commands
-        | commandBlock; */
+command: variableDeclaration ';'
+        | attribution ';'
+        | inputOutput ';'
+        | functionCall ';'
+        | shift ';'
+        | executionControl ';'
+        | fluxControl ';'
+        | commandBlock ';';
+
+variableDeclaration: optionalStatic optionalConst type TK_IDENTIFICADOR variableInit;
+variableInit: TK_OC_LE value
+        | TK_OC_LE TK_IDENTIFICADOR
+        | ;
+
+attribution: TK_IDENTIFICADOR '=' expression
+        | TK_IDENTIFICADOR '[' expression ']' '=' expression;
+
+inputOutput: input
+        | output;
+
+output: TK_PR_OUTPUT TK_IDENTIFICADOR
+        | TK_PR_OUTPUT value;
+
+input: TK_PR_INPUT TK_IDENTIFICADOR;
+
+functionCall: TK_IDENTIFICADOR '(' functionParameters ')';
+functionParameters: expression functionParametersList
+        | ;
+functionParametersList: ',' expression functionParametersList
+        | ;
+
+shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT
+        | TK_IDENTIFICADOR '[' expression ']' shiftOperator TK_LIT_INT;
+shiftOperator: TK_OC_SL
+        | TK_OC_SR;
+
+executionControl: TK_PR_RETURN expression
+        | TK_PR_BREAK
+        | TK_PR_CONTINUE;
+
+fluxControl: ;
+
+expression: ;
 
 %%
 
