@@ -6,6 +6,7 @@ int lineCount = 1;
 void inc_lines();
 
 %}
+%option yylineno
 
 %s multi_line_comment
 

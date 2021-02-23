@@ -1,10 +1,14 @@
 %{
-    #include "stdio.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 extern int yylineno;
 int yylex(void);
-void yyerror (char const *s);
+int yyerror (char const *s);
 %}
+
+%define parse.lac full
+%define parse.error verbose
 
 %token TK_PR_INT
 %token TK_PR_FLOAT
@@ -52,7 +56,7 @@ void yyerror (char const *s);
 
 %%
  
-program: globalVariable program 
+program: globalVariable program
         | functionDefinition program
         | ;
 
@@ -61,19 +65,24 @@ optionalStatic: TK_PR_STATIC
 optionalConst: TK_PR_CONST
         | ;
 
-globalVariable: optionalStatic type identifier globalVariableList;
+globalVariable: optionalStatic type identifier globalVariableList ';';
+globalVariableList: ',' identifier globalVariableList
+        | ;
 
 type: TK_PR_INT
         | TK_PR_FLOAT
         | TK_PR_CHAR
         | TK_PR_BOOL
         | TK_PR_STRING;
-
 identifier: TK_IDENTIFICADOR
         | TK_IDENTIFICADOR '[' TK_LIT_INT ']';
+value: TK_LIT_INT
+        | TK_LIT_FLOAT
+        | TK_LIT_FALSE
+        | TK_LIT_TRUE
+        | TK_LIT_CHAR
+        | TK_LIT_STRING;
 
-globalVariableList: ',' identifier globalVariableList
-        | ;
 
 functionDefinition: functionHeader commandBlock;
 
@@ -85,9 +94,9 @@ parametersList: ',' TK_PR_CONST type TK_IDENTIFICADOR parametersList
         | ;
 
 commandBlock: '{' simpleCommandList '}';
-simpleCommandList: simple_command ';' simpleCommandList
+simpleCommandList: simpleCommand ';' simpleCommandList
         | ;
-simple_command: ;
+simpleCommand: ;
         /* variable_declaration
         | attribution_command
         | input_output_command
@@ -99,6 +108,15 @@ simple_command: ;
 
 %%
 
-void yyerror (char const *s) {
+int yyerror (char const *s) {
     printf("Error on line %d: %s.\n", yylineno, s);
+    return 1;
+}
+
+int main() {
+    int ret = yyparse();
+    if (ret != 0) {
+        fprintf(stderr, "%d errors found.\n", ret);
+    }
+    return 0;
 }
