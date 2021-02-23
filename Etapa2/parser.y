@@ -1,4 +1,7 @@
 %{
+    #include "stdio.h"
+
+extern int yylineno;
 int yylex(void);
 void yyerror (char const *s);
 %}
@@ -48,31 +51,54 @@ void yyerror (char const *s);
 %token TOKEN_ERRO
 
 %%
+ 
+program: globalVariable program 
+        | functionDefinition program
+        | ;
 
+optionalStatic: TK_PR_STATIC
+        | ;
+optionalConst: TK_PR_CONST
+        | ;
 
+globalVariable: optionalStatic type identifier globalVariableList;
 
-programa: global_variable programa | function_definition programa | ;
+type: TK_PR_INT
+        | TK_PR_FLOAT
+        | TK_PR_CHAR
+        | TK_PR_BOOL
+        | TK_PR_STRING;
 
-global_variable: TK_PR_STATIC type identifier global_variable_list | type identifier global_variable_list;
+identifier: TK_IDENTIFICADOR
+        | TK_IDENTIFICADOR '[' TK_LIT_INT ']';
 
-type: TK_PR_INT | TK_PR_FLOAT | TK_PR_CHAR | TK_PR_BOOL | TK_PR_STRING;
+globalVariableList: ',' identifier globalVariableList
+        | ;
 
-identifier: TK_IDENTIFICADOR | TK_IDENTIFICADOR '[' TK_LIT_INT ']';
+functionDefinition: functionHeader commandBlock;
 
-global_variable_list: ',' identifier global_variable_list | ;
+functionHeader: optionalStatic type TK_IDENTIFICADOR '(' parameters ')';
 
-function_definition: function_header command_block;
+parameters: optionalConst type TK_IDENTIFICADOR parametersList 
+        | ;
+parametersList: ',' TK_PR_CONST type TK_IDENTIFICADOR parametersList
+        | ;
 
-function_header: TK_PR_STATIC type TK_IDENTIFICADOR '(' parameters ')' | type TK_IDENTIFICADOR '(' parameters ')';
-
-parameters: TK_PR_CONST type TK_IDENTIFICADOR parameters_list | type TK_IDENTIFICADOR parameters_list | ;
-parameters_list: ',' TK_PR_CONST type TK_IDENTIFICADOR parameters_list | ;
-
-command_block: '{' simple_command_list '}';
-simple_command_list: simple_command ';' simple_command_list | ;
-simple_command: variable_declaration | attribution_command | input_output_command | function_call | shift_command | execution_control_commands | flux_control_commands| command_block;
-
-
-
+commandBlock: '{' simpleCommandList '}';
+simpleCommandList: simple_command ';' simpleCommandList
+        | ;
+simple_command: ;
+        /* variable_declaration
+        | attribution_command
+        | input_output_command
+        | function_call
+        | shift_command 
+        | execution_control_commands
+        | flux_control_commands
+        | commandBlock; */
 
 %%
+
+void yyerror (char const *s) {
+    printf("Error on line %d: %s.\n", yylineno, s);
+}

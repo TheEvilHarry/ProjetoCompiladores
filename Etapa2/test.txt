@@ -1,0 +1,43 @@
+int x = 5; // Comentario inline
+float y = 5.5e10; /* Comentario inline 2 */
+
+char teste = 'o';
+string teste1 = "eita";
+
+// Comentario 1
+// int x = 70;
+// Comentario 3
+
+/* Comentario
+com
+multiplas
+linhas
+// Comentario dentro do comentario
+*/
+
+string valor = "int x  = 3";
+string valor2 = "oi // Comentario dentro da string";
+string valor3 = "opa /* Outro comentario dentro da string */";
+string valor4 = "Essa string deve estar na linha 21";
+
+/*
+  string valor5 = "teste de string dentro de um comentario";
+*/
+
+
+
+/* Comentario /* dentro de um /* comentario *** * / */
+
+float z = 73.36473027;
+
+char tab = '\t';
+char backspace = '\b';
+char newline = '\n';
+char cr = '\r';
+char ff = '\f';
+
+// comentario 
+teste // comentario maior
+/* a
+a */
+_2linhas /**/
