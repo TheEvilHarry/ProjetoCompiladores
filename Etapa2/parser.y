@@ -105,9 +105,11 @@ command: variableDeclaration ';'
         | fluxControl ';'
         | commandBlock ';';
 
-variableDeclaration: optionalStatic optionalConst type TK_IDENTIFICADOR variableInit;
-variableInit: TK_OC_LE value
-        | TK_OC_LE TK_IDENTIFICADOR
+variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList;
+variable: TK_IDENTIFICADOR
+        | TK_IDENTIFICADOR TK_OC_LE value
+        | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR;
+variableDeclarationList: ',' variable variableDeclarationList
         | ;
 
 attribution: TK_IDENTIFICADOR '=' expression

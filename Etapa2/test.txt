@@ -108,7 +108,7 @@ int main () {
         continue;
     };
 
-    i = true ? i+0 : i+1;
+    // i = true ? i+0 : i+1;
 
 
     /* Testes expressoes */
