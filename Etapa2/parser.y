@@ -94,7 +94,7 @@ headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersLi
         | ;
 
 commandBlock: '{' commandList '}';
-commandList: command ';' commandList
+commandList: command commandList
         | ;
 command: variableDeclaration ';'
         | attribution ';'
@@ -136,9 +136,66 @@ executionControl: TK_PR_RETURN expression
         | TK_PR_BREAK
         | TK_PR_CONTINUE;
 
-fluxControl: ;
+fluxControl: conditional
+        | while
+        | for;
+conditional: TK_PR_IF '(' expression ')' commandBlock else;
+else: TK_PR_ELSE commandBlock
+        | ;
+while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock;
+for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock;
 
-expression: ;
+expression: orLogicalExpression '?' expression ':' expression
+    | orLogicalExpression;
+orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression
+        | andLogicalExpression;
+andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression
+    | bitwiseOrExpression;
+bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression
+    | bitwiseAndExpression;
+bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression
+    | equalityExpression;
+equalityExpression: equalityExpression equalityOperator comparisonExpression
+        | comparisonExpression;
+comparisonExpression: comparisonExpression comparisonOperator sumExpression
+        | sumExpression;
+sumExpression: sumExpression sumOperator multiplicationExpression
+        | multiplicationExpression;
+multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression
+        | powerExpression;
+powerExpression: powerExpression powerOperator unaryExpression
+        | unaryExpression;
+unaryExpression: unaryOperator unaryExpression
+        | operand;
+
+orLogicalOperator: TK_OC_OR;
+andLogicalOperator: TK_OC_AND;
+bitwiseOrOperator: '|';
+bitwiseAndOperator: '&';
+equalityOperator: TK_OC_EQ
+        | TK_OC_NE;
+comparisonOperator: TK_OC_LE
+        | TK_OC_GE
+        | '<'
+        | '>';
+sumOperator: '+'
+        | '-';
+multiplicationOperator: '*'
+        | '/'
+        | '%';
+powerOperator: '^';
+unaryOperator: '+'
+        | '-'
+        | '!'
+        | '&'
+        | '*'
+        | '?'
+        | '#';
+operand: TK_IDENTIFICADOR
+        | TK_IDENTIFICADOR '[' expression ']'
+        | value
+        | functionCall
+        | '(' expression ')';
 
 %%
 
