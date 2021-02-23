@@ -51,9 +51,7 @@ void yyerror (char const *s);
 
 
 
-programa: global_variable programa | function_definition programa | %empty;
-
-// Global Variables Grammar Definition 
+programa: global_variable programa | function_definition programa | ;
 
 global_variable: TK_PR_STATIC type identifier global_variable_list | type identifier global_variable_list;
 
@@ -61,9 +59,18 @@ type: TK_PR_INT | TK_PR_FLOAT | TK_PR_CHAR | TK_PR_BOOL | TK_PR_STRING;
 
 identifier: TK_IDENTIFICADOR | TK_IDENTIFICADOR '[' TK_LIT_INT ']';
 
-global_variable_list: ',' identifier global_variable_list | %empty;
+global_variable_list: ',' identifier global_variable_list | ;
 
+function_definition: function_header command_block;
 
+function_header: TK_PR_STATIC type TK_IDENTIFICADOR '(' parameters ')' | type TK_IDENTIFICADOR '(' parameters ')';
+
+parameters: TK_PR_CONST type TK_IDENTIFICADOR parameters_list | type TK_IDENTIFICADOR parameters_list | ;
+parameters_list: ',' TK_PR_CONST type TK_IDENTIFICADOR parameters_list | ;
+
+command_block: '{' simple_command_list '}';
+simple_command_list: simple_command ';' simple_command_list | ;
+simple_command: variable_declaration | attribution_command | input_output_command | function_call | shift_command | execution_control_commands | flux_control_commands| command_block;
 
 
 

@@ -1,6 +1,6 @@
 %{
 
-#include "tokens.h"
+#include "parser.tab.h"
 int lineCount = 1;
 
 void inc_lines();
