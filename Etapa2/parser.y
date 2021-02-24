@@ -76,12 +76,15 @@ type: TK_PR_INT
         | TK_PR_STRING;
 identifier: TK_IDENTIFICADOR
         | TK_IDENTIFICADOR '[' TK_LIT_INT ']';
-value: TK_LIT_INT
-        | TK_LIT_FLOAT
+value: signal TK_LIT_INT
+        | signal TK_LIT_FLOAT
         | TK_LIT_FALSE
         | TK_LIT_TRUE
         | TK_LIT_CHAR
         | TK_LIT_STRING;
+signal: '+'
+        | '-'
+        | ;
 
 
 functionDefinition: functionHeader commandBlock;

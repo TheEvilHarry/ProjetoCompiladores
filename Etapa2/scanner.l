@@ -13,8 +13,8 @@ void inc_lines();
 letter [A-Za-z_]
 digit [0-9]
 identifier {letter}({digit}|{letter})*
-integer [+|-]?{digit}+
-exp [E|e]{integer}
+integer {digit}+
+exp [E|e][+|-]{integer}
 
 %%
 
