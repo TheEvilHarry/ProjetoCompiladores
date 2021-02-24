@@ -75,7 +75,7 @@ type: TK_PR_INT
         | TK_PR_BOOL
         | TK_PR_STRING;
 identifier: TK_IDENTIFICADOR
-        | TK_IDENTIFICADOR '[' TK_LIT_INT ']';
+        | TK_IDENTIFICADOR '[' positive_integer ']';
 value: signal TK_LIT_INT
         | signal TK_LIT_FLOAT
         | TK_LIT_FALSE
@@ -133,7 +133,7 @@ functionParametersList: ',' expression functionParametersList
         | ;
 
 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT
-        | TK_IDENTIFICADOR '[' expression ']' shiftOperator TK_LIT_INT;
+        | TK_IDENTIFICADOR '[' expression ']' shiftOperator positive_integer;
 shiftOperator: TK_OC_SL
         | TK_OC_SR;
 
@@ -201,6 +201,8 @@ operand: TK_IDENTIFICADOR
         | value
         | functionCall
         | '(' expression ')';
+
+positive_integer: '+' TK_LIT_INT | TK_LIT_INT;
 
 %%
 
