@@ -1,31 +1,47 @@
 #include <stdio.h>
 
-
-typedef enum lex_val_lit_type{
-    LIT_INT,
+typedef enum lexicalValueLiteralType
+{
+    LIT_INTEGER,
     LIT_FLOAT,
-    LIT_BOOL,
+    LIT_BOOLEAN,
     LIT_CHAR,
     LIT_STRING,
     NOT_LITERAL
+} Literal;
 
-} LiteralType
-
-typedef enum lex_val_token_type{
+typedef enum lexicalValueTokenType
+{
     IDENTIFIER_TOKEN,
     LITERAL_TOKEN,
-    SP_CHAR_TOKEN,
-    COMPOSITE_OP
-} Type
+    SPECIAL_CHAR_TOKEN,
+    COMPOSITE_OPERATOR_TOKEN
+} Token;
 
-struct t_lexical_value {
+typedef struct t_token_data
+{
     int line;
-    Type type;
-    LiteralType lit_type;
-    union {
-        int val_int;
-        float val_float;
-        char val_char;
-        char* val_string;
+    Token type;
+    Literal literal;
+    union
+    {
+        int valueInt;
+        float valueFloat;
+        char valueChar;
+        char *valueString;
     } value;
-}
+} TokenData;
+
+TokenData *createNonLiteralToken(int line, Token type, char *value);
+
+TokenData *createIntegerLiteralToken(int line, char *value);
+
+TokenData *createFloatLiteralToken(int line, char *value);
+
+TokenData *createBooleanLiteralToken(int line, char *value);
+
+TokenData *createCharLiteralToken(int line, char *value);
+
+TokenData *createStringLiteralToken(int line, char *value);
+
+void freeToken(TokenData *data);

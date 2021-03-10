@@ -2,15 +2,22 @@
 
 #define MAX_CHILDREN 4
 
-typedef struct t_node {
-    char *label;
-    LEXICAL_VALUE* value;
-    struct t_node *children[MAX_CHILDREN];
-    struct t_node *next;
+typedef struct t_ast_node
+{
+  char *label;
+  TokenData *data;
 
-} NODE;
+  struct t_node *children[MAX_CHILDREN];
+  struct t_node *next;
+  int numberOfChildren;
+} Node;
 
+Node *createNode(TokenData *data, char *label);
 
-struct NODE* createNode(LEXICAL_VALUE *value,char *label);
+Node *addChild(Node *node, Node *child);
 
-struct NODE* addChild(NODE *node, NODE *child);
+Node *addNext(Node *node, Node *next);
+
+void exporta(Node *arvore);
+
+void libera(Node *arvore);
