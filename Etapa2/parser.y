@@ -76,8 +76,8 @@ type: TK_PR_INT
         | TK_PR_STRING;
 identifier: TK_IDENTIFICADOR
         | TK_IDENTIFICADOR '[' positive_integer ']';
-value: signal TK_LIT_INT
-        | signal TK_LIT_FLOAT
+value: TK_LIT_INT
+        | TK_LIT_FLOAT
         | TK_LIT_FALSE
         | TK_LIT_TRUE
         | TK_LIT_CHAR
