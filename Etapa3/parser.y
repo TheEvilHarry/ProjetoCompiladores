@@ -1,11 +1,20 @@
 %{
 #include "stdio.h"
 #include "stdlib.h"
+#include "ast.h"
+#include "tokenutils.h"
+
+extern void *arvore;
 
 extern int yylineno;
 int yylex(void);
 int yyerror (char const *s);
 %}
+
+%union{
+        TokenData *token;
+        Node *node;
+}
 
 %define parse.lac full
 %define parse.error verbose

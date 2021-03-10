@@ -1,10 +1,10 @@
 %{
+    #include "ast.h"
+    #include "tokenutils.h"
+    #include "parser.tab.h"
+    int lineCount = 1;
 
-#include "parser.tab.h"
-int lineCount = 1;
-
-void inc_lines();
-
+    void inc_lines();
 %}
 %option yylineno
 
