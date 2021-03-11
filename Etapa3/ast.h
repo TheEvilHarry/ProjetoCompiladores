@@ -7,8 +7,8 @@ typedef struct t_ast_node
   char *label;
   TokenData *data;
 
-  struct t_node *children[MAX_CHILDREN];
-  struct t_node *next;
+  struct t_ast_node *children[MAX_CHILDREN];
+  struct t_ast_node *next;
   int numberOfChildren;
 } Node;
 
@@ -18,6 +18,10 @@ Node *addChild(Node *node, Node *child);
 
 Node *addNext(Node *node, Node *next);
 
-void exporta(Node *arvore);
+void exportAST(Node *node);
 
-void libera(Node *arvore);
+void freeAST(Node *node);
+
+void exporta(void *arvore);
+
+void libera(void *arvore);

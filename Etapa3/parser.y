@@ -2,7 +2,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "ast.h"
-#include "tokenutils.h"
 
 extern void *arvore;
 

@@ -1,6 +1,5 @@
 %{
     #include "ast.h"
-    #include "tokenutils.h"
     #include "parser.tab.h"
     int lineCount = 1;
 
