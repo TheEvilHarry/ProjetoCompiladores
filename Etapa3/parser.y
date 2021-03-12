@@ -146,10 +146,10 @@ functionDefinition: functionHeader commandBlock {add_child($1,$2); $$=S1;} ;  //
 
 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')' {$$=createNode($3);} ;
 
-headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList 
+headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {freeToken($3);$$=NULL;}
         | ;
-headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList
-        | ;
+headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {$$=NULL;}
+        | {$$=NULL;};
 
 commandBlock: '{' commandList '}';
 commandList: command commandList
@@ -174,13 +174,13 @@ variableDeclarationList: ',' variable variableDeclarationList
 attribution: TK_IDENTIFICADOR '=' expression
         | TK_IDENTIFICADOR '[' expression ']' '=' expression;
 
-inputOutput: input
-        | output;
+inputOutput: input {$$=$1;}
+        | output {$$=$1;};
 
-output: TK_PR_OUTPUT TK_IDENTIFICADOR
-        | TK_PR_OUTPUT value;
+output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNote($1); addChild($$,$2);}
+        | TK_PR_OUTPUT value {$$=createNote($1); addChild($$,$2);};
 
-input: TK_PR_INPUT TK_IDENTIFICADOR;
+input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNote($1); addChild($$,$2);} ;
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')';
 functionParameters: expression functionParametersList
@@ -197,7 +197,7 @@ executionControl: TK_PR_RETURN expression
         | TK_PR_BREAK {$$=createNode($1);}
         | TK_PR_CONTINUE {$$=createNode($1);};
 
-fluxControl: conditional
+fluxControl: conditional {$$=$1;}
         | while
         | for;
 conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild{$$,$3};addChild{$$,$5};addChild{$$,$6};};
@@ -256,11 +256,12 @@ unaryOperator: '+' {$$=$1;}
 
 operand: TK_IDENTIFICADOR {$$=createNode($1);}
         | TK_IDENTIFICADOR '[' expression ']'
-        | value
+        | value {$$=$1;}
         | functionCall
         | '(' expression ')' {freeToken($1); freeToken($3); $$=S2;};
 
-positive_integer: '+' TK_LIT_INT | TK_LIT_INT;
+positive_integer: '+' TK_LIT_INT {$$=createNote($1);}
+		| TK_LIT_INT {$$=createNote($1);};
 
 %%
 
