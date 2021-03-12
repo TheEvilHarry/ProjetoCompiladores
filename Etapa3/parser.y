@@ -200,7 +200,8 @@ executionControl: TK_PR_RETURN expression
 fluxControl: conditional
         | while
         | for;
-conditional: TK_PR_IF '(' expression ')' commandBlock else;
+conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild{$$,$3};addChild{$$,$5};addChild{$$,$6};};
+
 else: TK_PR_ELSE commandBlock
         | ;
 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock;
