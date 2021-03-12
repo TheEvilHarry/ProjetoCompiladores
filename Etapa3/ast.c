@@ -3,13 +3,15 @@
 #include <string.h>
 #include "ast.h"
 
-Node *createNode(TokenData *data, char *label)
+Node *createNode(TokenData *data)
 {
   Node *node = malloc(sizeof(Node));
 
+
+  //label is at node>data>tokenvalue>value
+
   node->data = data;
   node->numberOfChildren = 0;
-  node->label = strdup(label);
 
   memset(&node->children, (Node *)NULL, sizeof(Node) * MAX_CHILDREN);
   node->next = NULL;

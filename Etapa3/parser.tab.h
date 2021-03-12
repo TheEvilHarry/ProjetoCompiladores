@@ -107,7 +107,7 @@ union YYSTYPE
 {
 #line 13 "parser.y"
 
-        TokenData *token;
+        TokenData *valor_lexico;
         Node *node;
 
 #line 114 "parser.tab.h"

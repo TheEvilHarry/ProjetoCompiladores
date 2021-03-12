@@ -67,7 +67,6 @@ int yyerror (char const *s);
 %type<node>functionDefinition
 %type<node> optionalConst
 %type<node> optionalStatic
-%type<node> globalVariable
 %type<node> globalVariableList
 %type<node> type
 %type<node> identifier
@@ -115,37 +114,37 @@ int yyerror (char const *s);
 // need a join nodes function (?) maybe
 //label is at node>data>tokenvalue>value
 
-program: globalVariable program { $$ = $1; arvore = $$; }
-        | functionDefinition program
-        | ;
+program: globalVariable program { $$ = $2; arvore = $$; }
+        | functionDefinition program {$$=$1; $1->next = $2; arvore=$$; }
+        | {$$=NULL;};
 
-optionalStatic: TK_PR_STATIC {createNode($1, "label");}
-        | ;
-optionalConst: TK_PR_CONST
-        | ;
+optionalStatic: TK_PR_STATIC  { $$ = NULL; }
+        |  { $$ = NULL; };
+optionalConst: TK_PR_CONST  { $$ = NULL; }
+        |  { $$ = NULL; };
 
-globalVariable: optionalStatic type identifier globalVariableList ';';
-globalVariableList: ',' identifier globalVariableList
-        | ;
+globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL; freeToken($4);} ;
+globalVariableList: ',' identifier globalVariableList {$$=NULL; freeToken($1);}
+        | {$$=NULL};
 
-type: TK_PR_INT
-        | TK_PR_FLOAT
-        | TK_PR_CHAR
-        | TK_PR_BOOL
-        | TK_PR_STRING;
+type: TK_PR_INT { $$ = NULL; }
+        | TK_PR_FLOAT  { $$ = NULL; }
+        | TK_PR_CHAR  { $$ = NULL; }
+        | TK_PR_BOOL  { $$ = NULL; }
+        | TK_PR_STRING  { $$ = NULL; };
 identifier: TK_IDENTIFICADOR
         | TK_IDENTIFICADOR '[' positive_integer ']';
 
-value: TK_LIT_INT
-        | TK_LIT_FLOAT
-        | TK_LIT_FALSE
-        | TK_LIT_TRUE
-        | TK_LIT_CHAR
-        | TK_LIT_STRING;
+value: TK_LIT_INT {createNode($1);}
+        | TK_LIT_FLOAT {createNode($1);}
+        | TK_LIT_FALSE {createNode($1);}
+        | TK_LIT_TRUE {createNode($1);}
+        | TK_LIT_CHAR {createNode($1);}
+        | TK_LIT_STRING {createNode($1);};
 
-functionDefinition: functionHeader commandBlock;
+functionDefinition: functionHeader commandBlock {add_child($1,$2); $$=S1;} ;  //CHECK LATER
 
-functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')';
+functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')' {$$=createNode($3);} ;
 
 headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList 
         | ;
@@ -155,16 +154,17 @@ headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersLi
 commandBlock: '{' commandList '}';
 commandList: command commandList
         | ;
-command: variableDeclaration ';'
-        | attribution ';'
-        | inputOutput ';'
-        | functionCall ';'
-        | shift ';'
-        | executionControl ';'
-        | fluxControl ';'
-        | commandBlock ';';
+command: variableDeclaration ';' {$$ = $1; }
+        | attribution ';' {$$ = $1; }
+        | inputOutput ';' {$$ = $1; }
+        | functionCall ';' {$$ = $1; }
+        | shift ';' {$$ = $1; }
+        | executionControl ';' {$$ = $1; }      // CHECK IF TRUE
+        | fluxControl ';' {$$ = $1; }
+        | commandBlock ';' {$$ = $1; };
 
 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList;
+
 variable: TK_IDENTIFICADOR
         | TK_IDENTIFICADOR TK_OC_LE value
         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR;
@@ -194,8 +194,8 @@ shiftOperator: TK_OC_SL
         | TK_OC_SR;
 
 executionControl: TK_PR_RETURN expression
-        | TK_PR_BREAK
-        | TK_PR_CONTINUE;
+        | TK_PR_BREAK {$$=createNode($1);}
+        | TK_PR_CONTINUE {$$=createNode($1);};
 
 fluxControl: conditional
         | while
@@ -245,18 +245,19 @@ multiplicationOperator: '*'
         | '/'
         | '%';
 powerOperator: '^';
-unaryOperator: '+'
-        | '-'
-        | '!'
-        | '&'
-        | '*'
-        | '?'
-        | '#';
-operand: TK_IDENTIFICADOR
+unaryOperator: '+' {$$=$1;}
+        | '-' {$$=$1;}
+        | '!' {$$=$1;}
+        | '&' {$$=$1;}
+        | '*' {$$=$1;}
+        | '?' {$$=$1;}
+        | '#' {$$=$1;};
+
+operand: TK_IDENTIFICADOR {$$=createNode($1);}
         | TK_IDENTIFICADOR '[' expression ']'
         | value
         | functionCall
-        | '(' expression ')';
+        | '(' expression ')' {freeToken($1); freeToken($3); $$=S2;};
 
 positive_integer: '+' TK_LIT_INT | TK_LIT_INT;
 

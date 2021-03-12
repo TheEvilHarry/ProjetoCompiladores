@@ -29,6 +29,7 @@ typedef struct t_token_data
         char valueChar;
         char *valueString;
     } value;
+
 } TokenData;
 
 TokenData *createNonLiteralToken(int line, Token type, char *value);

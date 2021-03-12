@@ -6,13 +6,12 @@ typedef struct t_ast_node
 {
   char *label;
   TokenData *data;
-
   struct t_ast_node *children[MAX_CHILDREN];
   struct t_ast_node *next;
   int numberOfChildren;
 } Node;
 
-Node *createNode(TokenData *data, char *label);
+Node *createNode(TokenData *data);
 
 Node *addChild(Node *node, Node *child);
 
