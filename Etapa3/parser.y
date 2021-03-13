@@ -104,8 +104,11 @@ int yyerror (char const *s);
 %type<node> multiplicationExpression
 %type<node> powerExpression
 %type<node> unaryExpression
+%type<node> positive_integer
+%type<node> operand
 
-%type<valor_lexico> functionHeader
+
+%type<valor_lexico> functionHeader			//CHECK THIS LATER
 %type<valor_lexico> shiftOperator
 %%
 
@@ -132,7 +135,7 @@ type: TK_PR_INT { $$ = NULL; }
         | TK_PR_CHAR  { $$ = NULL; }
         | TK_PR_BOOL  { $$ = NULL; }
         | TK_PR_STRING  { $$ = NULL; };
-identifier: TK_IDENTIFICADOR
+identifier: TK_IDENTIFICADOR {$$=createNode($1);}
         | TK_IDENTIFICADOR '[' positive_integer ']';
 
 value: TK_LIT_INT {createNode($1);}
@@ -151,17 +154,29 @@ headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {free
 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {$$=NULL;}
         | {$$=NULL;};
 
-commandBlock: '{' commandList '}';
-commandList: command commandList
-        | ;
-command: variableDeclaration ';' {$$ = $1; }
-        | attribution ';' {$$ = $1; }
-        | inputOutput ';' {$$ = $1; }
-        | functionCall ';' {$$ = $1; }
-        | shift ';' {$$ = $1; }
-        | executionControl ';' {$$ = $1; }      // CHECK IF TRUE
-        | fluxControl ';' {$$ = $1; }
-        | commandBlock ';' {$$ = $1; };
+commandBlock: '{' commandList '}' {$$=$2; freeToken{$1}; freeToken{$3};} ;
+
+commandList: command commandList {
+
+		if($1!=NULL)
+		{
+			$$=createNode($1);
+			addChild($$,$2);
+		}
+		else {
+			$$=$2;
+		}
+	}
+        | {$$=NULL;};
+
+command: variableDeclaration ';' {$$ = $1; freeToken($2); }
+        | attribution ';' {$$ = $1; freeToken($2); }
+        | inputOutput ';' {$$ = $1;  freeToken($2);}
+        | functionCall ';' {$$ = $1;  freeToken($2);}
+        | shift ';' {$$ = $1; freeToken($2); }
+        | executionControl ';' {$$ = $1;  freeToken($2);}      // CHECK IF TRUE
+        | fluxControl ';' {$$ = $1; freeToken($2);}
+        | commandBlock ';' {$$ = $1; freeToken($2);};
 
 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList;
 
@@ -198,14 +213,17 @@ executionControl: TK_PR_RETURN expression
         | TK_PR_CONTINUE {$$=createNode($1);};
 
 fluxControl: conditional {$$=$1;}
-        | while
-        | for;
+        | while {$$=$1;}
+        | for {$$=$1};
 conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild{$$,$3};addChild{$$,$5};addChild{$$,$6};};
 
-else: TK_PR_ELSE commandBlock
-        | ;
-while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock;
-for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock;
+else: TK_PR_ELSE commandBlock {$$=$1;}
+        | {$$=NULL;} ;
+
+while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$6);};
+
+
+for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$9);} ;
 
 expression: orLogicalExpression '?' expression ':' expression
     | orLogicalExpression;
