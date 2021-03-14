@@ -60,7 +60,33 @@ int yyerror (char const *s);
 %token<valor_lexico> TK_LIT_CHAR
 %token<valor_lexico> TK_LIT_STRING
 %token<valor_lexico> TK_IDENTIFICADOR
+%token<valor_lexico> ','
+%token<valor_lexico> ';'
+%token<valor_lexico> ':'
+%token<valor_lexico> '('
+%token<valor_lexico> ')'
+%token<valor_lexico> '['
+%token<valor_lexico> ']'
+%token<valor_lexico> '{'
+%token<valor_lexico> '}'
+%type<valor_lexico> '+'
+%token<valor_lexico> '-'
+%token<valor_lexico> '|'
+%token<valor_lexico> '*'
+%token<valor_lexico> '/'
+%token<valor_lexico> '<'
+%token<valor_lexico> '>'
+%token<valor_lexico> '='
+%token<valor_lexico> '!'
+%token<valor_lexico> '&'
+%token<valor_lexico> '%'
+%token<valor_lexico> '#'
+%token<valor_lexico> '^'
+%token<valor_lexico> '.'
+%token<valor_lexico> '$'
+%token<valor_lexico> '?'
 %token TOKEN_ERRO
+
 
 %type<node> program
 %type<node> globalVariable
@@ -106,10 +132,22 @@ int yyerror (char const *s);
 %type<node> unaryExpression
 %type<node> positive_integer
 %type<node> operand
+%type<node> orLogicalOperator
+%type<node> andLogicalOperator
+%type<node> bitwiseOrOperator
+%type<node> bitwiseAndOperator
+%type<node> equalityOperator
+%type<node> sumOperator
+%type<node> multiplicationOperator
+%type<node> powerOperator
+%type<node> unaryOperator
+%type<node> comparisonOperator
 
 
-%type<valor_lexico> functionHeader			//CHECK THIS LATER
+
+%type<node> functionHeader			//CHECK THIS LATER
 %type<valor_lexico> shiftOperator
+
 %%
 
 //  estudando como estruturar a criação dos nodos ainda
@@ -128,7 +166,7 @@ optionalConst: TK_PR_CONST  { $$ = NULL; }
 
 globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL; freeToken($4);} ;
 globalVariableList: ',' identifier globalVariableList {$$=NULL; freeToken($1);}
-        | {$$=NULL};
+        | {$$=NULL;};
 
 type: TK_PR_INT { $$ = NULL; }
         | TK_PR_FLOAT  { $$ = NULL; }
@@ -145,7 +183,7 @@ value: TK_LIT_INT {createNode($1);}
         | TK_LIT_CHAR {createNode($1);}
         | TK_LIT_STRING {createNode($1);};
 
-functionDefinition: functionHeader commandBlock {add_child($1,$2); $$=S1;} ;  //CHECK LATER
+functionDefinition: functionHeader commandBlock {addChild($1,$2); $$=$1;} ;  //CHECK LATER
 
 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')' {$$=createNode($3);} ;
 
@@ -154,7 +192,7 @@ headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {free
 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {$$=NULL;}
         | {$$=NULL;};
 
-commandBlock: '{' commandList '}' {$$=$2; freeToken{$1}; freeToken{$3};} ;
+commandBlock: '{' commandList '}' {$$=$2; freeToken($1); freeToken($3);} ;
 
 commandList: command commandList {
 
@@ -192,10 +230,10 @@ attribution: TK_IDENTIFICADOR '=' expression
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
 
-output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNote($1); addChild($$,$2);}
-        | TK_PR_OUTPUT value {$$=createNote($1); addChild($$,$2);};
+output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,$2);}
+        | TK_PR_OUTPUT value {$$=createNode($1); addChild($$,$2);};
 
-input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNote($1); addChild($$,$2);} ;
+input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,$2);} ;
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')';
 functionParameters: expression functionParametersList
@@ -214,8 +252,8 @@ executionControl: TK_PR_RETURN expression
 
 fluxControl: conditional {$$=$1;}
         | while {$$=$1;}
-        | for {$$=$1};
-conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild{$$,$3};addChild{$$,$5};addChild{$$,$6};};
+        | for {$$=$1;};
+conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild($$,$3);addChild($$,$5);addChild($$,$6);};
 
 else: TK_PR_ELSE commandBlock {$$=$1;}
         | {$$=NULL;} ;
@@ -225,61 +263,67 @@ while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createNode($1); 
 
 for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$9);} ;
 
-expression: orLogicalExpression '?' expression ':' expression
-    | orLogicalExpression;
-orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression
-        | andLogicalExpression;
-andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression
-    | bitwiseOrExpression;
-bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression
-    | bitwiseAndExpression;
-bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression
-    | equalityExpression;
-equalityExpression: equalityExpression equalityOperator comparisonExpression
-        | comparisonExpression;
-comparisonExpression: comparisonExpression comparisonOperator sumExpression
-        | sumExpression;
-sumExpression: sumExpression sumOperator multiplicationExpression
-        | multiplicationExpression;
-multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression
-        | powerExpression;
-powerExpression: powerExpression powerOperator unaryExpression
-        | unaryExpression;
+expression: orLogicalExpression '?' expression ':' expression {$$=createNode($2); addChild($$,$1); addChild($$,$3); addChild($$,$5);  }
+    | orLogicalExpression {$$=$1;};
+
+orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+        | andLogicalExpression {$$=$1;};
+
+andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+    | bitwiseOrExpression {$$=$1;};
+
+bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+    | bitwiseAndExpression {$$=$1;};
+
+bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+    | equalityExpression {$$=$1;};
+
+equalityExpression: equalityExpression equalityOperator comparisonExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+        | comparisonExpression {$$=$1;};
+comparisonExpression: comparisonExpression comparisonOperator sumExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+        | sumExpression {$$=$1;};
+sumExpression: sumExpression sumOperator multiplicationExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+        | multiplicationExpression {$$=$1;};
+multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+        | powerExpression {$$=$1;};
+powerExpression: powerExpression powerOperator unaryExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+        | unaryExpression {$$=$1;};
+
 unaryExpression: unaryOperator unaryExpression
         | operand;
 
-orLogicalOperator: TK_OC_OR;
-andLogicalOperator: TK_OC_AND;
-bitwiseOrOperator: '|';
-bitwiseAndOperator: '&';
-equalityOperator: TK_OC_EQ
-        | TK_OC_NE;
-comparisonOperator: TK_OC_LE
-        | TK_OC_GE
-        | '<'
-        | '>';
-sumOperator: '+'
-        | '-';
+orLogicalOperator: TK_OC_OR {$$=createNode($1);};
+andLogicalOperator: TK_OC_AND {$$=createNode($1);} ;
+bitwiseOrOperator: '|' {$$=createNode($1);};
+bitwiseAndOperator: '&' {$$=createNode($1);};
+equalityOperator: TK_OC_EQ {$$=createNode($1);}
+        | TK_OC_NE {$$=createNode($1);};
+comparisonOperator: TK_OC_LE {$$=createNode($1);}
+        | TK_OC_GE {$$=createNode($1);}
+        | '<' {$$=createNode($1);}
+        | '>' {$$=createNode($1);};
+sumOperator: '+' {$$=createNode($1);};
+        | '-' {$$=createNode($1);};
 multiplicationOperator: '*'
-        | '/'
-        | '%';
+        | '/' {$$=createNode($1);};
+        | '%' {$$=createNode($1);};
 powerOperator: '^';
-unaryOperator: '+' {$$=$1;}
-        | '-' {$$=$1;}
-        | '!' {$$=$1;}
-        | '&' {$$=$1;}
-        | '*' {$$=$1;}
-        | '?' {$$=$1;}
-        | '#' {$$=$1;};
+unaryOperator: '+'
+        | '-' {$$=createNode($1);}
+        | '!' {$$=createNode($1);}
+        | '&' {$$=createNode($1);}
+        | '*' {$$=createNode($1);}
+        | '?' {$$=createNode($1);}
+        | '#' {$$=createNode($1);} ;
 
 operand: TK_IDENTIFICADOR {$$=createNode($1);}
         | TK_IDENTIFICADOR '[' expression ']'
         | value {$$=$1;}
         | functionCall
-        | '(' expression ')' {freeToken($1); freeToken($3); $$=S2;};
+        | '(' expression ')' {freeToken($1); freeToken($3); $$=$2;};
 
-positive_integer: '+' TK_LIT_INT {$$=createNote($1);}
-		| TK_LIT_INT {$$=createNote($1);};
+positive_integer: '+' TK_LIT_INT {$$=createNode($2);}
+		| TK_LIT_INT {$$=createNode($1);};
 
 %%
 
