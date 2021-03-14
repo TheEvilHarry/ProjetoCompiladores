@@ -90,7 +90,7 @@ int yyerror (char const *s);
 
 %type<node> program
 %type<node> globalVariable
-%type<node>functionDefinition
+%type<node> functionDefinition
 %type<node> optionalConst
 %type<node> optionalStatic
 %type<node> globalVariableList
@@ -144,7 +144,6 @@ int yyerror (char const *s);
 %type<node> comparisonOperator
 
 
-
 %type<node> functionHeader			//CHECK THIS LATER
 %type<valor_lexico> shiftOperator
 
@@ -153,10 +152,9 @@ int yyerror (char const *s);
 //  estudando como estruturar a criação dos nodos ainda
 // Let's create the nodes from the bottom-up
 // need a join nodes function (?) maybe
-//label is at node>data>tokenvalue>value
 
 program: globalVariable program { $$ = $2; arvore = $$; }
-        | functionDefinition program {$$=$1; $1->next = $2; arvore=$$; }
+        | functionDefinition program {$$=$1; addNext($1, $2); arvore=$$; }
         | {$$=NULL;};
 
 optionalStatic: TK_PR_STATIC  { $$ = NULL; }
@@ -164,7 +162,7 @@ optionalStatic: TK_PR_STATIC  { $$ = NULL; }
 optionalConst: TK_PR_CONST  { $$ = NULL; }
         |  { $$ = NULL; };
 
-globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL; freeToken($4);} ;
+globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL; freeAST($4);} ;
 globalVariableList: ',' identifier globalVariableList {$$=NULL; freeToken($1);}
         | {$$=NULL;};
 
@@ -198,8 +196,8 @@ commandList: command commandList {
 
 		if($1!=NULL)
 		{
-			$$=createNode($1);
-			addChild($$,$2);
+			addNext($1->children[$1->numberOfChildren - 1], $2);
+			$$=$1;
 		}
 		else {
 			$$=$2;
@@ -230,10 +228,10 @@ attribution: TK_IDENTIFICADOR '=' expression
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
 
-output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,$2);}
+output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($2));}
         | TK_PR_OUTPUT value {$$=createNode($1); addChild($$,$2);};
 
-input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,$2);} ;
+input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($2));} ;
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')';
 functionParameters: expression functionParametersList
@@ -255,7 +253,7 @@ fluxControl: conditional {$$=$1;}
         | for {$$=$1;};
 conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild($$,$3);addChild($$,$5);addChild($$,$6);};
 
-else: TK_PR_ELSE commandBlock {$$=$1;}
+else: TK_PR_ELSE commandBlock {$$=createNode($1);}
         | {$$=NULL;} ;
 
 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$6);};

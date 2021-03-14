@@ -1,1 +1,0 @@
-Error on line 168: syntax error, unexpected TK_IDENTIFICADOR.

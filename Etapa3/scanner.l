@@ -89,30 +89,30 @@ exp [E|e][+|-]{integer}
 
  /* Operadores Compostos */
 
-"<=" { return TK_OC_LE ; }
-">=" { return TK_OC_GE ; }
-"==" { return TK_OC_EQ ; }
-"!=" { return TK_OC_NE ; }
-"&&" { return TK_OC_AND ; }
-"||" { return TK_OC_OR ; }
-">>" { return TK_OC_SL ; }
-"<<" { return TK_OC_SR ; }
+"<=" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_LE ; }
+">=" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_GE ; }
+"==" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_EQ ; }
+"!=" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_NE ; }
+"&&" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_AND ; }
+"||" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_OR ; }
+">>" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_SL ; }
+"<<" { yylval.valor_lexico = createNonLiteralToken(yylineno, COMPOSITE_OPERATOR_TOKEN, yytext); return TK_OC_SR ; }
 
  /* Literais */
 
-{integer} { return TK_LIT_INT; }
-{integer}\.{digit}+{exp}? { return TK_LIT_FLOAT; }
+{integer} { yylval.valor_lexico = createIntegerLiteralToken(yylineno, yytext); return TK_LIT_INT; }
+{integer}\.{digit}+{exp}? { yylval.valor_lexico = createFloatLiteralToken(yylineno, yytext); return TK_LIT_FLOAT; }
 
-['][^\']['] { return TK_LIT_CHAR; }
-[']\\[tbnrf]['] { return TK_LIT_CHAR; }
-["][^\"\n]*["] { return TK_LIT_STRING; }
+['][^\']['] { yylval.valor_lexico = createCharLiteralToken(yylineno, yytext); return TK_LIT_CHAR; }
+[']\\[tbnrf]['] { yylval.valor_lexico = createCharLiteralToken(yylineno, yytext); return TK_LIT_CHAR; }
+["][^\"\n]*["] { yylval.valor_lexico = createStringLiteralToken(yylineno, yytext); return TK_LIT_STRING; }
 
-true { return TK_LIT_TRUE; }
-false { return TK_LIT_FALSE; }
+true { yylval.valor_lexico = createBooleanLiteralToken(yylineno, yytext); return TK_LIT_TRUE; }
+false { yylval.valor_lexico = createBooleanLiteralToken(yylineno, yytext); return TK_LIT_FALSE; }
 
  /* Identificadores */
 
-{identifier} { return TK_IDENTIFICADOR; }
+{identifier} { yylval.valor_lexico = createNonLiteralToken(yylineno, IDENTIFIER_TOKEN, yytext); return TK_IDENTIFICADOR; }
 
 [-+]?{digit}+{letter}({letter}|{digit}|_)* { return TOKEN_ERRO; }
 

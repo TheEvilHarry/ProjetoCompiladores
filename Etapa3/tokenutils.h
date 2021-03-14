@@ -21,6 +21,8 @@ typedef struct t_token_data
     int line;
     Token type;
     Literal literal;
+
+    char *label;
     union
     {
         int valueInt;
@@ -34,13 +36,13 @@ typedef struct t_token_data
 
 TokenData *createNonLiteralToken(int line, Token type, char *value);
 
-TokenData *createIntegerLiteralToken(int line, int value);
+TokenData *createIntegerLiteralToken(int line, char *value);
 
-TokenData *createFloatLiteralToken(int line, float value);
+TokenData *createFloatLiteralToken(int line, char *value);
 
-TokenData *createBooleanLiteralToken(int line, int value);
+TokenData *createBooleanLiteralToken(int line, char *value);
 
-TokenData *createCharLiteralToken(int line, char value);
+TokenData *createCharLiteralToken(int line, char *value);
 
 TokenData *createStringLiteralToken(int line, char *value);
 

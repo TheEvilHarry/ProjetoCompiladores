@@ -4,7 +4,6 @@
 
 typedef struct t_ast_node
 {
-  char *label;
   TokenData *data;
   struct t_ast_node *children[MAX_CHILDREN];
   struct t_ast_node *next;

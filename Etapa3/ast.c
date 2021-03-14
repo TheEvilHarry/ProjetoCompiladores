@@ -5,16 +5,14 @@
 
 Node *createNode(TokenData *data)
 {
+  printf("Creating node with label %s on line %d\n", data->label, data->line);
+
   Node *node = malloc(sizeof(Node));
-
-
-  //label is at node>data>tokenvalue>value
 
   node->data = data;
   node->numberOfChildren = 0;
 
-  memset(&node->children, (Node *)NULL, sizeof(Node) * MAX_CHILDREN);
-  node->next = NULL;
+  node->next = malloc(sizeof(Node) * MAX_CHILDREN);
 
   return node;
 }
@@ -51,9 +49,9 @@ void exportAST(Node *node)
     printf("%p, %p\n", node, node->next);
     exporta(node->next);
   }
-  if (node->label != NULL)
+  if (node->data->label != NULL)
   {
-    printf("%p [label=\"%s\"]\n", node, node->label);
+    printf("%p [label=\"%s\"]\n", node, node->data->label);
   }
 
   return;
