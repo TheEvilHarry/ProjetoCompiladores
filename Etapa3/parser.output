@@ -1,0 +1,2892 @@
+Terminals unused in grammar
+
+    TK_PR_THEN
+    TK_PR_FOREACH
+    TK_PR_SWITCH
+    TK_PR_CASE
+    TK_PR_CLASS
+    TK_PR_PRIVATE
+    TK_PR_PUBLIC
+    TK_PR_PROTECTED
+    TK_PR_END
+    TK_PR_DEFAULT
+    '.'
+    '$'
+    TOKEN_ERRO
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: globalVariable program
+    2        | functionDefinition program
+    3        | %empty
+
+    4 optionalStatic: TK_PR_STATIC
+    5               | %empty
+
+    6 optionalConst: TK_PR_CONST
+    7              | %empty
+
+    8 globalVariable: optionalStatic type identifier globalVariableList ';'
+
+    9 globalVariableList: ',' identifier globalVariableList
+   10                   | %empty
+
+   11 type: TK_PR_INT
+   12     | TK_PR_FLOAT
+   13     | TK_PR_CHAR
+   14     | TK_PR_BOOL
+   15     | TK_PR_STRING
+
+   16 value: TK_LIT_INT
+   17      | TK_LIT_FLOAT
+   18      | TK_LIT_FALSE
+   19      | TK_LIT_TRUE
+   20      | TK_LIT_CHAR
+   21      | TK_LIT_STRING
+
+   22 functionDefinition: functionHeader commandBlock
+
+   23 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')'
+
+   24 headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList
+   25                 | %empty
+
+   26 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList
+   27                     | %empty
+
+   28 commandBlock: '{' commandList '}'
+
+   29 commandList: command commandList
+   30            | %empty
+
+   31 command: variableDeclaration ';'
+   32        | attribution ';'
+   33        | inputOutput ';'
+   34        | functionCall ';'
+   35        | shift ';'
+   36        | executionControl ';'
+   37        | fluxControl ';'
+   38        | commandBlock ';'
+
+   39 attribution: TK_IDENTIFICADOR '=' expression
+   40            | vector_identifier '=' expression
+
+   41 inputOutput: input
+   42            | output
+
+   43 output: TK_PR_OUTPUT TK_IDENTIFICADOR
+   44       | TK_PR_OUTPUT value
+
+   45 input: TK_PR_INPUT TK_IDENTIFICADOR
+
+   46 functionCall: TK_IDENTIFICADOR '(' functionParameters ')'
+
+   47 functionParameters: expression functionParametersList
+   48                   | %empty
+
+   49 functionParametersList: ',' expression functionParametersList
+   50                       | %empty
+
+   51 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT
+   52      | vector_identifier shiftOperator positive_integer
+
+   53 shiftOperator: TK_OC_SL
+   54              | TK_OC_SR
+
+   55 executionControl: TK_PR_RETURN expression
+   56                 | TK_PR_BREAK
+   57                 | TK_PR_CONTINUE
+
+   58 fluxControl: conditional
+   59            | while
+   60            | for
+
+   61 conditional: TK_PR_IF '(' expression ')' commandBlock else
+
+   62 else: TK_PR_ELSE commandBlock
+   63     | %empty
+
+   64 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock
+
+   65 for: TK_PR_FOR '(' attribution ':' expression ':' attribution ')' commandBlock
+
+   66 expression: orLogicalExpression '?' expression ':' expression
+   67           | orLogicalExpression
+
+   68 orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression
+   69                    | andLogicalExpression
+
+   70 andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression
+   71                     | bitwiseOrExpression
+
+   72 bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression
+   73                    | bitwiseAndExpression
+
+   74 bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression
+   75                     | equalityExpression
+
+   76 equalityExpression: equalityExpression equalityOperator comparisonExpression
+   77                   | comparisonExpression
+
+   78 comparisonExpression: comparisonExpression comparisonOperator sumExpression
+   79                     | sumExpression
+
+   80 sumExpression: sumExpression sumOperator multiplicationExpression
+   81              | multiplicationExpression
+
+   82 multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression
+   83                         | powerExpression
+
+   84 powerExpression: powerExpression powerOperator unaryExpression
+   85                | unaryExpression
+
+   86 unaryExpression: unaryOperator unaryExpression
+   87                | operand
+
+   88 orLogicalOperator: TK_OC_OR
+
+   89 andLogicalOperator: TK_OC_AND
+
+   90 bitwiseOrOperator: '|'
+
+   91 bitwiseAndOperator: '&'
+
+   92 equalityOperator: TK_OC_EQ
+   93                 | TK_OC_NE
+
+   94 comparisonOperator: TK_OC_LE
+   95                   | TK_OC_GE
+   96                   | '<'
+   97                   | '>'
+
+   98 sumOperator: '+'
+   99            | '-'
+
+  100 multiplicationOperator: '*'
+  101                       | '/'
+  102                       | '%'
+
+  103 powerOperator: '^'
+
+  104 unaryOperator: '+'
+  105              | '-'
+  106              | '!'
+  107              | '&'
+  108              | '*'
+  109              | '?'
+  110              | '#'
+
+  111 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList
+
+  112 variable: TK_IDENTIFICADOR
+  113         | TK_IDENTIFICADOR TK_OC_LE value
+  114         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR
+
+  115 variableDeclarationList: ',' variable variableDeclarationList
+  116                        | %empty
+
+  117 operand: TK_IDENTIFICADOR
+  118        | vector_identifier
+  119        | value
+  120        | functionCall
+  121        | '(' expression ')'
+
+  122 vector_identifier: TK_IDENTIFICADOR '[' expression ']'
+
+  123 identifier: TK_IDENTIFICADOR
+  124           | TK_IDENTIFICADOR '[' positive_integer ']'
+
+  125 positive_integer: '+' TK_LIT_INT
+  126                 | TK_LIT_INT
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '!' <valor_lexico> (33) 106
+    '#' <valor_lexico> (35) 110
+    '$' <valor_lexico> (36)
+    '%' <valor_lexico> (37) 102
+    '&' <valor_lexico> (38) 91 107
+    '(' <valor_lexico> (40) 23 46 61 64 65 121
+    ')' <valor_lexico> (41) 23 46 61 64 65 121
+    '*' <valor_lexico> (42) 100 108
+    '+' <valor_lexico> (43) 98 104 125
+    ',' <valor_lexico> (44) 9 26 49 115
+    '-' <valor_lexico> (45) 99 105
+    '.' <valor_lexico> (46)
+    '/' <valor_lexico> (47) 101
+    ':' <valor_lexico> (58) 65 66
+    ';' <valor_lexico> (59) 8 31 32 33 34 35 36 37 38
+    '<' <valor_lexico> (60) 96
+    '=' <valor_lexico> (61) 39 40
+    '>' <valor_lexico> (62) 97
+    '?' <valor_lexico> (63) 66 109
+    '[' <valor_lexico> (91) 122 124
+    ']' <valor_lexico> (93) 122 124
+    '^' <valor_lexico> (94) 103
+    '{' <valor_lexico> (123) 28
+    '|' <valor_lexico> (124) 90
+    '}' <valor_lexico> (125) 28
+    error (256)
+    TK_PR_INT <valor_lexico> (258) 11
+    TK_PR_FLOAT <valor_lexico> (259) 12
+    TK_PR_BOOL <valor_lexico> (260) 14
+    TK_PR_CHAR <valor_lexico> (261) 13
+    TK_PR_STRING <valor_lexico> (262) 15
+    TK_PR_IF <valor_lexico> (263) 61
+    TK_PR_THEN <valor_lexico> (264)
+    TK_PR_ELSE <valor_lexico> (265) 62
+    TK_PR_WHILE <valor_lexico> (266) 64
+    TK_PR_DO <valor_lexico> (267) 64
+    TK_PR_INPUT <valor_lexico> (268) 45
+    TK_PR_OUTPUT <valor_lexico> (269) 43 44
+    TK_PR_RETURN <valor_lexico> (270) 55
+    TK_PR_CONST <valor_lexico> (271) 6
+    TK_PR_STATIC <valor_lexico> (272) 4
+    TK_PR_FOREACH <valor_lexico> (273)
+    TK_PR_FOR <valor_lexico> (274) 65
+    TK_PR_SWITCH <valor_lexico> (275)
+    TK_PR_CASE <valor_lexico> (276)
+    TK_PR_BREAK <valor_lexico> (277) 56
+    TK_PR_CONTINUE <valor_lexico> (278) 57
+    TK_PR_CLASS <valor_lexico> (279)
+    TK_PR_PRIVATE <valor_lexico> (280)
+    TK_PR_PUBLIC <valor_lexico> (281)
+    TK_PR_PROTECTED <valor_lexico> (282)
+    TK_PR_END <valor_lexico> (283)
+    TK_PR_DEFAULT <valor_lexico> (284)
+    TK_OC_LE <valor_lexico> (285) 94 113 114
+    TK_OC_GE <valor_lexico> (286) 95
+    TK_OC_EQ <valor_lexico> (287) 92
+    TK_OC_NE <valor_lexico> (288) 93
+    TK_OC_AND <valor_lexico> (289) 89
+    TK_OC_OR <valor_lexico> (290) 88
+    TK_OC_SL <valor_lexico> (291) 53
+    TK_OC_SR <valor_lexico> (292) 54
+    TK_LIT_INT <valor_lexico> (293) 16 51 125 126
+    TK_LIT_FLOAT <valor_lexico> (294) 17
+    TK_LIT_FALSE <valor_lexico> (295) 18
+    TK_LIT_TRUE <valor_lexico> (296) 19
+    TK_LIT_CHAR <valor_lexico> (297) 20
+    TK_LIT_STRING <valor_lexico> (298) 21
+    TK_IDENTIFICADOR <valor_lexico> (299) 23 24 26 39 43 45 46 51 112 113 114 117 122 123 124
+    TOKEN_ERRO (300)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (71)
+        on left: 0
+    program <node> (72)
+        on left: 1 2 3
+        on right: 0 1 2
+    optionalStatic <node> (73)
+        on left: 4 5
+        on right: 8 23 111
+    optionalConst <node> (74)
+        on left: 6 7
+        on right: 24 26 111
+    globalVariable <node> (75)
+        on left: 8
+        on right: 1
+    globalVariableList <node> (76)
+        on left: 9 10
+        on right: 8 9
+    type <node> (77)
+        on left: 11 12 13 14 15
+        on right: 8 23 24 26 111
+    value <node> (78)
+        on left: 16 17 18 19 20 21
+        on right: 44 113 119
+    functionDefinition <node> (79)
+        on left: 22
+        on right: 2
+    functionHeader <node> (80)
+        on left: 23
+        on right: 22
+    headerParameters <node> (81)
+        on left: 24 25
+        on right: 23
+    headerParametersList <node> (82)
+        on left: 26 27
+        on right: 24 26
+    commandBlock <node> (83)
+        on left: 28
+        on right: 22 38 61 62 64 65
+    commandList <node> (84)
+        on left: 29 30
+        on right: 28 29
+    command <node> (85)
+        on left: 31 32 33 34 35 36 37 38
+        on right: 29
+    attribution <node> (86)
+        on left: 39 40
+        on right: 32 65
+    inputOutput <node> (87)
+        on left: 41 42
+        on right: 33
+    output <node> (88)
+        on left: 43 44
+        on right: 42
+    input <node> (89)
+        on left: 45
+        on right: 41
+    functionCall <node> (90)
+        on left: 46
+        on right: 34 120
+    functionParameters <node> (91)
+        on left: 47 48
+        on right: 46
+    functionParametersList <node> (92)
+        on left: 49 50
+        on right: 47 49
+    shift <node> (93)
+        on left: 51 52
+        on right: 35
+    shiftOperator <node> (94)
+        on left: 53 54
+        on right: 51 52
+    executionControl <node> (95)
+        on left: 55 56 57
+        on right: 36
+    fluxControl <node> (96)
+        on left: 58 59 60
+        on right: 37
+    conditional <node> (97)
+        on left: 61
+        on right: 58
+    else <node> (98)
+        on left: 62 63
+        on right: 61
+    while <node> (99)
+        on left: 64
+        on right: 59
+    for <node> (100)
+        on left: 65
+        on right: 60
+    expression <node> (101)
+        on left: 66 67
+        on right: 39 40 47 49 55 61 64 65 66 121 122
+    orLogicalExpression <node> (102)
+        on left: 68 69
+        on right: 66 67 68
+    andLogicalExpression <node> (103)
+        on left: 70 71
+        on right: 68 69 70
+    bitwiseOrExpression <node> (104)
+        on left: 72 73
+        on right: 70 71 72
+    bitwiseAndExpression <node> (105)
+        on left: 74 75
+        on right: 72 73 74
+    equalityExpression <node> (106)
+        on left: 76 77
+        on right: 74 75 76
+    comparisonExpression <node> (107)
+        on left: 78 79
+        on right: 76 77 78
+    sumExpression <node> (108)
+        on left: 80 81
+        on right: 78 79 80
+    multiplicationExpression <node> (109)
+        on left: 82 83
+        on right: 80 81 82
+    powerExpression <node> (110)
+        on left: 84 85
+        on right: 82 83 84
+    unaryExpression <node> (111)
+        on left: 86 87
+        on right: 84 85 86
+    orLogicalOperator <node> (112)
+        on left: 88
+        on right: 68
+    andLogicalOperator <node> (113)
+        on left: 89
+        on right: 70
+    bitwiseOrOperator <node> (114)
+        on left: 90
+        on right: 72
+    bitwiseAndOperator <node> (115)
+        on left: 91
+        on right: 74
+    equalityOperator <node> (116)
+        on left: 92 93
+        on right: 76
+    comparisonOperator <node> (117)
+        on left: 94 95 96 97
+        on right: 78
+    sumOperator <node> (118)
+        on left: 98 99
+        on right: 80
+    multiplicationOperator <node> (119)
+        on left: 100 101 102
+        on right: 82
+    powerOperator <node> (120)
+        on left: 103
+        on right: 84
+    unaryOperator <node> (121)
+        on left: 104 105 106 107 108 109 110
+        on right: 86
+    variableDeclaration <node> (122)
+        on left: 111
+        on right: 31
+    variable <node> (123)
+        on left: 112 113 114
+        on right: 111 115
+    variableDeclarationList <node> (124)
+        on left: 115 116
+        on right: 111 115
+    operand <node> (125)
+        on left: 117 118 119 120 121
+        on right: 87
+    vector_identifier <node> (126)
+        on left: 122
+        on right: 40 52 118
+    identifier <node> (127)
+        on left: 123 124
+        on right: 8 9
+    positive_integer <node> (128)
+        on left: 125 126
+        on right: 52 124
+
+
+State 0
+
+    0 $accept: • program $end
+
+    TK_PR_STATIC  shift, and go to state 1
+
+    $end      reduce using rule 3 (program)
+    $default  reduce using rule 5 (optionalStatic)
+
+    program             go to state 2
+    optionalStatic      go to state 3
+    globalVariable      go to state 4
+    functionDefinition  go to state 5
+    functionHeader      go to state 6
+
+
+State 1
+
+    4 optionalStatic: TK_PR_STATIC •
+
+    $default  reduce using rule 4 (optionalStatic)
+
+
+State 2
+
+    0 $accept: program • $end
+
+    $end  shift, and go to state 7
+
+
+State 3
+
+    8 globalVariable: optionalStatic • type identifier globalVariableList ';'
+   23 functionHeader: optionalStatic • type TK_IDENTIFICADOR '(' headerParameters ')'
+
+    TK_PR_INT     shift, and go to state 8
+    TK_PR_FLOAT   shift, and go to state 9
+    TK_PR_BOOL    shift, and go to state 10
+    TK_PR_CHAR    shift, and go to state 11
+    TK_PR_STRING  shift, and go to state 12
+
+    type  go to state 13
+
+
+State 4
+
+    1 program: globalVariable • program
+
+    TK_PR_STATIC  shift, and go to state 1
+
+    $end      reduce using rule 3 (program)
+    $default  reduce using rule 5 (optionalStatic)
+
+    program             go to state 14
+    optionalStatic      go to state 3
+    globalVariable      go to state 4
+    functionDefinition  go to state 5
+    functionHeader      go to state 6
+
+
+State 5
+
+    2 program: functionDefinition • program
+
+    TK_PR_STATIC  shift, and go to state 1
+
+    $end      reduce using rule 3 (program)
+    $default  reduce using rule 5 (optionalStatic)
+
+    program             go to state 15
+    optionalStatic      go to state 3
+    globalVariable      go to state 4
+    functionDefinition  go to state 5
+    functionHeader      go to state 6
+
+
+State 6
+
+   22 functionDefinition: functionHeader • commandBlock
+
+    '{'  shift, and go to state 16
+
+    commandBlock  go to state 17
+
+
+State 7
+
+    0 $accept: program $end •
+
+    $default  accept
+
+
+State 8
+
+   11 type: TK_PR_INT •
+
+    $default  reduce using rule 11 (type)
+
+
+State 9
+
+   12 type: TK_PR_FLOAT •
+
+    $default  reduce using rule 12 (type)
+
+
+State 10
+
+   14 type: TK_PR_BOOL •
+
+    $default  reduce using rule 14 (type)
+
+
+State 11
+
+   13 type: TK_PR_CHAR •
+
+    $default  reduce using rule 13 (type)
+
+
+State 12
+
+   15 type: TK_PR_STRING •
+
+    $default  reduce using rule 15 (type)
+
+
+State 13
+
+    8 globalVariable: optionalStatic type • identifier globalVariableList ';'
+   23 functionHeader: optionalStatic type • TK_IDENTIFICADOR '(' headerParameters ')'
+
+    TK_IDENTIFICADOR  shift, and go to state 18
+
+    identifier  go to state 19
+
+
+State 14
+
+    1 program: globalVariable program •
+
+    $default  reduce using rule 1 (program)
+
+
+State 15
+
+    2 program: functionDefinition program •
+
+    $default  reduce using rule 2 (program)
+
+
+State 16
+
+   28 commandBlock: '{' • commandList '}'
+
+    TK_PR_IF          shift, and go to state 20
+    TK_PR_WHILE       shift, and go to state 21
+    TK_PR_INPUT       shift, and go to state 22
+    TK_PR_OUTPUT      shift, and go to state 23
+    TK_PR_RETURN      shift, and go to state 24
+    TK_PR_STATIC      shift, and go to state 1
+    TK_PR_FOR         shift, and go to state 25
+    TK_PR_BREAK       shift, and go to state 26
+    TK_PR_CONTINUE    shift, and go to state 27
+    TK_IDENTIFICADOR  shift, and go to state 28
+    '{'               shift, and go to state 16
+
+    '}'       reduce using rule 30 (commandList)
+    $default  reduce using rule 5 (optionalStatic)
+
+    optionalStatic       go to state 29
+    commandBlock         go to state 30
+    commandList          go to state 31
+    command              go to state 32
+    attribution          go to state 33
+    inputOutput          go to state 34
+    output               go to state 35
+    input                go to state 36
+    functionCall         go to state 37
+    shift                go to state 38
+    executionControl     go to state 39
+    fluxControl          go to state 40
+    conditional          go to state 41
+    while                go to state 42
+    for                  go to state 43
+    variableDeclaration  go to state 44
+    vector_identifier    go to state 45
+
+
+State 17
+
+   22 functionDefinition: functionHeader commandBlock •
+
+    $default  reduce using rule 22 (functionDefinition)
+
+
+State 18
+
+   23 functionHeader: optionalStatic type TK_IDENTIFICADOR • '(' headerParameters ')'
+  123 identifier: TK_IDENTIFICADOR •
+  124           | TK_IDENTIFICADOR • '[' positive_integer ']'
+
+    '('  shift, and go to state 46
+    '['  shift, and go to state 47
+
+    $default  reduce using rule 123 (identifier)
+
+
+State 19
+
+    8 globalVariable: optionalStatic type identifier • globalVariableList ';'
+
+    ','  shift, and go to state 48
+
+    $default  reduce using rule 10 (globalVariableList)
+
+    globalVariableList  go to state 49
+
+
+State 20
+
+   61 conditional: TK_PR_IF • '(' expression ')' commandBlock else
+
+    '('  shift, and go to state 50
+
+
+State 21
+
+   64 while: TK_PR_WHILE • '(' expression ')' TK_PR_DO commandBlock
+
+    '('  shift, and go to state 51
+
+
+State 22
+
+   45 input: TK_PR_INPUT • TK_IDENTIFICADOR
+
+    TK_IDENTIFICADOR  shift, and go to state 52
+
+
+State 23
+
+   43 output: TK_PR_OUTPUT • TK_IDENTIFICADOR
+   44       | TK_PR_OUTPUT • value
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 59
+
+    value  go to state 60
+
+
+State 24
+
+   55 executionControl: TK_PR_RETURN • expression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 72
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 25
+
+   65 for: TK_PR_FOR • '(' attribution ':' expression ':' attribution ')' commandBlock
+
+    '('  shift, and go to state 86
+
+
+State 26
+
+   56 executionControl: TK_PR_BREAK •
+
+    $default  reduce using rule 56 (executionControl)
+
+
+State 27
+
+   57 executionControl: TK_PR_CONTINUE •
+
+    $default  reduce using rule 57 (executionControl)
+
+
+State 28
+
+   39 attribution: TK_IDENTIFICADOR • '=' expression
+   46 functionCall: TK_IDENTIFICADOR • '(' functionParameters ')'
+   51 shift: TK_IDENTIFICADOR • shiftOperator TK_LIT_INT
+  122 vector_identifier: TK_IDENTIFICADOR • '[' expression ']'
+
+    TK_OC_SL  shift, and go to state 87
+    TK_OC_SR  shift, and go to state 88
+    '('       shift, and go to state 89
+    '['       shift, and go to state 90
+    '='       shift, and go to state 91
+
+    shiftOperator  go to state 92
+
+
+State 29
+
+  111 variableDeclaration: optionalStatic • optionalConst type variable variableDeclarationList
+
+    TK_PR_CONST  shift, and go to state 93
+
+    $default  reduce using rule 7 (optionalConst)
+
+    optionalConst  go to state 94
+
+
+State 30
+
+   38 command: commandBlock • ';'
+
+    ';'  shift, and go to state 95
+
+
+State 31
+
+   28 commandBlock: '{' commandList • '}'
+
+    '}'  shift, and go to state 96
+
+
+State 32
+
+   29 commandList: command • commandList
+
+    TK_PR_IF          shift, and go to state 20
+    TK_PR_WHILE       shift, and go to state 21
+    TK_PR_INPUT       shift, and go to state 22
+    TK_PR_OUTPUT      shift, and go to state 23
+    TK_PR_RETURN      shift, and go to state 24
+    TK_PR_STATIC      shift, and go to state 1
+    TK_PR_FOR         shift, and go to state 25
+    TK_PR_BREAK       shift, and go to state 26
+    TK_PR_CONTINUE    shift, and go to state 27
+    TK_IDENTIFICADOR  shift, and go to state 28
+    '{'               shift, and go to state 16
+
+    '}'       reduce using rule 30 (commandList)
+    $default  reduce using rule 5 (optionalStatic)
+
+    optionalStatic       go to state 29
+    commandBlock         go to state 30
+    commandList          go to state 97
+    command              go to state 32
+    attribution          go to state 33
+    inputOutput          go to state 34
+    output               go to state 35
+    input                go to state 36
+    functionCall         go to state 37
+    shift                go to state 38
+    executionControl     go to state 39
+    fluxControl          go to state 40
+    conditional          go to state 41
+    while                go to state 42
+    for                  go to state 43
+    variableDeclaration  go to state 44
+    vector_identifier    go to state 45
+
+
+State 33
+
+   32 command: attribution • ';'
+
+    ';'  shift, and go to state 98
+
+
+State 34
+
+   33 command: inputOutput • ';'
+
+    ';'  shift, and go to state 99
+
+
+State 35
+
+   42 inputOutput: output •
+
+    $default  reduce using rule 42 (inputOutput)
+
+
+State 36
+
+   41 inputOutput: input •
+
+    $default  reduce using rule 41 (inputOutput)
+
+
+State 37
+
+   34 command: functionCall • ';'
+
+    ';'  shift, and go to state 100
+
+
+State 38
+
+   35 command: shift • ';'
+
+    ';'  shift, and go to state 101
+
+
+State 39
+
+   36 command: executionControl • ';'
+
+    ';'  shift, and go to state 102
+
+
+State 40
+
+   37 command: fluxControl • ';'
+
+    ';'  shift, and go to state 103
+
+
+State 41
+
+   58 fluxControl: conditional •
+
+    $default  reduce using rule 58 (fluxControl)
+
+
+State 42
+
+   59 fluxControl: while •
+
+    $default  reduce using rule 59 (fluxControl)
+
+
+State 43
+
+   60 fluxControl: for •
+
+    $default  reduce using rule 60 (fluxControl)
+
+
+State 44
+
+   31 command: variableDeclaration • ';'
+
+    ';'  shift, and go to state 104
+
+
+State 45
+
+   40 attribution: vector_identifier • '=' expression
+   52 shift: vector_identifier • shiftOperator positive_integer
+
+    TK_OC_SL  shift, and go to state 87
+    TK_OC_SR  shift, and go to state 88
+    '='       shift, and go to state 105
+
+    shiftOperator  go to state 106
+
+
+State 46
+
+   23 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' • headerParameters ')'
+
+    TK_PR_CONST  shift, and go to state 93
+
+    ')'       reduce using rule 25 (headerParameters)
+    $default  reduce using rule 7 (optionalConst)
+
+    optionalConst     go to state 107
+    headerParameters  go to state 108
+
+
+State 47
+
+  124 identifier: TK_IDENTIFICADOR '[' • positive_integer ']'
+
+    TK_LIT_INT  shift, and go to state 109
+    '+'         shift, and go to state 110
+
+    positive_integer  go to state 111
+
+
+State 48
+
+    9 globalVariableList: ',' • identifier globalVariableList
+
+    TK_IDENTIFICADOR  shift, and go to state 112
+
+    identifier  go to state 113
+
+
+State 49
+
+    8 globalVariable: optionalStatic type identifier globalVariableList • ';'
+
+    ';'  shift, and go to state 114
+
+
+State 50
+
+   61 conditional: TK_PR_IF '(' • expression ')' commandBlock else
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 115
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 51
+
+   64 while: TK_PR_WHILE '(' • expression ')' TK_PR_DO commandBlock
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 116
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 52
+
+   45 input: TK_PR_INPUT TK_IDENTIFICADOR •
+
+    $default  reduce using rule 45 (input)
+
+
+State 53
+
+   16 value: TK_LIT_INT •
+
+    $default  reduce using rule 16 (value)
+
+
+State 54
+
+   17 value: TK_LIT_FLOAT •
+
+    $default  reduce using rule 17 (value)
+
+
+State 55
+
+   18 value: TK_LIT_FALSE •
+
+    $default  reduce using rule 18 (value)
+
+
+State 56
+
+   19 value: TK_LIT_TRUE •
+
+    $default  reduce using rule 19 (value)
+
+
+State 57
+
+   20 value: TK_LIT_CHAR •
+
+    $default  reduce using rule 20 (value)
+
+
+State 58
+
+   21 value: TK_LIT_STRING •
+
+    $default  reduce using rule 21 (value)
+
+
+State 59
+
+   43 output: TK_PR_OUTPUT TK_IDENTIFICADOR •
+
+    $default  reduce using rule 43 (output)
+
+
+State 60
+
+   44 output: TK_PR_OUTPUT value •
+
+    $default  reduce using rule 44 (output)
+
+
+State 61
+
+   46 functionCall: TK_IDENTIFICADOR • '(' functionParameters ')'
+  117 operand: TK_IDENTIFICADOR •
+  122 vector_identifier: TK_IDENTIFICADOR • '[' expression ']'
+
+    '('  shift, and go to state 89
+    '['  shift, and go to state 90
+
+    $default  reduce using rule 117 (operand)
+
+
+State 62
+
+  121 operand: '(' • expression ')'
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 117
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 63
+
+  104 unaryOperator: '+' •
+
+    $default  reduce using rule 104 (unaryOperator)
+
+
+State 64
+
+  105 unaryOperator: '-' •
+
+    $default  reduce using rule 105 (unaryOperator)
+
+
+State 65
+
+  108 unaryOperator: '*' •
+
+    $default  reduce using rule 108 (unaryOperator)
+
+
+State 66
+
+  106 unaryOperator: '!' •
+
+    $default  reduce using rule 106 (unaryOperator)
+
+
+State 67
+
+  107 unaryOperator: '&' •
+
+    $default  reduce using rule 107 (unaryOperator)
+
+
+State 68
+
+  110 unaryOperator: '#' •
+
+    $default  reduce using rule 110 (unaryOperator)
+
+
+State 69
+
+  109 unaryOperator: '?' •
+
+    $default  reduce using rule 109 (unaryOperator)
+
+
+State 70
+
+  119 operand: value •
+
+    $default  reduce using rule 119 (operand)
+
+
+State 71
+
+  120 operand: functionCall •
+
+    $default  reduce using rule 120 (operand)
+
+
+State 72
+
+   55 executionControl: TK_PR_RETURN expression •
+
+    $default  reduce using rule 55 (executionControl)
+
+
+State 73
+
+   66 expression: orLogicalExpression • '?' expression ':' expression
+   67           | orLogicalExpression •
+   68 orLogicalExpression: orLogicalExpression • orLogicalOperator andLogicalExpression
+
+    TK_OC_OR  shift, and go to state 118
+    '?'       shift, and go to state 119
+
+    $default  reduce using rule 67 (expression)
+
+    orLogicalOperator  go to state 120
+
+
+State 74
+
+   69 orLogicalExpression: andLogicalExpression •
+   70 andLogicalExpression: andLogicalExpression • andLogicalOperator bitwiseOrExpression
+
+    TK_OC_AND  shift, and go to state 121
+
+    $default  reduce using rule 69 (orLogicalExpression)
+
+    andLogicalOperator  go to state 122
+
+
+State 75
+
+   71 andLogicalExpression: bitwiseOrExpression •
+   72 bitwiseOrExpression: bitwiseOrExpression • bitwiseOrOperator bitwiseAndExpression
+
+    '|'  shift, and go to state 123
+
+    $default  reduce using rule 71 (andLogicalExpression)
+
+    bitwiseOrOperator  go to state 124
+
+
+State 76
+
+   73 bitwiseOrExpression: bitwiseAndExpression •
+   74 bitwiseAndExpression: bitwiseAndExpression • bitwiseAndOperator equalityExpression
+
+    '&'  shift, and go to state 125
+
+    $default  reduce using rule 73 (bitwiseOrExpression)
+
+    bitwiseAndOperator  go to state 126
+
+
+State 77
+
+   75 bitwiseAndExpression: equalityExpression •
+   76 equalityExpression: equalityExpression • equalityOperator comparisonExpression
+
+    TK_OC_EQ  shift, and go to state 127
+    TK_OC_NE  shift, and go to state 128
+
+    $default  reduce using rule 75 (bitwiseAndExpression)
+
+    equalityOperator  go to state 129
+
+
+State 78
+
+   77 equalityExpression: comparisonExpression •
+   78 comparisonExpression: comparisonExpression • comparisonOperator sumExpression
+
+    TK_OC_LE  shift, and go to state 130
+    TK_OC_GE  shift, and go to state 131
+    '<'       shift, and go to state 132
+    '>'       shift, and go to state 133
+
+    $default  reduce using rule 77 (equalityExpression)
+
+    comparisonOperator  go to state 134
+
+
+State 79
+
+   79 comparisonExpression: sumExpression •
+   80 sumExpression: sumExpression • sumOperator multiplicationExpression
+
+    '+'  shift, and go to state 135
+    '-'  shift, and go to state 136
+
+    $default  reduce using rule 79 (comparisonExpression)
+
+    sumOperator  go to state 137
+
+
+State 80
+
+   81 sumExpression: multiplicationExpression •
+   82 multiplicationExpression: multiplicationExpression • multiplicationOperator powerExpression
+
+    '*'  shift, and go to state 138
+    '/'  shift, and go to state 139
+    '%'  shift, and go to state 140
+
+    $default  reduce using rule 81 (sumExpression)
+
+    multiplicationOperator  go to state 141
+
+
+State 81
+
+   83 multiplicationExpression: powerExpression •
+   84 powerExpression: powerExpression • powerOperator unaryExpression
+
+    '^'  shift, and go to state 142
+
+    $default  reduce using rule 83 (multiplicationExpression)
+
+    powerOperator  go to state 143
+
+
+State 82
+
+   85 powerExpression: unaryExpression •
+
+    $default  reduce using rule 85 (powerExpression)
+
+
+State 83
+
+   86 unaryExpression: unaryOperator • unaryExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value              go to state 70
+    functionCall       go to state 71
+    unaryExpression    go to state 144
+    unaryOperator      go to state 83
+    operand            go to state 84
+    vector_identifier  go to state 85
+
+
+State 84
+
+   87 unaryExpression: operand •
+
+    $default  reduce using rule 87 (unaryExpression)
+
+
+State 85
+
+  118 operand: vector_identifier •
+
+    $default  reduce using rule 118 (operand)
+
+
+State 86
+
+   65 for: TK_PR_FOR '(' • attribution ':' expression ':' attribution ')' commandBlock
+
+    TK_IDENTIFICADOR  shift, and go to state 145
+
+    attribution        go to state 146
+    vector_identifier  go to state 147
+
+
+State 87
+
+   53 shiftOperator: TK_OC_SL •
+
+    $default  reduce using rule 53 (shiftOperator)
+
+
+State 88
+
+   54 shiftOperator: TK_OC_SR •
+
+    $default  reduce using rule 54 (shiftOperator)
+
+
+State 89
+
+   46 functionCall: TK_IDENTIFICADOR '(' • functionParameters ')'
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    $default  reduce using rule 48 (functionParameters)
+
+    value                     go to state 70
+    functionCall              go to state 71
+    functionParameters        go to state 148
+    expression                go to state 149
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 90
+
+  122 vector_identifier: TK_IDENTIFICADOR '[' • expression ']'
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 150
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 91
+
+   39 attribution: TK_IDENTIFICADOR '=' • expression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 151
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 92
+
+   51 shift: TK_IDENTIFICADOR shiftOperator • TK_LIT_INT
+
+    TK_LIT_INT  shift, and go to state 152
+
+
+State 93
+
+    6 optionalConst: TK_PR_CONST •
+
+    $default  reduce using rule 6 (optionalConst)
+
+
+State 94
+
+  111 variableDeclaration: optionalStatic optionalConst • type variable variableDeclarationList
+
+    TK_PR_INT     shift, and go to state 8
+    TK_PR_FLOAT   shift, and go to state 9
+    TK_PR_BOOL    shift, and go to state 10
+    TK_PR_CHAR    shift, and go to state 11
+    TK_PR_STRING  shift, and go to state 12
+
+    type  go to state 153
+
+
+State 95
+
+   38 command: commandBlock ';' •
+
+    $default  reduce using rule 38 (command)
+
+
+State 96
+
+   28 commandBlock: '{' commandList '}' •
+
+    $default  reduce using rule 28 (commandBlock)
+
+
+State 97
+
+   29 commandList: command commandList •
+
+    $default  reduce using rule 29 (commandList)
+
+
+State 98
+
+   32 command: attribution ';' •
+
+    $default  reduce using rule 32 (command)
+
+
+State 99
+
+   33 command: inputOutput ';' •
+
+    $default  reduce using rule 33 (command)
+
+
+State 100
+
+   34 command: functionCall ';' •
+
+    $default  reduce using rule 34 (command)
+
+
+State 101
+
+   35 command: shift ';' •
+
+    $default  reduce using rule 35 (command)
+
+
+State 102
+
+   36 command: executionControl ';' •
+
+    $default  reduce using rule 36 (command)
+
+
+State 103
+
+   37 command: fluxControl ';' •
+
+    $default  reduce using rule 37 (command)
+
+
+State 104
+
+   31 command: variableDeclaration ';' •
+
+    $default  reduce using rule 31 (command)
+
+
+State 105
+
+   40 attribution: vector_identifier '=' • expression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 154
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 106
+
+   52 shift: vector_identifier shiftOperator • positive_integer
+
+    TK_LIT_INT  shift, and go to state 109
+    '+'         shift, and go to state 110
+
+    positive_integer  go to state 155
+
+
+State 107
+
+   24 headerParameters: optionalConst • type TK_IDENTIFICADOR headerParametersList
+
+    TK_PR_INT     shift, and go to state 8
+    TK_PR_FLOAT   shift, and go to state 9
+    TK_PR_BOOL    shift, and go to state 10
+    TK_PR_CHAR    shift, and go to state 11
+    TK_PR_STRING  shift, and go to state 12
+
+    type  go to state 156
+
+
+State 108
+
+   23 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters • ')'
+
+    ')'  shift, and go to state 157
+
+
+State 109
+
+  126 positive_integer: TK_LIT_INT •
+
+    $default  reduce using rule 126 (positive_integer)
+
+
+State 110
+
+  125 positive_integer: '+' • TK_LIT_INT
+
+    TK_LIT_INT  shift, and go to state 158
+
+
+State 111
+
+  124 identifier: TK_IDENTIFICADOR '[' positive_integer • ']'
+
+    ']'  shift, and go to state 159
+
+
+State 112
+
+  123 identifier: TK_IDENTIFICADOR •
+  124           | TK_IDENTIFICADOR • '[' positive_integer ']'
+
+    '['  shift, and go to state 47
+
+    $default  reduce using rule 123 (identifier)
+
+
+State 113
+
+    9 globalVariableList: ',' identifier • globalVariableList
+
+    ','  shift, and go to state 48
+
+    $default  reduce using rule 10 (globalVariableList)
+
+    globalVariableList  go to state 160
+
+
+State 114
+
+    8 globalVariable: optionalStatic type identifier globalVariableList ';' •
+
+    $default  reduce using rule 8 (globalVariable)
+
+
+State 115
+
+   61 conditional: TK_PR_IF '(' expression • ')' commandBlock else
+
+    ')'  shift, and go to state 161
+
+
+State 116
+
+   64 while: TK_PR_WHILE '(' expression • ')' TK_PR_DO commandBlock
+
+    ')'  shift, and go to state 162
+
+
+State 117
+
+  121 operand: '(' expression • ')'
+
+    ')'  shift, and go to state 163
+
+
+State 118
+
+   88 orLogicalOperator: TK_OC_OR •
+
+    $default  reduce using rule 88 (orLogicalOperator)
+
+
+State 119
+
+   66 expression: orLogicalExpression '?' • expression ':' expression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 164
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 120
+
+   68 orLogicalExpression: orLogicalExpression orLogicalOperator • andLogicalExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    andLogicalExpression      go to state 165
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 121
+
+   89 andLogicalOperator: TK_OC_AND •
+
+    $default  reduce using rule 89 (andLogicalOperator)
+
+
+State 122
+
+   70 andLogicalExpression: andLogicalExpression andLogicalOperator • bitwiseOrExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    bitwiseOrExpression       go to state 166
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 123
+
+   90 bitwiseOrOperator: '|' •
+
+    $default  reduce using rule 90 (bitwiseOrOperator)
+
+
+State 124
+
+   72 bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator • bitwiseAndExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    bitwiseAndExpression      go to state 167
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 125
+
+   91 bitwiseAndOperator: '&' •
+
+    $default  reduce using rule 91 (bitwiseAndOperator)
+
+
+State 126
+
+   74 bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator • equalityExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    equalityExpression        go to state 168
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 127
+
+   92 equalityOperator: TK_OC_EQ •
+
+    $default  reduce using rule 92 (equalityOperator)
+
+
+State 128
+
+   93 equalityOperator: TK_OC_NE •
+
+    $default  reduce using rule 93 (equalityOperator)
+
+
+State 129
+
+   76 equalityExpression: equalityExpression equalityOperator • comparisonExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    comparisonExpression      go to state 169
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 130
+
+   94 comparisonOperator: TK_OC_LE •
+
+    $default  reduce using rule 94 (comparisonOperator)
+
+
+State 131
+
+   95 comparisonOperator: TK_OC_GE •
+
+    $default  reduce using rule 95 (comparisonOperator)
+
+
+State 132
+
+   96 comparisonOperator: '<' •
+
+    $default  reduce using rule 96 (comparisonOperator)
+
+
+State 133
+
+   97 comparisonOperator: '>' •
+
+    $default  reduce using rule 97 (comparisonOperator)
+
+
+State 134
+
+   78 comparisonExpression: comparisonExpression comparisonOperator • sumExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    sumExpression             go to state 170
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 135
+
+   98 sumOperator: '+' •
+
+    $default  reduce using rule 98 (sumOperator)
+
+
+State 136
+
+   99 sumOperator: '-' •
+
+    $default  reduce using rule 99 (sumOperator)
+
+
+State 137
+
+   80 sumExpression: sumExpression sumOperator • multiplicationExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    multiplicationExpression  go to state 171
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 138
+
+  100 multiplicationOperator: '*' •
+
+    $default  reduce using rule 100 (multiplicationOperator)
+
+
+State 139
+
+  101 multiplicationOperator: '/' •
+
+    $default  reduce using rule 101 (multiplicationOperator)
+
+
+State 140
+
+  102 multiplicationOperator: '%' •
+
+    $default  reduce using rule 102 (multiplicationOperator)
+
+
+State 141
+
+   82 multiplicationExpression: multiplicationExpression multiplicationOperator • powerExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value              go to state 70
+    functionCall       go to state 71
+    powerExpression    go to state 172
+    unaryExpression    go to state 82
+    unaryOperator      go to state 83
+    operand            go to state 84
+    vector_identifier  go to state 85
+
+
+State 142
+
+  103 powerOperator: '^' •
+
+    $default  reduce using rule 103 (powerOperator)
+
+
+State 143
+
+   84 powerExpression: powerExpression powerOperator • unaryExpression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value              go to state 70
+    functionCall       go to state 71
+    unaryExpression    go to state 173
+    unaryOperator      go to state 83
+    operand            go to state 84
+    vector_identifier  go to state 85
+
+
+State 144
+
+   86 unaryExpression: unaryOperator unaryExpression •
+
+    $default  reduce using rule 86 (unaryExpression)
+
+
+State 145
+
+   39 attribution: TK_IDENTIFICADOR • '=' expression
+  122 vector_identifier: TK_IDENTIFICADOR • '[' expression ']'
+
+    '['  shift, and go to state 90
+    '='  shift, and go to state 91
+
+
+State 146
+
+   65 for: TK_PR_FOR '(' attribution • ':' expression ':' attribution ')' commandBlock
+
+    ':'  shift, and go to state 174
+
+
+State 147
+
+   40 attribution: vector_identifier • '=' expression
+
+    '='  shift, and go to state 105
+
+
+State 148
+
+   46 functionCall: TK_IDENTIFICADOR '(' functionParameters • ')'
+
+    ')'  shift, and go to state 175
+
+
+State 149
+
+   47 functionParameters: expression • functionParametersList
+
+    ','  shift, and go to state 176
+
+    $default  reduce using rule 50 (functionParametersList)
+
+    functionParametersList  go to state 177
+
+
+State 150
+
+  122 vector_identifier: TK_IDENTIFICADOR '[' expression • ']'
+
+    ']'  shift, and go to state 178
+
+
+State 151
+
+   39 attribution: TK_IDENTIFICADOR '=' expression •
+
+    $default  reduce using rule 39 (attribution)
+
+
+State 152
+
+   51 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT •
+
+    $default  reduce using rule 51 (shift)
+
+
+State 153
+
+  111 variableDeclaration: optionalStatic optionalConst type • variable variableDeclarationList
+
+    TK_IDENTIFICADOR  shift, and go to state 179
+
+    variable  go to state 180
+
+
+State 154
+
+   40 attribution: vector_identifier '=' expression •
+
+    $default  reduce using rule 40 (attribution)
+
+
+State 155
+
+   52 shift: vector_identifier shiftOperator positive_integer •
+
+    $default  reduce using rule 52 (shift)
+
+
+State 156
+
+   24 headerParameters: optionalConst type • TK_IDENTIFICADOR headerParametersList
+
+    TK_IDENTIFICADOR  shift, and go to state 181
+
+
+State 157
+
+   23 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')' •
+
+    $default  reduce using rule 23 (functionHeader)
+
+
+State 158
+
+  125 positive_integer: '+' TK_LIT_INT •
+
+    $default  reduce using rule 125 (positive_integer)
+
+
+State 159
+
+  124 identifier: TK_IDENTIFICADOR '[' positive_integer ']' •
+
+    $default  reduce using rule 124 (identifier)
+
+
+State 160
+
+    9 globalVariableList: ',' identifier globalVariableList •
+
+    $default  reduce using rule 9 (globalVariableList)
+
+
+State 161
+
+   61 conditional: TK_PR_IF '(' expression ')' • commandBlock else
+
+    '{'  shift, and go to state 16
+
+    commandBlock  go to state 182
+
+
+State 162
+
+   64 while: TK_PR_WHILE '(' expression ')' • TK_PR_DO commandBlock
+
+    TK_PR_DO  shift, and go to state 183
+
+
+State 163
+
+  121 operand: '(' expression ')' •
+
+    $default  reduce using rule 121 (operand)
+
+
+State 164
+
+   66 expression: orLogicalExpression '?' expression • ':' expression
+
+    ':'  shift, and go to state 184
+
+
+State 165
+
+   68 orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression •
+   70 andLogicalExpression: andLogicalExpression • andLogicalOperator bitwiseOrExpression
+
+    TK_OC_AND  shift, and go to state 121
+
+    $default  reduce using rule 68 (orLogicalExpression)
+
+    andLogicalOperator  go to state 122
+
+
+State 166
+
+   70 andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression •
+   72 bitwiseOrExpression: bitwiseOrExpression • bitwiseOrOperator bitwiseAndExpression
+
+    '|'  shift, and go to state 123
+
+    $default  reduce using rule 70 (andLogicalExpression)
+
+    bitwiseOrOperator  go to state 124
+
+
+State 167
+
+   72 bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression •
+   74 bitwiseAndExpression: bitwiseAndExpression • bitwiseAndOperator equalityExpression
+
+    '&'  shift, and go to state 125
+
+    $default  reduce using rule 72 (bitwiseOrExpression)
+
+    bitwiseAndOperator  go to state 126
+
+
+State 168
+
+   74 bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression •
+   76 equalityExpression: equalityExpression • equalityOperator comparisonExpression
+
+    TK_OC_EQ  shift, and go to state 127
+    TK_OC_NE  shift, and go to state 128
+
+    $default  reduce using rule 74 (bitwiseAndExpression)
+
+    equalityOperator  go to state 129
+
+
+State 169
+
+   76 equalityExpression: equalityExpression equalityOperator comparisonExpression •
+   78 comparisonExpression: comparisonExpression • comparisonOperator sumExpression
+
+    TK_OC_LE  shift, and go to state 130
+    TK_OC_GE  shift, and go to state 131
+    '<'       shift, and go to state 132
+    '>'       shift, and go to state 133
+
+    $default  reduce using rule 76 (equalityExpression)
+
+    comparisonOperator  go to state 134
+
+
+State 170
+
+   78 comparisonExpression: comparisonExpression comparisonOperator sumExpression •
+   80 sumExpression: sumExpression • sumOperator multiplicationExpression
+
+    '+'  shift, and go to state 135
+    '-'  shift, and go to state 136
+
+    $default  reduce using rule 78 (comparisonExpression)
+
+    sumOperator  go to state 137
+
+
+State 171
+
+   80 sumExpression: sumExpression sumOperator multiplicationExpression •
+   82 multiplicationExpression: multiplicationExpression • multiplicationOperator powerExpression
+
+    '*'  shift, and go to state 138
+    '/'  shift, and go to state 139
+    '%'  shift, and go to state 140
+
+    $default  reduce using rule 80 (sumExpression)
+
+    multiplicationOperator  go to state 141
+
+
+State 172
+
+   82 multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression •
+   84 powerExpression: powerExpression • powerOperator unaryExpression
+
+    '^'  shift, and go to state 142
+
+    $default  reduce using rule 82 (multiplicationExpression)
+
+    powerOperator  go to state 143
+
+
+State 173
+
+   84 powerExpression: powerExpression powerOperator unaryExpression •
+
+    $default  reduce using rule 84 (powerExpression)
+
+
+State 174
+
+   65 for: TK_PR_FOR '(' attribution ':' • expression ':' attribution ')' commandBlock
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 185
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 175
+
+   46 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' •
+
+    $default  reduce using rule 46 (functionCall)
+
+
+State 176
+
+   49 functionParametersList: ',' • expression functionParametersList
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 186
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 177
+
+   47 functionParameters: expression functionParametersList •
+
+    $default  reduce using rule 47 (functionParameters)
+
+
+State 178
+
+  122 vector_identifier: TK_IDENTIFICADOR '[' expression ']' •
+
+    $default  reduce using rule 122 (vector_identifier)
+
+
+State 179
+
+  112 variable: TK_IDENTIFICADOR •
+  113         | TK_IDENTIFICADOR • TK_OC_LE value
+  114         | TK_IDENTIFICADOR • TK_OC_LE TK_IDENTIFICADOR
+
+    TK_OC_LE  shift, and go to state 187
+
+    $default  reduce using rule 112 (variable)
+
+
+State 180
+
+  111 variableDeclaration: optionalStatic optionalConst type variable • variableDeclarationList
+
+    ','  shift, and go to state 188
+
+    $default  reduce using rule 116 (variableDeclarationList)
+
+    variableDeclarationList  go to state 189
+
+
+State 181
+
+   24 headerParameters: optionalConst type TK_IDENTIFICADOR • headerParametersList
+
+    ','  shift, and go to state 190
+
+    $default  reduce using rule 27 (headerParametersList)
+
+    headerParametersList  go to state 191
+
+
+State 182
+
+   61 conditional: TK_PR_IF '(' expression ')' commandBlock • else
+
+    TK_PR_ELSE  shift, and go to state 192
+
+    $default  reduce using rule 63 (else)
+
+    else  go to state 193
+
+
+State 183
+
+   64 while: TK_PR_WHILE '(' expression ')' TK_PR_DO • commandBlock
+
+    '{'  shift, and go to state 16
+
+    commandBlock  go to state 194
+
+
+State 184
+
+   66 expression: orLogicalExpression '?' expression ':' • expression
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 61
+    '('               shift, and go to state 62
+    '+'               shift, and go to state 63
+    '-'               shift, and go to state 64
+    '*'               shift, and go to state 65
+    '!'               shift, and go to state 66
+    '&'               shift, and go to state 67
+    '#'               shift, and go to state 68
+    '?'               shift, and go to state 69
+
+    value                     go to state 70
+    functionCall              go to state 71
+    expression                go to state 195
+    orLogicalExpression       go to state 73
+    andLogicalExpression      go to state 74
+    bitwiseOrExpression       go to state 75
+    bitwiseAndExpression      go to state 76
+    equalityExpression        go to state 77
+    comparisonExpression      go to state 78
+    sumExpression             go to state 79
+    multiplicationExpression  go to state 80
+    powerExpression           go to state 81
+    unaryExpression           go to state 82
+    unaryOperator             go to state 83
+    operand                   go to state 84
+    vector_identifier         go to state 85
+
+
+State 185
+
+   65 for: TK_PR_FOR '(' attribution ':' expression • ':' attribution ')' commandBlock
+
+    ':'  shift, and go to state 196
+
+
+State 186
+
+   49 functionParametersList: ',' expression • functionParametersList
+
+    ','  shift, and go to state 176
+
+    $default  reduce using rule 50 (functionParametersList)
+
+    functionParametersList  go to state 197
+
+
+State 187
+
+  113 variable: TK_IDENTIFICADOR TK_OC_LE • value
+  114         | TK_IDENTIFICADOR TK_OC_LE • TK_IDENTIFICADOR
+
+    TK_LIT_INT        shift, and go to state 53
+    TK_LIT_FLOAT      shift, and go to state 54
+    TK_LIT_FALSE      shift, and go to state 55
+    TK_LIT_TRUE       shift, and go to state 56
+    TK_LIT_CHAR       shift, and go to state 57
+    TK_LIT_STRING     shift, and go to state 58
+    TK_IDENTIFICADOR  shift, and go to state 198
+
+    value  go to state 199
+
+
+State 188
+
+  115 variableDeclarationList: ',' • variable variableDeclarationList
+
+    TK_IDENTIFICADOR  shift, and go to state 179
+
+    variable  go to state 200
+
+
+State 189
+
+  111 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList •
+
+    $default  reduce using rule 111 (variableDeclaration)
+
+
+State 190
+
+   26 headerParametersList: ',' • optionalConst type TK_IDENTIFICADOR headerParametersList
+
+    TK_PR_CONST  shift, and go to state 93
+
+    $default  reduce using rule 7 (optionalConst)
+
+    optionalConst  go to state 201
+
+
+State 191
+
+   24 headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList •
+
+    $default  reduce using rule 24 (headerParameters)
+
+
+State 192
+
+   62 else: TK_PR_ELSE • commandBlock
+
+    '{'  shift, and go to state 16
+
+    commandBlock  go to state 202
+
+
+State 193
+
+   61 conditional: TK_PR_IF '(' expression ')' commandBlock else •
+
+    $default  reduce using rule 61 (conditional)
+
+
+State 194
+
+   64 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock •
+
+    $default  reduce using rule 64 (while)
+
+
+State 195
+
+   66 expression: orLogicalExpression '?' expression ':' expression •
+
+    $default  reduce using rule 66 (expression)
+
+
+State 196
+
+   65 for: TK_PR_FOR '(' attribution ':' expression ':' • attribution ')' commandBlock
+
+    TK_IDENTIFICADOR  shift, and go to state 145
+
+    attribution        go to state 203
+    vector_identifier  go to state 147
+
+
+State 197
+
+   49 functionParametersList: ',' expression functionParametersList •
+
+    $default  reduce using rule 49 (functionParametersList)
+
+
+State 198
+
+  114 variable: TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR •
+
+    $default  reduce using rule 114 (variable)
+
+
+State 199
+
+  113 variable: TK_IDENTIFICADOR TK_OC_LE value •
+
+    $default  reduce using rule 113 (variable)
+
+
+State 200
+
+  115 variableDeclarationList: ',' variable • variableDeclarationList
+
+    ','  shift, and go to state 188
+
+    $default  reduce using rule 116 (variableDeclarationList)
+
+    variableDeclarationList  go to state 204
+
+
+State 201
+
+   26 headerParametersList: ',' optionalConst • type TK_IDENTIFICADOR headerParametersList
+
+    TK_PR_INT     shift, and go to state 8
+    TK_PR_FLOAT   shift, and go to state 9
+    TK_PR_BOOL    shift, and go to state 10
+    TK_PR_CHAR    shift, and go to state 11
+    TK_PR_STRING  shift, and go to state 12
+
+    type  go to state 205
+
+
+State 202
+
+   62 else: TK_PR_ELSE commandBlock •
+
+    $default  reduce using rule 62 (else)
+
+
+State 203
+
+   65 for: TK_PR_FOR '(' attribution ':' expression ':' attribution • ')' commandBlock
+
+    ')'  shift, and go to state 206
+
+
+State 204
+
+  115 variableDeclarationList: ',' variable variableDeclarationList •
+
+    $default  reduce using rule 115 (variableDeclarationList)
+
+
+State 205
+
+   26 headerParametersList: ',' optionalConst type • TK_IDENTIFICADOR headerParametersList
+
+    TK_IDENTIFICADOR  shift, and go to state 207
+
+
+State 206
+
+   65 for: TK_PR_FOR '(' attribution ':' expression ':' attribution ')' • commandBlock
+
+    '{'  shift, and go to state 16
+
+    commandBlock  go to state 208
+
+
+State 207
+
+   26 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR • headerParametersList
+
+    ','  shift, and go to state 190
+
+    $default  reduce using rule 27 (headerParametersList)
+
+    headerParametersList  go to state 209
+
+
+State 208
+
+   65 for: TK_PR_FOR '(' attribution ':' expression ':' attribution ')' commandBlock •
+
+    $default  reduce using rule 65 (for)
+
+
+State 209
+
+   26 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList •
+
+    $default  reduce using rule 26 (headerParametersList)

@@ -12,6 +12,14 @@ typedef struct t_ast_node
 
 Node *createNode(TokenData *data);
 
+Node *createAttributionNode();
+
+Node *createInitializationNode();
+
+Node *createFuncCallNode();
+
+Node *createShiftNode(TokenData *data);
+
 Node *addChild(Node *node, Node *child);
 
 Node *addNext(Node *node, Node *next);

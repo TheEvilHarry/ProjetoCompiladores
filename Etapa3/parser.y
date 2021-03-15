@@ -142,10 +142,11 @@ int yyerror (char const *s);
 %type<node> powerOperator
 %type<node> unaryOperator
 %type<node> comparisonOperator
+%type<node> vector_identifier
 
 
 %type<node> functionHeader			//CHECK THIS LATER
-%type<valor_lexico> shiftOperator
+%type<node> shiftOperator
 
 %%
 
@@ -171,8 +172,6 @@ type: TK_PR_INT { $$ = NULL; }
         | TK_PR_CHAR  { $$ = NULL; }
         | TK_PR_BOOL  { $$ = NULL; }
         | TK_PR_STRING  { $$ = NULL; };
-identifier: TK_IDENTIFICADOR {$$=createNode($1);}
-        | TK_IDENTIFICADOR '[' positive_integer ']';
 
 value: TK_LIT_INT {createNode($1);}
         | TK_LIT_FLOAT {createNode($1);}
@@ -186,7 +185,7 @@ functionDefinition: functionHeader commandBlock {addChild($1,$2); $$=$1;} ;  //C
 functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')' {$$=createNode($3);} ;
 
 headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {freeToken($3);$$=NULL;}
-        | ;
+        | {$$=NULL;};
 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {$$=NULL;}
         | {$$=NULL;};
 
@@ -214,16 +213,9 @@ command: variableDeclaration ';' {$$ = $1; freeToken($2); }
         | fluxControl ';' {$$ = $1; freeToken($2);}
         | commandBlock ';' {$$ = $1; freeToken($2);};
 
-variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList;
 
-variable: TK_IDENTIFICADOR
-        | TK_IDENTIFICADOR TK_OC_LE value
-        | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR;
-variableDeclarationList: ',' variable variableDeclarationList
-        | ;
-
-attribution: TK_IDENTIFICADOR '=' expression
-        | TK_IDENTIFICADOR '[' expression ']' '=' expression;
+attribution: TK_IDENTIFICADOR '=' expression {$$=createAttributionNode(); addChild($$,createNode($1)); addChild($$,$3);}
+        | vector_identifier '=' expression {$$=createAttributionNode(); addChild($$,$1); addChild($$,$3);};
 
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
@@ -233,18 +225,21 @@ output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode
 
 input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($2));} ;
 
-functionCall: TK_IDENTIFICADOR '(' functionParameters ')';
+functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createFuncCallNode(); addChild($$, createNode($1)); addChild($$,$3);} ;
+
+
 functionParameters: expression functionParametersList
-        | ;
+        | {$$=NULL;};
 functionParametersList: ',' expression functionParametersList
-        | ;
+        | {$$=NULL;};
 
-shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT
-        | TK_IDENTIFICADOR '[' expression ']' shiftOperator positive_integer;
-shiftOperator: TK_OC_SL
-        | TK_OC_SR;
+shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT {addChild($2,createNode($1)); addChild($2,createNode($3)); $$=$2;}
+        | vector_identifier shiftOperator positive_integer {addChild($2,$1); addChild($2,$3); $$=$2;} ;
 
-executionControl: TK_PR_RETURN expression
+shiftOperator: TK_OC_SL {$$=createShiftNode($1);}
+        | TK_OC_SR {$$=createShiftNode($1);};
+
+executionControl: TK_PR_RETURN expression {$$=createNode($1); addChild($$,$2);}
         | TK_PR_BREAK {$$=createNode($1);}
         | TK_PR_CONTINUE {$$=createNode($1);};
 
@@ -302,11 +297,11 @@ comparisonOperator: TK_OC_LE {$$=createNode($1);}
         | '>' {$$=createNode($1);};
 sumOperator: '+' {$$=createNode($1);};
         | '-' {$$=createNode($1);};
-multiplicationOperator: '*'
+multiplicationOperator: '*' {createNode($1);}
         | '/' {$$=createNode($1);};
         | '%' {$$=createNode($1);};
-powerOperator: '^';
-unaryOperator: '+'
+powerOperator: '^' {$$=createNode($1);};
+unaryOperator: '+' {$$=createNode($1)}
         | '-' {$$=createNode($1);}
         | '!' {$$=createNode($1);}
         | '&' {$$=createNode($1);}
@@ -314,11 +309,28 @@ unaryOperator: '+'
         | '?' {$$=createNode($1);}
         | '#' {$$=createNode($1);} ;
 
+
+variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList; ///////need to discuss with pedro
+
+variable: TK_IDENTIFICADOR {$$=NULL; freeToken($1);}
+        | TK_IDENTIFICADOR TK_OC_LE value {$$=createInitializationNode(); addChild($$,createNode($1)); addChild($$,$3); }
+        | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {$$=createInitializationNode(); addChild($$,createNode($1)); addChild($$,createNode($3)); };
+
+variableDeclarationList: ',' variable variableDeclarationList ///////need to discuss with pedro
+        | {$$=NULL;};
+
+
 operand: TK_IDENTIFICADOR {$$=createNode($1);}
-        | TK_IDENTIFICADOR '[' expression ']'
+        | vector_identifier {$$=$1;}
         | value {$$=$1;}
         | functionCall
         | '(' expression ')' {freeToken($1); freeToken($3); $$=$2;};
+
+vector_identifier: TK_IDENTIFICADOR '[' expression ']';    ///////need to discuss with pedro
+
+identifier: TK_IDENTIFICADOR {$$=createNode($1);}
+          | TK_IDENTIFICADOR '[' positive_integer ']';
+
 
 positive_integer: '+' TK_LIT_INT {$$=createNode($2);}
 		| TK_LIT_INT {$$=createNode($1);};

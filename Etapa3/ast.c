@@ -17,6 +17,26 @@ Node *createNode(TokenData *data)
   return node;
 }
 
+Node *createAttributionNode(){
+
+    return NULL;
+}
+
+Node *createInitializationNode(){
+    return NULL;
+}
+
+Node *createFuncCallNode(){
+
+     return NULL;
+
+}
+
+Node *createShiftNode(TokenData *data){
+    return NULL;
+
+}
+
 Node *addChild(Node *node, Node *child)
 {
   node->children[node->numberOfChildren] = child;
