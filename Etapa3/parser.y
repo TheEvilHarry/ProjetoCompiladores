@@ -225,13 +225,6 @@ output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode
 
 input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($2));} ;
 
-functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createFuncCallNode(); addChild($$, createNode($1)); addChild($$,$3);} ;
-
-
-functionParameters: expression functionParametersList
-        | {$$=NULL;};
-functionParametersList: ',' expression functionParametersList
-        | {$$=NULL;};
 
 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT {addChild($2,createNode($1)); addChild($2,createNode($3)); $$=$2;}
         | vector_identifier shiftOperator positive_integer {addChild($2,$1); addChild($2,$3); $$=$2;} ;
@@ -301,29 +294,52 @@ multiplicationOperator: '*' {createNode($1);}
         | '/' {$$=createNode($1);};
         | '%' {$$=createNode($1);};
 powerOperator: '^' {$$=createNode($1);};
-unaryOperator: '+' {$$=createNode($1)}
+unaryOperator: '+' {$$=createNode($1);}
         | '-' {$$=createNode($1);}
         | '!' {$$=createNode($1);}
         | '&' {$$=createNode($1);}
         | '*' {$$=createNode($1);}
         | '?' {$$=createNode($1);}
         | '#' {$$=createNode($1);} ;
+											///////need to discuss with pedro
 
+variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList {
 
-variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList; ///////need to discuss with pedro
+	if($4==NULL){
+		$$=$5;	}
+	else{
+		$4->next=$5;
+		$$=$4;}
+};
 
 variable: TK_IDENTIFICADOR {$$=NULL; freeToken($1);}
         | TK_IDENTIFICADOR TK_OC_LE value {$$=createInitializationNode(); addChild($$,createNode($1)); addChild($$,$3); }
         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {$$=createInitializationNode(); addChild($$,createNode($1)); addChild($$,createNode($3)); };
 
-variableDeclarationList: ',' variable variableDeclarationList ///////need to discuss with pedro
+								///////need to discuss with pedro
+
+variableDeclarationList: ',' variable variableDeclarationList {
+
+	if($2==NULL){
+		$$=$3;	}
+	else{
+		$2->next = $3;
+		$$=$2;	}
+}
         | {$$=NULL;};
 
+
+functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createFuncCallNode(); addChild($$, createNode($1)); addChild($$,$3);} ;
+
+functionParameters: expression functionParametersList
+        | {$$=NULL;};
+functionParametersList: ',' expression functionParametersList
+        | {$$=NULL;};
 
 operand: TK_IDENTIFICADOR {$$=createNode($1);}
         | vector_identifier {$$=$1;}
         | value {$$=$1;}
-        | functionCall
+        | functionCall {$$=$1;}
         | '(' expression ')' {freeToken($1); freeToken($3); $$=$2;};
 
 vector_identifier: TK_IDENTIFICADOR '[' expression ']';    ///////need to discuss with pedro
