@@ -1,6 +1,8 @@
 int var_global;
 int main(){
     for( i=1 : 2 <= 3 : i=i+1){
+
+        cmd();
         output "diego";
         a = 12;
         a = 12 + 1;

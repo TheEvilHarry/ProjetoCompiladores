@@ -13,7 +13,8 @@ typedef enum lexicalValueTokenType
     IDENTIFIER_TOKEN,
     LITERAL_TOKEN,
     SPECIAL_CHAR_TOKEN,
-    COMPOSITE_OPERATOR_TOKEN
+    COMPOSITE_OPERATOR_TOKEN,
+    SPECIAL_TYPE
 } Token;
 
 typedef struct t_token_data

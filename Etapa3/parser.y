@@ -331,11 +331,27 @@ variableDeclarationList: ',' variable variableDeclarationList {
 
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
-        char* str;
-        strcpy(str, "call ");
+
+	char str[10]="call ";
+
         strcat(str, $1->label);
-        $$=createCustomLabelNode($1, str);
-        addChild($$,$3);
+
+	TokenData* data = createNonLiteralToken(yylineno, SPECIAL_TYPE, str);
+
+	$$=createNode(data);
+	addChild($$,createNode($1));
+	addChild($$,$3);
+
+//        char str[10]="call ";
+//
+//        strcat(str, $1->label);
+//
+//        $$=createCustomLabelNode(NULL, str);
+//
+//        addChild($$,createNode($1));
+//
+//        addChild($$,$3);
+
 } ;
 
 functionParameters: expression functionParametersList {
