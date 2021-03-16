@@ -165,7 +165,7 @@ optionalConst: TK_PR_CONST  { $$ = NULL; }
         |  { $$ = NULL; };
 
 globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL; freeAST($4);} ;
-globalVariableList: ',' identifier globalVariableList {$$=NULL; freeToken($1);}
+globalVariableList: ',' identifier globalVariableList {$$=NULL;}
         | {$$=NULL;};
 
 type: TK_PR_INT { $$ = NULL; }
@@ -205,18 +205,18 @@ commandList: command commandList {
 	}
         | {$$=NULL;};
 
-command: variableDeclaration ';' {$$ = $1; freeToken($2); }
-        | attribution ';' {$$ = $1; freeToken($2); }
-        | inputOutput ';' {$$ = $1;  freeToken($2);}
-        | functionCall ';' {$$ = $1;  freeToken($2);}
-        | shift ';' {$$ = $1; freeToken($2); }
-        | executionControl ';' {$$ = $1;  freeToken($2);}      // CHECK IF TRUE
-        | fluxControl ';' {$$ = $1; freeToken($2);}
-        | commandBlock ';' {$$ = $1; freeToken($2);};
+command: variableDeclaration ';' {$$ = $1; }
+        | attribution ';' {$$ = $1; }
+        | inputOutput ';' {$$ = $1; }
+        | functionCall ';' {$$ = $1; }
+        | shift ';' {$$ = $1; }
+        | executionControl ';' {$$ = $1; }      // CHECK IF TRUE
+        | fluxControl ';' {$$ = $1;}
+        | commandBlock ';' {$$ = $1;};
 
 
-attribution: TK_IDENTIFICADOR '=' expression {$$=createNode($2); addChild($$,createNode($1)); addChild($$,$3);}
-        | vector_identifier '=' expression {$$=createNode($2); addChild($$,$1); addChild($$,$3);};
+attribution: TK_IDENTIFICADOR '=' expression {$$=createCustomLabelNode(NULL, "="); addChild($$,createNode($1)); addChild($$,$3);}
+        | vector_identifier '=' expression {$$=createCustomLabelNode(NULL, "="); addChild($$,$1); addChild($$,$3);};
 
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
@@ -330,7 +330,13 @@ variableDeclarationList: ',' variable variableDeclarationList {
         | {$$=NULL;};
 
 
-functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createFuncCallNode(); addChild($$, createNode($1)); addChild($$,$3);} ;
+functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
+        char* str;
+        strcpy(str, "call ");
+        strcat(str, $1->label);
+        $$=createCustomLabelNode($1, str);
+        addChild($$,$3);
+} ;
 
 functionParameters: expression functionParametersList {
 
@@ -349,7 +355,7 @@ operand: TK_IDENTIFICADOR {$$=createNode($1);}
         | vector_identifier {$$=$1;}
         | value {$$=$1;}
         | functionCall {$$=$1;}
-        | '(' expression ')' {freeToken($1); freeToken($3); $$=$2;};
+        | '(' expression ')' {$$=$2;};
 
 vector_identifier: TK_IDENTIFICADOR '[' expression ']';    ///////need to discuss with pedro
 

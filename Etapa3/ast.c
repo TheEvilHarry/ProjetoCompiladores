@@ -19,11 +19,14 @@ Node *createNode(TokenData *data)
 
 Node *createCustomLabelNode(TokenData *data, char *label)
 {
-  printf("Creating node with label %s on line %d\n", data->label, data->line);
+  printf("Creating node with custom label %s\n", label);
 
   Node *node = malloc(sizeof(Node));
 
-  data->label = strdup(label);
+  if (data != NULL)
+  {
+    data->label = strdup(label);
+  }
 
   node->data = data;
   node->numberOfChildren = 0;
@@ -31,12 +34,6 @@ Node *createCustomLabelNode(TokenData *data, char *label)
   node->next = malloc(sizeof(Node) * MAX_CHILDREN);
 
   return node;
-}
-
-Node *createAttributionNode()
-{
-
-  return NULL;
 }
 
 Node *addChild(Node *node, Node *child)
