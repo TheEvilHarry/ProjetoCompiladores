@@ -211,8 +211,8 @@ command: variableDeclaration ';' {$$ = $1; }
         | functionCall ';' {$$ = $1; }
         | shift ';' {$$ = $1; }
         | executionControl ';' {$$ = $1; }      // CHECK IF TRUE
-        | fluxControl ';' {$$ = $1;}
-        | commandBlock ';' {$$ = $1;};
+        | fluxControl {$$ = $1;}
+        | commandBlock {$$ = $1;};
 
 
 attribution: TK_IDENTIFICADOR '=' expression {$$=createCustomLabelNode(NULL, "="); addChild($$,createNode($1)); addChild($$,$3);}
