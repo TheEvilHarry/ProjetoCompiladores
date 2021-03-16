@@ -174,12 +174,12 @@ type: TK_PR_INT { $$ = NULL; }
         | TK_PR_BOOL  { $$ = NULL; }
         | TK_PR_STRING  { $$ = NULL; };
 
-value: TK_LIT_INT {createNode($1);}
-        | TK_LIT_FLOAT {createNode($1);}
-        | TK_LIT_FALSE {createNode($1);}
-        | TK_LIT_TRUE {createNode($1);}
-        | TK_LIT_CHAR {createNode($1);}
-        | TK_LIT_STRING {createNode($1);};
+value: TK_LIT_INT {$$=createNode($1);}
+        | TK_LIT_FLOAT {$$=createNode($1);}
+        | TK_LIT_FALSE {$$=createNode($1);}
+        | TK_LIT_TRUE {$$=createNode($1);}
+        | TK_LIT_CHAR {$$=createNode($1);}
+        | TK_LIT_STRING {$$=createNode($1);};
 
 functionDefinition: functionHeader commandBlock {addChild($1,$2); $$=$1;} ;  //CHECK LATER
 
@@ -266,8 +266,8 @@ multiplicationExpression: multiplicationExpression multiplicationOperator powerE
 powerExpression: powerExpression powerOperator unaryExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
         | unaryExpression {$$=$1;};
 
-unaryExpression: unaryOperator unaryExpression
-        | operand;
+unaryExpression: unaryOperator unaryExpression {$$=$1; addChild($$, $2); }
+        | operand {$$=$1;};
 
 orLogicalOperator: TK_OC_OR {$$=createNode($1);};
 andLogicalOperator: TK_OC_AND {$$=createNode($1);} ;
@@ -292,7 +292,6 @@ unaryOperator: '+' {$$=createNode($1);}
         | '*' {$$=createNode($1);}
         | '?' {$$=createNode($1);}
         | '#' {$$=createNode($1);} ;
-											///////need to discuss with pedro
 
 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList {
 
@@ -343,7 +342,7 @@ operand: TK_IDENTIFICADOR {$$=createNode($1);}
         | functionCall {$$=$1;}
         | '(' expression ')' {$$=$2;};
 
-vector_identifier: TK_IDENTIFICADOR '[' expression ']';    ///////need to discuss with pedro
+vector_identifier: TK_IDENTIFICADOR '[' expression ']' { $$=createCustomLabelNode("[]", yylineno); addChild($$, createNode($1)); addChild($$, $3); };
 
 identifier: TK_IDENTIFICADOR {$$=createNode($1);}
           | TK_IDENTIFICADOR '[' positive_integer ']';

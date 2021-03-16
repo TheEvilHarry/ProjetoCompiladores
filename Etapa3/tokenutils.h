@@ -1,3 +1,5 @@
+#define MAX_LABEL_SIZE 100
+
 typedef enum lexicalValueLiteralType
 {
     LIT_INTEGER,
@@ -23,14 +25,14 @@ typedef struct t_token_data
     Token type;
     Literal literal;
 
-    char *label;
+    char label[MAX_LABEL_SIZE];
     union
     {
         int valueInt;
         float valueFloat;
         int valueBoolean;
         char valueChar;
-        char *valueString;
+        char valueString[MAX_LABEL_SIZE];
     } value;
 
 } TokenData;
