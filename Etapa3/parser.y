@@ -192,17 +192,7 @@ headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersLi
 
 commandBlock: '{' commandList '}' {$$=$2;} ;
 
-commandList: command commandList {
-
-		if($1!=NULL)
-		{
-			addNext($1->children[$1->numberOfChildren - 1], $2);
-			$$=$1;
-		}
-		else {
-			$$=$2;
-		}
-	}
+commandList: command commandList { addNext($1, $2); $$=$1; }
         | {$$=NULL;};
 
 command: variableDeclaration ';' {$$ = $1; }
@@ -250,7 +240,7 @@ while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createNode($1); 
 
 for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$9);} ;
 
-expression: orLogicalExpression '?' expression ':' expression {$$=createNode($2); addChild($$,$1); addChild($$,$3); addChild($$,$5);  }
+expression: orLogicalExpression '?' expression ':' expression {$$=createCustomLabelNode("?:", yylineno); addChild($$,$1); addChild($$,$3); addChild($$,$5);  }
     | orLogicalExpression {$$=$1;};
 
 orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
@@ -341,17 +331,10 @@ functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
 	addChild($$,$3);
 } ;
 
-functionParameters: expression functionParametersList {
-
-		if($1==NULL){
-			$$=$2;}
-		else{
-			$1->next=$2;
-			$$=$1;}
-}
+functionParameters: expression functionParametersList { $$=addNext($1, $2); }
         | {$$=NULL;};
 
-functionParametersList: ',' expression functionParametersList {$$=NULL;}
+functionParametersList: ',' expression functionParametersList { $$=addNext($2, $3); }
         | {$$=NULL;};
 
 operand: TK_IDENTIFICADOR {$$=createNode($1);}
