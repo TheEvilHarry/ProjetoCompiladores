@@ -17,24 +17,26 @@ Node *createNode(TokenData *data)
   return node;
 }
 
-Node *createAttributionNode(){
+Node *createCustomLabelNode(TokenData *data, char *label)
+{
+  printf("Creating node with label %s on line %d\n", data->label, data->line);
 
-    return NULL;
+  Node *node = malloc(sizeof(Node));
+
+  data->label = strdup(label);
+
+  node->data = data;
+  node->numberOfChildren = 0;
+
+  node->next = malloc(sizeof(Node) * MAX_CHILDREN);
+
+  return node;
 }
 
-Node *createInitializationNode(){
-    return NULL;
-}
+Node *createAttributionNode()
+{
 
-Node *createFuncCallNode(){
-
-     return NULL;
-
-}
-
-Node *createShiftNode(TokenData *data){
-    return NULL;
-
+  return NULL;
 }
 
 Node *addChild(Node *node, Node *child)

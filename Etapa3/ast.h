@@ -12,13 +12,7 @@ typedef struct t_ast_node
 
 Node *createNode(TokenData *data);
 
-Node *createAttributionNode();
-
-Node *createInitializationNode();
-
-Node *createFuncCallNode();
-
-Node *createShiftNode(TokenData *data);
+Node *createCustomLabelNode(TokenData *data, char *label);
 
 Node *addChild(Node *node, Node *child);
 

@@ -1,6 +1,7 @@
 %{
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 #include "ast.h"
 
 extern void *arvore;
@@ -60,16 +61,16 @@ int yyerror (char const *s);
 %token<valor_lexico> TK_LIT_CHAR
 %token<valor_lexico> TK_LIT_STRING
 %token<valor_lexico> TK_IDENTIFICADOR
-%token<valor_lexico> ','
-%token<valor_lexico> ';'
-%token<valor_lexico> ':'
-%token<valor_lexico> '('
-%token<valor_lexico> ')'
-%token<valor_lexico> '['
-%token<valor_lexico> ']'
-%token<valor_lexico> '{'
-%token<valor_lexico> '}'
-%type<valor_lexico> '+'
+%token ','
+%token ';'
+%token ':'
+%token '('
+%token ')'
+%token '['
+%token ']'
+%token '{'
+%token '}'
+%token<valor_lexico> '+'
 %token<valor_lexico> '-'
 %token<valor_lexico> '|'
 %token<valor_lexico> '*'
@@ -189,7 +190,7 @@ headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {free
 headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {$$=NULL;}
         | {$$=NULL;};
 
-commandBlock: '{' commandList '}' {$$=$2; freeToken($1); freeToken($3);} ;
+commandBlock: '{' commandList '}' {$$=$2;} ;
 
 commandList: command commandList {
 
@@ -214,8 +215,8 @@ command: variableDeclaration ';' {$$ = $1; freeToken($2); }
         | commandBlock ';' {$$ = $1; freeToken($2);};
 
 
-attribution: TK_IDENTIFICADOR '=' expression {$$=createAttributionNode(); addChild($$,createNode($1)); addChild($$,$3);}
-        | vector_identifier '=' expression {$$=createAttributionNode(); addChild($$,$1); addChild($$,$3);};
+attribution: TK_IDENTIFICADOR '=' expression {$$=createNode($2); addChild($$,createNode($1)); addChild($$,$3);}
+        | vector_identifier '=' expression {$$=createNode($2); addChild($$,$1); addChild($$,$3);};
 
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
@@ -229,8 +230,8 @@ input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($
 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT {addChild($2,createNode($1)); addChild($2,createNode($3)); $$=$2;}
         | vector_identifier shiftOperator positive_integer {addChild($2,$1); addChild($2,$3); $$=$2;} ;
 
-shiftOperator: TK_OC_SL {$$=createShiftNode($1);}
-        | TK_OC_SR {$$=createShiftNode($1);};
+shiftOperator: TK_OC_SL {$$=createNode($1);}
+        | TK_OC_SR {$$=createNode($1);};
 
 executionControl: TK_PR_RETURN expression {$$=createNode($1); addChild($$,$2);}
         | TK_PR_BREAK {$$=createNode($1);}
@@ -313,8 +314,8 @@ variableDeclaration: optionalStatic optionalConst type variable variableDeclarat
 };
 
 variable: TK_IDENTIFICADOR {$$=NULL; freeToken($1);}
-        | TK_IDENTIFICADOR TK_OC_LE value {$$=createInitializationNode(); addChild($$,createNode($1)); addChild($$,$3); }
-        | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {$$=createInitializationNode(); addChild($$,createNode($1)); addChild($$,createNode($3)); };
+        | TK_IDENTIFICADOR TK_OC_LE value {$$=createNode($2); addChild($$,createNode($1)); addChild($$,$3); }
+        | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {$$=createNode($2); addChild($$,createNode($1)); addChild($$,createNode($3)); };
 
 								///////need to discuss with pedro
 
@@ -329,7 +330,7 @@ variableDeclarationList: ',' variable variableDeclarationList {
         | {$$=NULL;};
 
 
-functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createFuncCallNode(); addChild($$, createNode($1)); addChild($$,$3);} ;
+functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createCustomLabelNode($1, strcat("call ", $1->label)); addChild($$,$3);} ;
 
 functionParameters: expression functionParametersList
         | {$$=NULL;};
