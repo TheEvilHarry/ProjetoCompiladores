@@ -330,11 +330,19 @@ variableDeclarationList: ',' variable variableDeclarationList {
         | {$$=NULL;};
 
 
-functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createCustomLabelNode($1, strcat("call ", $1->label)); addChild($$,$3);} ;
+functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {$$=createFuncCallNode(); addChild($$, createNode($1)); addChild($$,$3);} ;
 
-functionParameters: expression functionParametersList
+functionParameters: expression functionParametersList {
+
+		if($1==NULL){
+			$$=$2;}
+		else{
+			$1->next=$2;
+			$$=$1;}
+}
         | {$$=NULL;};
-functionParametersList: ',' expression functionParametersList
+
+functionParametersList: ',' expression functionParametersList {$$=NULL;}
         | {$$=NULL;};
 
 operand: TK_IDENTIFICADOR {$$=createNode($1);}
@@ -351,6 +359,7 @@ identifier: TK_IDENTIFICADOR {$$=createNode($1);}
 
 positive_integer: '+' TK_LIT_INT {$$=createNode($2);}
 		| TK_LIT_INT {$$=createNode($1);};
+
 
 %%
 
