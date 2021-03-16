@@ -12,7 +12,7 @@ typedef struct t_ast_node
 
 Node *createNode(TokenData *data);
 
-Node *createCustomLabelNode(TokenData *data, char *label);
+Node *createCustomLabelNode(char *label, int line);
 
 Node *addChild(Node *node, Node *child);
 

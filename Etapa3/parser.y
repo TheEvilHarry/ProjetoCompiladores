@@ -156,7 +156,7 @@ int yyerror (char const *s);
 // need a join nodes function (?) maybe
 
 program: globalVariable program { $$ = $2; arvore = $$; }
-        | functionDefinition program {$$=$1; addNext($1, $2); arvore=$$; }
+        | functionDefinition program {$$=$1; addNext($$, $2); arvore=$$; }
         | {$$=NULL;};
 
 optionalStatic: TK_PR_STATIC  { $$ = NULL; }
@@ -215,8 +215,8 @@ command: variableDeclaration ';' {$$ = $1; }
         | commandBlock {$$ = $1;};
 
 
-attribution: TK_IDENTIFICADOR '=' expression {$$=createCustomLabelNode(NULL, "="); addChild($$,createNode($1)); addChild($$,$3);}
-        | vector_identifier '=' expression {$$=createCustomLabelNode(NULL, "="); addChild($$,$1); addChild($$,$3);};
+attribution: TK_IDENTIFICADOR '=' expression {$$=createCustomLabelNode("=", yylineno); addChild($$,createNode($1)); addChild($$,$3);}
+        | vector_identifier '=' expression {$$=createCustomLabelNode("=", yylineno); addChild($$,$1); addChild($$,$3);};
 
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
@@ -331,27 +331,14 @@ variableDeclarationList: ',' variable variableDeclarationList {
 
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
-
 	char str[10]="call ";
 
         strcat(str, $1->label);
 
-	TokenData* data = createNonLiteralToken(yylineno, SPECIAL_TYPE, str);
+	$$=createCustomLabelNode(str, yylineno);
 
-	$$=createNode(data);
 	addChild($$,createNode($1));
 	addChild($$,$3);
-
-//        char str[10]="call ";
-//
-//        strcat(str, $1->label);
-//
-//        $$=createCustomLabelNode(NULL, str);
-//
-//        addChild($$,createNode($1));
-//
-//        addChild($$,$3);
-
 } ;
 
 functionParameters: expression functionParametersList {

@@ -12,26 +12,22 @@ Node *createNode(TokenData *data)
   node->data = data;
   node->numberOfChildren = 0;
 
-  node->next = malloc(sizeof(Node) * MAX_CHILDREN);
+  node->next = NULL; //malloc(sizeof(Node) * MAX_CHILDREN);
 
   return node;
 }
 
-Node *createCustomLabelNode(TokenData *data, char *label)
+Node *createCustomLabelNode(char *label, int line)
 {
   printf("Creating node with custom label %s\n", label);
 
+  TokenData *data = createNonLiteralToken(line, SPECIAL_TYPE, label);
   Node *node = malloc(sizeof(Node));
-
-  if (data != NULL)
-  {
-    data->label = strdup(label);
-  }
 
   node->data = data;
   node->numberOfChildren = 0;
 
-  node->next = malloc(sizeof(Node) * MAX_CHILDREN);
+  node->next = NULL; //malloc(sizeof(Node) * MAX_CHILDREN);
 
   return node;
 }
@@ -57,19 +53,23 @@ void exportAST(Node *node)
   {
     return;
   }
+  // printf("Exporting node with label %s and %d children\n", node->data->label, node->numberOfChildren);
 
   for (int i = 0; i < node->numberOfChildren; i++)
   {
+    printf("Iterating over node's children (%d/%d)...\n", i + 1, node->numberOfChildren);
     printf("%p, %p\n", node, node->children[i]);
-    exporta(node->children[i]);
+    exportAST(node->children[i]);
   }
   if (node->next != NULL)
   {
+    printf("Node's next is not null, exporting...\n");
     printf("%p, %p\n", node, node->next);
-    exporta(node->next);
+    exportAST(node->next);
   }
-  if (node->data->label != NULL)
+  if (node->data && node->data->label != NULL)
   {
+    printf("Node has a label, printing...\n");
     printf("%p [label=\"%s\"]\n", node, node->data->label);
   }
 
