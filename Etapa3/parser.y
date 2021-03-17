@@ -19,33 +19,33 @@ int yyerror (char const *s);
 %define parse.lac full
 %define parse.error verbose
 
-%token<valor_lexico> TK_PR_INT
-%token<valor_lexico> TK_PR_FLOAT
-%token<valor_lexico> TK_PR_BOOL
-%token<valor_lexico> TK_PR_CHAR
-%token<valor_lexico> TK_PR_STRING
+%token TK_PR_INT
+%token TK_PR_FLOAT
+%token TK_PR_BOOL
+%token TK_PR_CHAR
+%token TK_PR_STRING
 %token<valor_lexico> TK_PR_IF
-%token<valor_lexico> TK_PR_THEN
+%token TK_PR_THEN
 %token<valor_lexico> TK_PR_ELSE
 %token<valor_lexico> TK_PR_WHILE
-%token<valor_lexico> TK_PR_DO
+%token TK_PR_DO
 %token<valor_lexico> TK_PR_INPUT
 %token<valor_lexico> TK_PR_OUTPUT
 %token<valor_lexico> TK_PR_RETURN
-%token<valor_lexico> TK_PR_CONST
-%token<valor_lexico> TK_PR_STATIC
-%token<valor_lexico> TK_PR_FOREACH
+%token TK_PR_CONST
+%token TK_PR_STATIC
+%token TK_PR_FOREACH
 %token<valor_lexico> TK_PR_FOR
-%token<valor_lexico> TK_PR_SWITCH
-%token<valor_lexico> TK_PR_CASE
+%token TK_PR_SWITCH
+%token TK_PR_CASE
 %token<valor_lexico> TK_PR_BREAK
 %token<valor_lexico> TK_PR_CONTINUE
-%token<valor_lexico> TK_PR_CLASS
-%token<valor_lexico> TK_PR_PRIVATE
-%token<valor_lexico> TK_PR_PUBLIC
-%token<valor_lexico> TK_PR_PROTECTED
-%token<valor_lexico> TK_PR_END
-%token<valor_lexico> TK_PR_DEFAULT
+%token TK_PR_CLASS
+%token TK_PR_PRIVATE
+%token TK_PR_PUBLIC
+%token TK_PR_PROTECTED
+%token TK_PR_END
+%token TK_PR_DEFAULT
 %token<valor_lexico> TK_OC_LE
 %token<valor_lexico> TK_OC_GE
 %token<valor_lexico> TK_OC_EQ
@@ -77,7 +77,7 @@ int yyerror (char const *s);
 %token<valor_lexico> '/'
 %token<valor_lexico> '<'
 %token<valor_lexico> '>'
-%token<valor_lexico> '='
+%token '='
 %token<valor_lexico> '!'
 %token<valor_lexico> '&'
 %token<valor_lexico> '%'
@@ -150,10 +150,6 @@ int yyerror (char const *s);
 %type<node> shiftOperator
 
 %%
-
-//  estudando como estruturar a criação dos nodos ainda
-// Let's create the nodes from the bottom-up
-// need a join nodes function (?) maybe
 
 program: globalVariable program { $$ = $2; arvore = $$; }
         | functionDefinition program {$$=$1; addNext($$, $2); arvore=$$; }
@@ -306,8 +302,6 @@ variable: TK_IDENTIFICADOR {$$=NULL; freeToken($1);}
         | TK_IDENTIFICADOR TK_OC_LE value {$$=createNode($2); addChild($$,createNode($1)); addChild($$,$3); }
         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {$$=createNode($2); addChild($$,createNode($1)); addChild($$,createNode($3)); };
 
-								///////need to discuss with pedro
-
 variableDeclarationList: ',' variable variableDeclarationList {
 
 	if($2==NULL){
@@ -344,8 +338,8 @@ operand: TK_IDENTIFICADOR {$$=createNode($1);}
 
 vector_identifier: TK_IDENTIFICADOR '[' expression ']' { $$=createCustomLabelNode("[]", yylineno); addChild($$, createNode($1)); addChild($$, $3); };
 
-identifier: TK_IDENTIFICADOR {$$=createNode($1);}
-          | TK_IDENTIFICADOR '[' positive_integer ']';
+identifier: TK_IDENTIFICADOR {freeToken($1);}
+          | TK_IDENTIFICADOR '[' positive_integer ']' { freeToken($1); freeAST($3); };
 
 
 positive_integer: '+' TK_LIT_INT {$$=createNode($2);}

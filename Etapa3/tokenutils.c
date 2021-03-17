@@ -82,7 +82,9 @@ TokenData *createCharLiteralToken(int line, char *value)
   token->literal = LIT_CHAR;
 
   token->value.valueChar = (char)value[1];
-  strcpy(token->label, strdup(value));
+  char str[2] = "\0";
+  str[0] = value[1];
+  strcpy(token->label, str);
 
   return token;
 }
@@ -108,7 +110,7 @@ TokenData *createStringLiteralToken(int line, char *value)
   tempString[position] = '\0';
 
   strcpy(token->value.valueString, tempString);
-  strcpy(token->label, strdup(value));
+  strcpy(token->label, tempString);
 
   return token;
 }
