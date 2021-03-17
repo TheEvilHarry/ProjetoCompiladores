@@ -188,7 +188,16 @@ headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersLi
 
 commandBlock: '{' commandList '}' {$$=$2;} ;
 
-commandList: command commandList { addNext($1, $2); $$=$1; }
+commandList: command commandList {
+		if($1==NULL) {
+			$$=$2;
+                }
+		else {
+		        addNext($1, $2);
+		        $$=$1;
+                }
+
+}
         | {$$=NULL;};
 
 command: variableDeclaration ';' {$$ = $1; }
@@ -290,12 +299,13 @@ unaryOperator: '+' {$$=createCustomLabelNode("+", yylineno);}
         | '#' {$$=createCustomLabelNode("#", yylineno);} ;
 
 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList {
-
-	if($4==NULL){
-		$$=$5;	}
-	else{
-		$4->next=$5;
-		$$=$4;}
+	if($4==NULL) {
+	        $$=$5;
+        }
+	else {
+	        addNext($4, $5);
+		$$=$4;
+        }
 };
 
 variable: TK_IDENTIFICADOR {$$=NULL; freeToken($1);}

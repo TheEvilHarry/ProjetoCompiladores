@@ -5,7 +5,6 @@
 
 TokenData *createNonLiteralToken(int line, Token type, char *value)
 {
-  printf("Creating non literal (type=%d) lexical value %s on line %d\n", type, value, line);
   TokenData *token = malloc(sizeof(TokenData));
 
   token->line = line;
@@ -20,7 +19,6 @@ TokenData *createNonLiteralToken(int line, Token type, char *value)
 
 TokenData *createIntegerLiteralToken(int line, char *value)
 {
-  printf("Creating integer lexical value %s on line %d\n", value, line);
   TokenData *token = malloc(sizeof(TokenData));
 
   token->line = line;
@@ -35,7 +33,6 @@ TokenData *createIntegerLiteralToken(int line, char *value)
 
 TokenData *createFloatLiteralToken(int line, char *value)
 {
-  printf("Creating float lexical value %s on line %d\n", value, line);
   TokenData *token = malloc(sizeof(TokenData));
 
   token->line = line;
@@ -50,7 +47,6 @@ TokenData *createFloatLiteralToken(int line, char *value)
 
 TokenData *createBooleanLiteralToken(int line, char *value)
 {
-  printf("Creating boolean lexical value %s on line %d\n", value, line);
   TokenData *token = malloc(sizeof(TokenData));
 
   token->line = line;
@@ -74,7 +70,6 @@ TokenData *createBooleanLiteralToken(int line, char *value)
 
 TokenData *createCharLiteralToken(int line, char *value)
 {
-  printf("Creating char lexical value %c on line %d\n", value[1], line);
   TokenData *token = malloc(sizeof(TokenData));
 
   token->line = line;
@@ -91,7 +86,6 @@ TokenData *createCharLiteralToken(int line, char *value)
 
 TokenData *createStringLiteralToken(int line, char *value)
 {
-  printf("Creating string lexical value %s on line %d\n", value, line);
   TokenData *token = malloc(sizeof(TokenData));
 
   token->line = line;
@@ -119,13 +113,10 @@ TokenData *createStringLiteralToken(int line, char *value)
 
 void freeToken(TokenData *token)
 {
-  printf("Staring token %s's free operation\n", token->label);
   if (token != NULL)
   {
-    printf("Token %s is not NULL, proceeding with free operation\n", token->label);
     free(token);
   }
-  printf("Finished token free operation\n");
 
   return;
 }
