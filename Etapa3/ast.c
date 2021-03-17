@@ -182,6 +182,8 @@ void freeAST(Node *node)
 {
   if (node != NULL)
   {
+    printf("Node is not null\n");
+    printf("Starting node %s's free operation\n", node->data->label);
     for (int i = 0; i < node->numberOfChildren; i++)
     {
       freeAST(node->children[i]);
@@ -190,8 +192,12 @@ void freeAST(Node *node)
     {
       freeAST(node->next);
     }
-
-    freeToken(node->data);
+    if (node->data != NULL)
+    {
+      printf("Node %s data is not null, starting token free\n", node->data->label);
+      freeToken(node->data);
+    }
+    printf("About to free node\n");
     free(node);
   }
 }

@@ -70,22 +70,22 @@ int yyerror (char const *s);
 %token ']'
 %token '{'
 %token '}'
-%token<valor_lexico> '+'
-%token<valor_lexico> '-'
-%token<valor_lexico> '|'
-%token<valor_lexico> '*'
-%token<valor_lexico> '/'
-%token<valor_lexico> '<'
-%token<valor_lexico> '>'
+%token '+'
+%token '-'
+%token '|'
+%token '*'
+%token '/'
+%token '<'
+%token '>'
 %token '='
-%token<valor_lexico> '!'
-%token<valor_lexico> '&'
-%token<valor_lexico> '%'
-%token<valor_lexico> '#'
-%token<valor_lexico> '^'
-%token<valor_lexico> '.'
-%token<valor_lexico> '$'
-%token<valor_lexico> '?'
+%token '!'
+%token '&'
+%token '%'
+%token '#'
+%token '^'
+%token '.'
+%token '$'
+%token '?'
 %token TOKEN_ERRO
 
 
@@ -160,7 +160,7 @@ optionalStatic: TK_PR_STATIC  { $$ = NULL; }
 optionalConst: TK_PR_CONST  { $$ = NULL; }
         |  { $$ = NULL; };
 
-globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL; freeAST($4);} ;
+globalVariable: optionalStatic type identifier globalVariableList ';' {$$=NULL;} ;
 globalVariableList: ',' identifier globalVariableList {$$=NULL;}
         | {$$=NULL;};
 
@@ -267,27 +267,27 @@ unaryExpression: unaryOperator unaryExpression {$$=$1; addChild($$, $2); }
 
 orLogicalOperator: TK_OC_OR {$$=createNode($1);};
 andLogicalOperator: TK_OC_AND {$$=createNode($1);} ;
-bitwiseOrOperator: '|' {$$=createNode($1);};
-bitwiseAndOperator: '&' {$$=createNode($1);};
+bitwiseOrOperator: '|' {$$=createCustomLabelNode("|", yylineno);};
+bitwiseAndOperator: '&' {$$=createCustomLabelNode("&", yylineno);};
 equalityOperator: TK_OC_EQ {$$=createNode($1);}
         | TK_OC_NE {$$=createNode($1);};
 comparisonOperator: TK_OC_LE {$$=createNode($1);}
         | TK_OC_GE {$$=createNode($1);}
-        | '<' {$$=createNode($1);}
-        | '>' {$$=createNode($1);};
-sumOperator: '+' {$$=createNode($1);};
-        | '-' {$$=createNode($1);};
-multiplicationOperator: '*' {createNode($1);}
-        | '/' {$$=createNode($1);};
-        | '%' {$$=createNode($1);};
-powerOperator: '^' {$$=createNode($1);};
-unaryOperator: '+' {$$=createNode($1);}
-        | '-' {$$=createNode($1);}
-        | '!' {$$=createNode($1);}
-        | '&' {$$=createNode($1);}
-        | '*' {$$=createNode($1);}
-        | '?' {$$=createNode($1);}
-        | '#' {$$=createNode($1);} ;
+        | '<' {$$=createCustomLabelNode("<", yylineno);}
+        | '>' {$$=createCustomLabelNode(">", yylineno);};
+sumOperator: '+' {$$=createCustomLabelNode("+", yylineno);};
+        | '-' {$$=createCustomLabelNode("-", yylineno);};
+multiplicationOperator: '*' {$$=createCustomLabelNode("*", yylineno);}
+        | '/' {$$=createCustomLabelNode("/", yylineno);};
+        | '%' {$$=createCustomLabelNode("%", yylineno);};
+powerOperator: '^' {$$=createCustomLabelNode("^", yylineno);};
+unaryOperator: '+' {$$=createCustomLabelNode("+", yylineno);}
+        | '-' {$$=createCustomLabelNode("-", yylineno);}
+        | '!' {$$=createCustomLabelNode("!", yylineno);}
+        | '&' {$$=createCustomLabelNode("&", yylineno);}
+        | '*' {$$=createCustomLabelNode("*", yylineno);}
+        | '?' {$$=createCustomLabelNode("?", yylineno);}
+        | '#' {$$=createCustomLabelNode("#", yylineno);} ;
 
 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList {
 

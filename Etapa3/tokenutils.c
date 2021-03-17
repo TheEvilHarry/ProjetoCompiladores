@@ -117,10 +117,10 @@ TokenData *createStringLiteralToken(int line, char *value)
 
 void freeToken(TokenData *token)
 {
-  // printf("Staring token %s's free operation\n", token->label);
+  printf("Staring token %s's free operation\n", token->label);
   if (token != NULL)
   {
-    // printf("Token %s is not NULL, proceeding with free operation\n", token->label);
+    printf("Token %s is not NULL, proceeding with free operation\n", token->label);
     free(token);
   }
   printf("Finished token free operation\n");
