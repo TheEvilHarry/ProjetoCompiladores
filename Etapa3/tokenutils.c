@@ -12,8 +12,8 @@ TokenData *createNonLiteralToken(int line, Token type, char *value)
   token->type = type;
   token->literal = NOT_LITERAL;
 
-  strcpy(token->value.valueString, strdup(value));
-  strcpy(token->label, strdup(value));
+  strcpy(token->value.valueString, value);
+  strcpy(token->label, value);
 
   return token;
 }
@@ -28,7 +28,7 @@ TokenData *createIntegerLiteralToken(int line, char *value)
   token->literal = LIT_INTEGER;
 
   token->value.valueInt = atoi(value);
-  strcpy(token->label, strdup(value));
+  strcpy(token->label, value);
 
   return token;
 }
@@ -43,7 +43,7 @@ TokenData *createFloatLiteralToken(int line, char *value)
   token->literal = LIT_FLOAT;
 
   token->value.valueInt = atof(value);
-  strcpy(token->label, strdup(value));
+  strcpy(token->label, value);
 
   return token;
 }
@@ -67,7 +67,7 @@ TokenData *createBooleanLiteralToken(int line, char *value)
     token->value.valueBoolean = 0;
   }
 
-  strcpy(token->label, strdup(value));
+  strcpy(token->label, value);
 
   return token;
 }
@@ -111,6 +111,8 @@ TokenData *createStringLiteralToken(int line, char *value)
 
   strcpy(token->value.valueString, tempString);
   strcpy(token->label, tempString);
+
+  free(tempString);
 
   return token;
 }
