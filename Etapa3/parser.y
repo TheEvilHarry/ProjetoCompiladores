@@ -219,22 +219,22 @@ shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT {addChild($2,createNode($1)); a
 shiftOperator: TK_OC_SL {$$=createNode($1);}
         | TK_OC_SR {$$=createNode($1);};
 
-executionControl: TK_PR_RETURN expression {$$=createNode($1); addChild($$,$2);}
-        | TK_PR_BREAK {$$=createNode($1);}
-        | TK_PR_CONTINUE {$$=createNode($1);};
+executionControl: TK_PR_RETURN expression {$$=createCustomLabelNode("return", yylineno); addChild($$,$2);}
+        | TK_PR_BREAK {$$=createCustomLabelNode("break", yylineno);}
+        | TK_PR_CONTINUE {$$=createCustomLabelNode("continue", yylineno);};
 
 fluxControl: conditional {$$=$1;}
         | while {$$=$1;}
         | for {$$=$1;};
-conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createNode($1); addChild($$,$3);addChild($$,$5);addChild($$,$6);};
+conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createCustomLabelNode("if", yylineno); addChild($$,$3);addChild($$,$5);addChild($$,$6);};
 
-else: TK_PR_ELSE commandBlock {$$=createNode($1);}
+else: TK_PR_ELSE commandBlock {$$=createCustomLabelNode("else", yylineno);}
         | {$$=NULL;} ;
 
-while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$6);};
+while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createCustomLabelNode("while", yylineno); addChild($$,$3); addChild($$,$6);};
 
 
-for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock {$$=createNode($1); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$9);} ;
+for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock {$$=createCustomLabelNode("for", yylineno); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$9);} ;
 
 expression: orLogicalExpression '?' expression ':' expression {$$=createCustomLabelNode("?:", yylineno); addChild($$,$1); addChild($$,$3); addChild($$,$5);  }
     | orLogicalExpression {$$=$1;};

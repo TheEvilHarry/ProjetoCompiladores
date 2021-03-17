@@ -25,7 +25,7 @@ int bar(){
 }
 
 int f3(int a){
-    int mmm;
+    // int mmm;
     a = expp ? (1 + 2) : false;
     b = true;
 }
