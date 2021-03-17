@@ -207,10 +207,10 @@ attribution: TK_IDENTIFICADOR '=' expression {$$=createCustomLabelNode("=", yyli
 inputOutput: input {$$=$1;}
         | output {$$=$1;};
 
-output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($2));}
-        | TK_PR_OUTPUT value {$$=createNode($1); addChild($$,$2);};
+output: TK_PR_OUTPUT TK_IDENTIFICADOR {$$=createCustomLabelNode("output", yylineno); addChild($$,createNode($2));}
+        | TK_PR_OUTPUT value {$$=createCustomLabelNode("output", yylineno); addChild($$,$2);};
 
-input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createNode($1); addChild($$,createNode($2));} ;
+input: TK_PR_INPUT TK_IDENTIFICADOR {$$=createCustomLabelNode("input", yylineno); addChild($$,createNode($2));} ;
 
 
 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT {addChild($2,createNode($1)); addChild($2,createNode($3)); $$=$2;}
