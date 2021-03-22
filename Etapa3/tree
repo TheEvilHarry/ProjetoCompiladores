@@ -1,0 +1,124 @@
+digraph G {
+n0 -> n1;
+n1 -> n2;
+n2 -> n3;
+n3 [label="i"]
+n2 -> n4;
+n4 [label="1"]
+n2 [label="="]
+n1 -> n5;
+n5 -> n6;
+n6 [label="2"]
+n5 -> n7;
+n7 [label="3"]
+n5 [label="<="]
+n1 -> n8;
+n8 -> n9;
+n9 [label="i"]
+n8 -> n10;
+n10 -> n11;
+n11 [label="i"]
+n10 -> n12;
+n12 [label="1"]
+n10 [label="+"]
+n8 [label="="]
+n1 -> n13;
+n13 -> n14;
+n14 [label="cmd"]
+n13 -> n15;
+n15 -> n16;
+n16 [label="diego"]
+n15 -> n17;
+n17 -> n18;
+n18 [label="a"]
+n17 -> n19;
+n19 [label="12"]
+n17 -> n20;
+n20 -> n21;
+n21 [label="a"]
+n20 -> n22;
+n22 -> n23;
+n23 [label="12"]
+n22 -> n24;
+n24 [label="1"]
+n22 [label="+"]
+n20 -> n25;
+n25 -> n26;
+n26 [label="b"]
+n25 -> n27;
+n27 [label="4"]
+n25 -> n28;
+n28 -> n29;
+n29 [label="j"]
+n28 -> n30;
+n30 [label="3"]
+n28 [label="="]
+n25 [label=">>"]
+n20 [label="="]
+n17 [label="="]
+n15 [label="output"]
+n13 [label="call cmd"]
+n1 [label="for"]
+n0 -> n31;
+n31 -> n32;
+n32 -> n33;
+n33 [label="b"]
+n32 -> n34;
+n34 [label="3"]
+n32 [label=">>"]
+n31 -> n35;
+n35 -> n36;
+n36 -> n37;
+n37 [label="i"]
+n36 -> n38;
+n38 [label="5"]
+n36 -> n39;
+n39 -> n40;
+n40 [label="expr"]
+n39 -> n41;
+n41 -> n42;
+n42 [label="a"]
+n41 -> n43;
+n43 [label="4"]
+n41 [label=">>"]
+n39 -> n44;
+n44 -> n45;
+n45 -> n46;
+n46 -> n47;
+n47 [label="a"]
+n46 -> n48;
+n48 [label="2"]
+n46 [label="="]
+n45 [label="break"]
+n44 [label="continue"]
+n39 [label="while"]
+n36 [label="<="]
+n35 -> n49;
+n49 -> n50;
+n50 -> n51;
+n51 [label="a"]
+n50 -> n52;
+n52 -> n53;
+n53 [label="expp"]
+n52 -> n54;
+n54 -> n55;
+n55 [label="1"]
+n54 -> n56;
+n56 [label="2"]
+n54 [label="+"]
+n52 -> n57;
+n57 [label="false"]
+n52 [label="?:"]
+n50 -> n58;
+n58 -> n59;
+n59 [label="b"]
+n58 -> n60;
+n60 [label="true"]
+n58 [label="="]
+n50 [label="="]
+n49 [label="f3"]
+n35 [label="bar"]
+n31 [label="foo"]
+n0 [label="main"]
+
+}
