@@ -19,6 +19,15 @@ typedef enum lexicalValueTokenType
     SPECIAL_TYPE
 } Token;
 
+typedef union lexicalValue
+{
+    int valueInt;
+    float valueFloat;
+    int valueBoolean;
+    char valueChar;
+    char valueString[MAX_LABEL_SIZE];
+} LexicalValue;
+
 typedef struct t_token_data
 {
     int line;
