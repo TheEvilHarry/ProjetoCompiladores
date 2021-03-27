@@ -35,14 +35,7 @@ typedef struct t_token_data
     Literal literal;
 
     char label[MAX_LABEL_SIZE];
-    union
-    {
-        int valueInt;
-        float valueFloat;
-        int valueBoolean;
-        char valueChar;
-        char valueString[MAX_LABEL_SIZE];
-    } value;
+    LexicalValue value;
 
 } TokenData;
 

@@ -3,25 +3,27 @@
 #include <string.h>
 #include "ast.h"
 
-Node *createNode(TokenData *data)
+Node *createNode(TokenData *data, Type type)
 {
   Node *node = malloc(sizeof(Node));
 
   node->data = data;
   node->numberOfChildren = 0;
+  node->type = type;
 
   node->next = NULL;
 
   return node;
 }
 
-Node *createCustomLabelNode(char *label, int line)
+Node *createCustomLabelNode(char *label, int line, Type type)
 {
   TokenData *data = createNonLiteralToken(line, SPECIAL_TYPE, label);
   Node *node = malloc(sizeof(Node));
 
   node->data = data;
   node->numberOfChildren = 0;
+  node->type = type;
 
   node->next = NULL;
 
