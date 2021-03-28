@@ -1,17 +1,14 @@
-Starting variable table entry creation for var_global1
 [WARNING] Creating a variable without a type
 Table after variable var_global1 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for salada
 [WARNING] Creating a variable without a type
 Table after variable salada creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0]
 [KEY: salada][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for var_global3
 [WARNING] Creating a variable without a type
 Table after variable var_global3 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0]
@@ -20,128 +17,182 @@ Table after variable var_global3 creation:
 
 
 Ending variable list declaration
-Starting function table entry creation for main
-Starting variable table entry creation for i
+Stacked new empty scope, now there are 2 scopes
+Table after variable y creation:
+[KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+
+
+Table after variable x creation:
+[KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+
+
 [WARNING] Creating a variable without a type
 Table after variable i creation:
-[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for a
 [WARNING] Creating a variable without a type
 Table after variable a creation:
-[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: a][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for b
 [WARNING] Creating a variable without a type
 Table after variable b creation:
-[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: b][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: a][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: b][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for j
 [WARNING] Creating a variable without a type
 Table after variable j creation:
-[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: b][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: j][LINE: 4][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: a][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: b][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: j][LINE: 5][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
 Ending variable list declaration
-Starting function table entry creation for main2
-Starting function table entry creation for foo
-Starting variable table entry creation for var_global2
+Stacked new empty scope, now there are 3 scopes
+[WARNING] Creating a variable without a type
+Table after variable b creation:
+[KEY: b][LINE: 7][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Stacked new empty scope, now there are 4 scopes
+[WARNING] Creating a variable without a type
+Table after variable c creation:
+[KEY: c][LINE: 14][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Stacked new empty scope, now there are 2 scopes
+Stacked new empty scope, now there are 2 scopes
+[WARNING] Creating a variable without a type
+Table after variable b creation:
+[KEY: b][LINE: 24][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
 [WARNING] Creating a variable without a type
 Table after variable var_global2 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: b][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: j][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: main2][LINE: 15][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: foo][LINE: 16][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: var_global2][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
+ARGUMENTS: [KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+
+[KEY: main2][LINE: 22][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: foo][LINE: 23][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: var_global2][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for v3
 [WARNING] Creating a variable without a type
 Table after variable v3 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: b][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: j][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: main2][LINE: 15][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: foo][LINE: 16][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: var_global2][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: v3][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
+ARGUMENTS: [KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+
+[KEY: main2][LINE: 22][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: foo][LINE: 23][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: var_global2][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: v3][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for v4
 [WARNING] Creating a variable without a type
 Table after variable v4 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: b][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: j][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: main2][LINE: 15][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: foo][LINE: 16][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: var_global2][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: v3][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: v4][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
+ARGUMENTS: [KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+
+[KEY: main2][LINE: 22][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: foo][LINE: 23][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: var_global2][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: v3][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: v4][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
-Starting variable table entry creation for v5
 [WARNING] Creating a variable without a type
 Table after variable v5 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: salada][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4]
 [KEY: main][LINE: 3][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: i][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: a][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: b][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: j][LINE: 4][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: main2][LINE: 15][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: foo][LINE: 16][NATURE: 3][TYPE: 1][SIZE: 4]
-[KEY: var_global2][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: v3][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: v4][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
-[KEY: v5][LINE: 19][NATURE: 1][TYPE: 0][SIZE: 0]
+ARGUMENTS: [KEY: y][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4]
+
+[KEY: main2][LINE: 22][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: foo][LINE: 23][NATURE: 3][TYPE: 1][SIZE: 4]
+[KEY: var_global2][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: v3][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: v4][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: v5][LINE: 28][NATURE: 1][TYPE: 0][SIZE: 0]
 
 
 Ending variable list declaration
-Starting function table entry creation for bar
-Starting variable table entry creation for i
+Stacked new empty scope, now there are 2 scopes
 [WARNING] Creating a variable without a type
-[ERROR][Line 21]: Identifier "i" already declared on line 4
+Table after variable i creation:
+[KEY: i][LINE: 30][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+[WARNING] Creating a variable without a type
+Table after variable expr creation:
+[KEY: i][LINE: 30][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: expr][LINE: 30][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+[WARNING] Creating a variable without a type
+Table after variable a creation:
+[KEY: i][LINE: 30][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: expr][LINE: 30][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: a][LINE: 30][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Stacked new empty scope, now there are 3 scopes
+Stacked new empty scope, now there are 2 scopes
+Table after variable a creation:
+[KEY: a][LINE: 39][NATURE: 1][TYPE: 1][SIZE: 4]
+
+
+[WARNING] Creating a variable without a type
+Table after variable mmm creation:
+[KEY: a][LINE: 39][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: mmm][LINE: 40][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+[WARNING] Creating a variable without a type
+Table after variable b creation:
+[KEY: a][LINE: 39][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: mmm][LINE: 40][NATURE: 1][TYPE: 0][SIZE: 0]
+[KEY: b][LINE: 40][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+[WARNING] Creating a variable without a type
+Table after variable expp creation:
+[KEY: a][LINE: 39][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: mmm][LINE: 40][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: b][LINE: 40][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: expp][LINE: 41][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration

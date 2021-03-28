@@ -118,4 +118,5 @@ void freeAST(Node *node)
 void libera(void *arvore)
 {
   freeAST((Node *)arvore);
+  freeTableStack(getGlobalStack());
 }

@@ -1,4 +1,6 @@
-#include "ast.h"
+#include "tokenutils.h"
+
+extern int get_line_number(void);
 
 typedef enum
 {
@@ -41,22 +43,29 @@ void freeStringList(StringList *first);
 SymbolTableEntry *createTableEntry(char *key, int line, Nature nature, Type type, int size, TokenData *data);
 SymbolTableEntry *findEntryInTable(SymbolTableEntry *table, char *key);
 void addEntryToTopScopeTable(SymbolTableEntry *entry);
+void addEntryToTable(SymbolTableEntry *table, SymbolTableEntry *entry);
 void freeSymbolTable(SymbolTableEntry *table);
-void freeSymbolTableEntryArgs(SymbolTableEntry *arguments);
 void printTable(SymbolTableEntry *table);
+
 //Pilha de tabelas de simbolos
-SymbolTableStack *stackScope(SymbolTableStack *stack, SymbolTableEntry *scope);
+SymbolTableStack *stackScope();
 SymbolTableEntry *findEntryInStack(SymbolTableStack *stack, char *key);
-SymbolTableStack *popScope(SymbolTableStack *stack);
+SymbolTableStack *popScope();
 void freeTableStack(SymbolTableStack *stack);
-//
+
+// Escopos
 void createGlobalScope();
+int getNumberOfStackedScopes();
 SymbolTableEntry *getCurrentScope();
-//
+SymbolTableStack *getGlobalStack();
+
+// Criaçao de entradas da tabela
 void createLiteralTableEntry(char *identifier, int line, Type type, TokenData *token);
 void createVariableTableEntry(char *identifier, int line, Type type, TokenData *token);
 void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token);
 void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *token);
+
+void addArgumentsToLastDefinedFunction();
 
 void initiateVariableListDeclaration();
 void endVariableListDeclaration(Type type);
@@ -66,6 +75,18 @@ int getSizeFromType(Type type);
 
 Type getEntryTypeFromKey(char *key);
 
+// Verificaçao do uso de identificadores
+void verifyVariableUse(char *identifier);
+void verifyVectorUse(char *identifier);
+void verifyFunctionUse(char *identifier);
+
 // Lançamento de erros
 void throwDeclaredError(char *name, int previousDeclarationLine);
 void throwUndeclaredError(char *name);
+void throwVariableError(char *name, int declarationLine, Nature nature);
+void throwVectorError(char *name, int declarationLine, Nature nature);
+void throwFunctionError(char *name, int declarationLine, Nature nature);
+
+// Tipos e naturezas
+char *getTypeName(Type type);
+char *getNatureName(Nature nature);

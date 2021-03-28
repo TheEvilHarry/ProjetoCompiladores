@@ -2,7 +2,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-#include "symbolTable.h"
+#include "ast.h"
 
 extern void *arvore;
 
@@ -98,7 +98,8 @@ int yyerror (char const *s);
 %type<node> globalVariableList
 %type<node> identifier
 %type<node> value
-%type<node> commandBlock
+%type<node> commandBlockInit
+%type<node> commandBlockEnd
 %type<node> functionParametersList
 %type<node> functionParameters
 %type<node> headerParameters
@@ -147,6 +148,7 @@ int yyerror (char const *s);
 
 
 %type<node> functionHeader			//CHECK THIS LATER
+%type<node> functionName			
 %type<node> shiftOperator
 
 %type<type> type
@@ -181,18 +183,36 @@ value: TK_LIT_INT {$$=createNode($1, TYPE_INTEGER);}
         | TK_LIT_CHAR {$$=createNode($1, TYPE_CHAR);}
         | TK_LIT_STRING {$$=createNode($1, TYPE_STRING);};
 
-functionDefinition: functionHeader commandBlock {addChild($1,$2); $$=$1;} ;  //CHECK LATER
+functionDefinition: functionHeader functionCommandBlockInit commandBlockEnd {
+        addChild($1,$3);
+        $$=$1; };  //CHECK LATER
 
-functionHeader: optionalStatic type TK_IDENTIFICADOR '(' headerParameters ')' {
+functionHeader: functionName headerParametersBlockInit headerParametersBlockEnd {
+        addArgumentsToLastDefinedFunction();
+        $$=$1; } ;
+
+functionName: optionalStatic type TK_IDENTIFICADOR { 
         $$=createNode($3, $2);
-        createFunctionTableEntry($3->value.valueString, yylineno, $2, $3); } ;
+        createFunctionTableEntry($3->value.valueString, yylineno, $2, $3); };
 
-headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {freeToken($3);$$=NULL;}
-        | {$$=NULL;};
-headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {$$=NULL;}
+headerParametersBlockInit: '(' { stackScope(); };
+
+headerParametersBlockEnd: headerParameters ')';
+
+headerParameters: optionalConst type TK_IDENTIFICADOR headerParametersList {
+        createVariableTableEntry($3->value.valueString, yylineno, $2, NULL);
+        freeToken($3);
+        $$=NULL; }
+        | { $$=NULL; };
+headerParametersList: ',' optionalConst type TK_IDENTIFICADOR headerParametersList {
+        createVariableTableEntry($4->value.valueString, yylineno, $3, NULL);
+        $$=NULL; }
         | {$$=NULL;};
 
-commandBlock: '{' commandList '}' {$$=$2;} ;
+commandBlockInit: '{' { stackScope(); };
+commandBlockEnd: commandList '}' { $$=$1; popScope(); };
+
+functionCommandBlockInit: '{';
 
 commandList: command commandList {
 		if($1==NULL) {
@@ -213,13 +233,14 @@ command: variableDeclaration ';' {$$ = $1; }
         | shift ';' {$$ = $1; }
         | executionControl ';' {$$ = $1; }      // CHECK IF TRUE
         | fluxControl {$$ = $1;}
-        | commandBlock {$$ = $1;};
+        | commandBlockInit commandBlockEnd {$$ = $2;};
 
 
 attribution: TK_IDENTIFICADOR '=' expression {
-        Type identifierType = getEntryTypeFromKey($1->value.valueString);
-        $$=createCustomLabelNode("=", yylineno, identifierType);
-        addChild($$,createNode($1, identifierType));
+        // Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        verifyVariableUse($1->value.valueString);
+        $$=createCustomLabelNode("=", yylineno, TYPE_UNDEFINED);
+        addChild($$,createNode($1, TYPE_UNDEFINED));
         addChild($$,$3); }
         | vector_identifier '=' expression {
                 $$=createCustomLabelNode("=", yylineno, $1->type);
@@ -261,15 +282,15 @@ executionControl: TK_PR_RETURN expression {
 fluxControl: conditional {$$=$1;}
         | while {$$=$1;}
         | for {$$=$1;};
-conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createCustomLabelNode("if", yylineno, TYPE_UNDEFINED); addChild($$,$3);addChild($$,$5);addChild($$,$6);};
+conditional: TK_PR_IF '(' expression ')' commandBlockInit commandBlockEnd else {$$=createCustomLabelNode("if", yylineno, TYPE_UNDEFINED); addChild($$,$3);addChild($$,$6);addChild($$,$7);};
 
-else: TK_PR_ELSE commandBlock {$$=createCustomLabelNode("else", yylineno, TYPE_UNDEFINED);}
+else: TK_PR_ELSE commandBlockInit commandBlockEnd {$$=createCustomLabelNode("else", yylineno, TYPE_UNDEFINED);}
         | {$$=NULL;} ;
 
-while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createCustomLabelNode("while", yylineno, TYPE_UNDEFINED); addChild($$,$3); addChild($$,$6);};
+while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlockInit commandBlockEnd {$$=createCustomLabelNode("while", yylineno, TYPE_UNDEFINED); addChild($$,$3); addChild($$,$7);};
 
 
-for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlock {$$=createCustomLabelNode("for", yylineno, TYPE_UNDEFINED); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$9);} ;
+for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlockInit commandBlockEnd {$$=createCustomLabelNode("for", yylineno, TYPE_UNDEFINED); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$10);} ;
 
 expression: orLogicalExpression '?' expression ':' expression {
         $$=createCustomLabelNode("?:", yylineno, $3->type); // Verificar se sao do mesmo tipo?
@@ -367,14 +388,15 @@ variableDeclarationList: ',' variable variableDeclarationList {
 
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
-        Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        verifyFunctionUse($1->value.valueString);
+        // Type identifierType = getEntryTypeFromKey($1->value.valueString);
 	char str[10]="call ";
 
         strcat(str, $1->label);
 
-	$$=createCustomLabelNode(str, yylineno, identifierType);
+	$$=createCustomLabelNode(str, yylineno, TYPE_UNDEFINED);
 
-	addChild($$,createNode($1, identifierType));
+	addChild($$,createNode($1, TYPE_UNDEFINED));
 	addChild($$,$3);
 } ;
 
@@ -391,16 +413,20 @@ operand: TK_IDENTIFICADOR {$$=createNode($1, getEntryTypeFromKey($1->value.value
         | '(' expression ')' {$$=$2;};
 
 vector_identifier: TK_IDENTIFICADOR '[' expression ']' {
-        Type identifierType = getEntryTypeFromKey($1->value.valueString);
-        $$=createCustomLabelNode("[]", yylineno, identifierType); 
-        addChild($$, createNode($1, identifierType));
+        // Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        verifyVectorUse($1->value.valueString);
+        $$=createCustomLabelNode("[]", yylineno, TYPE_UNDEFINED); 
+        addChild($$, createNode($1, TYPE_UNDEFINED));
         addChild($$, $3); };
 
 identifier: TK_IDENTIFICADOR {
         createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL);
         freeToken($1);
         $$=NULL; }
-          | TK_IDENTIFICADOR '[' positive_integer ']' { freeToken($1); freeAST($3); };
+          | TK_IDENTIFICADOR '[' positive_integer ']' {
+                  // Criar vetor na tabela
+                  freeToken($1);
+                  freeAST($3); };
 
 
 positive_integer: '+' TK_LIT_INT {$$=createNode($2, TYPE_INTEGER);}

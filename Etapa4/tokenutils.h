@@ -1,5 +1,15 @@
 #define MAX_LABEL_SIZE 100
 
+typedef enum
+{
+    TYPE_UNDEFINED = 0,
+    TYPE_INTEGER,
+    TYPE_FLOAT,
+    TYPE_STRING,
+    TYPE_BOOL,
+    TYPE_CHAR
+} Type;
+
 typedef enum lexicalValueLiteralType
 {
     LIT_INTEGER,

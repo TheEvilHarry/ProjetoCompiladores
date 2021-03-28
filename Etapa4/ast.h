@@ -1,16 +1,6 @@
-#include "tokenutils.h"
+#include "symbolTable.h"
 
 #define MAX_CHILDREN 4
-
-typedef enum
-{
-  TYPE_UNDEFINED = 0,
-  TYPE_INTEGER,
-  TYPE_FLOAT,
-  TYPE_STRING,
-  TYPE_BOOL,
-  TYPE_CHAR
-} Type;
 
 typedef struct t_ast_node
 {
