@@ -1,9 +1,10 @@
-int var_global1, var_global2, var_global3;
-int var_global1;
+int var_global1, salada, var_global3;
+// int var_global1;
 int main(){
+    char i, a, b, j;
     for( i=1 : 2 <= 3 : i=i+1){
 
-        cmd();
+        //cmd();
         output "diego";
         a = 12;
         a = 12 + 1;
@@ -11,7 +12,7 @@ int main(){
         j = 3;
     }
 }
-int main() { }
+int main2() { }
 int foo(){
     b>>3;
 }

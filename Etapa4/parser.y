@@ -164,9 +164,9 @@ optionalConst: TK_PR_CONST  { $$ = NULL; }
 
 globalVariable: optionalStatic type identifier globalVariableList ';' { 
         $$=NULL; 
-        initiateVariableListDeclaration($2); };
+        endVariableListDeclaration($2); };
 globalVariableList: ',' identifier globalVariableList {$$=NULL;}
-        | { $$=NULL; endVariableListDeclaration(); };
+        | { $$=NULL; };
 
 type: TK_PR_INT { $$ = TYPE_INTEGER; }
         | TK_PR_FLOAT  { $$ = TYPE_FLOAT; }
@@ -336,16 +336,20 @@ variableDeclaration: optionalStatic optionalConst type variable variableDeclarat
 	        addNext($4, $5);
 		$$=$4;
         }
-        // createVariableTableEntry()
+        endVariableListDeclaration($3);
 };
 
-variable: TK_IDENTIFICADOR {$$=NULL;}
+variable: TK_IDENTIFICADOR {
+        $$=NULL;
+        createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL); }
         | TK_IDENTIFICADOR TK_OC_LE value {
+                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL);
                 Type identifierType = getEntryTypeFromKey($1->value.valueString);
                 $$=createNode($2, identifierType); // Verificar inferencia
                 addChild($$,createNode($1, identifierType));
                 addChild($$,$3); }
         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {
+                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL);
                 Type identifierType = getEntryTypeFromKey($1->value.valueString);
                 $$=createNode($2, identifierType);
                 addChild($$,createNode($1, identifierType));
@@ -359,7 +363,7 @@ variableDeclarationList: ',' variable variableDeclarationList {
 		$2->next = $3;
 		$$=$2;	}
 }
-        | {$$=NULL;};
+        | { $$=NULL; };
 
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
@@ -392,7 +396,10 @@ vector_identifier: TK_IDENTIFICADOR '[' expression ']' {
         addChild($$, createNode($1, identifierType));
         addChild($$, $3); };
 
-identifier: TK_IDENTIFICADOR {createNode($1, getEntryTypeFromKey($1->value.valueString));}
+identifier: TK_IDENTIFICADOR {
+        createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL);
+        freeToken($1);
+        $$=NULL; }
           | TK_IDENTIFICADOR '[' positive_integer ']' { freeToken($1); freeAST($3); };
 
 

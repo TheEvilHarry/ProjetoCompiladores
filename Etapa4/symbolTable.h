@@ -27,12 +27,23 @@ typedef struct symbolTableStack
     struct symbolTableStack *rest;
 } SymbolTableStack;
 
+typedef struct stringListT
+{
+    char *value;
+    struct stringListT *next;
+} StringList;
+
+//
+StringList *createStringList(char *value);
+void freeStringList(StringList *first);
+
 // Tabela de simbolos
 SymbolTableEntry *createTableEntry(char *key, int line, Nature nature, Type type, int size, TokenData *data);
 SymbolTableEntry *findEntryInTable(SymbolTableEntry *table, char *key);
 void addEntryToTopScopeTable(SymbolTableEntry *entry);
 void freeSymbolTable(SymbolTableEntry *table);
 void freeSymbolTableEntryArgs(SymbolTableEntry *arguments);
+void printTable(SymbolTableEntry *table);
 //Pilha de tabelas de simbolos
 SymbolTableStack *stackScope(SymbolTableStack *stack, SymbolTableEntry *scope);
 SymbolTableEntry *findEntryInStack(SymbolTableStack *stack, char *key);
@@ -47,8 +58,9 @@ void createVariableTableEntry(char *identifier, int line, Type type, TokenData *
 void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token);
 void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *token);
 
-void initiateVariableListDeclaration(Type type);
-void endVariableListDeclaration();
+void initiateVariableListDeclaration();
+void endVariableListDeclaration(Type type);
+void addVariableToListDeclaration(char *key);
 
 int getSizeFromType(Type type);
 
