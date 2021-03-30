@@ -24,7 +24,7 @@ StringList *createStringList(char *value)
   return list;
 }
 
-void freeStringList(StringList *first)
+void freeStringList(StringList *first )
 {
   if (first == NULL)
   {
@@ -319,7 +319,66 @@ int getSizeFromType(Type type)
 }
 
 //
-void createLiteralTableEntry(char *identifier, int line, Type type, TokenData *token);
+void createLiteralTableEntry(int line, Type type, TokenData *token){
+
+    if(type==TYPE_UNDEFINED){
+        printf("[WARNING] Creating a literal without a type\n");
+    }
+
+    char* key = generateLiteralKey(token);
+
+    SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), key);
+
+     if (redeclared != NULL)
+      {
+        throwDeclaredError(key, redeclared->line);
+      }
+     else
+      {
+        SymbolTableEntry *entry = createTableEntry(key, line, NATURE_literal, type, getSizeFromType(type), token);
+        addEntryToTopScopeTable(entry);
+//       if (type == TYPE_UNDEFINED)
+//        {
+//          addVariableToListDeclaration(identifier);
+//        }
+
+      printf("Table after literal %s creation:\n", key);
+      printTable(getCurrentScope());
+      printf("\n\n");
+
+        }
+}
+
+
+char* generateLiteralKey(TokenData *token){
+    char *new_key;
+        switch (token->literal)
+        {
+        case LIT_STRING:
+            new_key = strdup(token->value.valueString);
+            break;
+        case LIT_CHAR:
+            new_key = (char *) malloc (2);
+            new_key[0] = token->value.valueChar;
+            new_key[1] = '\0';
+            break;
+        case LIT_BOOLEAN:
+            new_key = (char *) malloc (6);
+            strcpy(new_key, (token->value.valueBoolean == 1) ? "true" : "false");
+            break;
+        case LIT_INTEGER:
+            new_key = (char *) malloc (12);
+            snprintf(new_key, 12, "%d", token->value.valueInt);
+            break;
+        case LIT_FLOAT:
+            new_key = (char *) malloc (30);
+            snprintf(new_key, 30, "%.6f", token->value.valueFloat);
+            break;
+        default:
+            break;
+    }
+    return new_key;
+}
 
 void createVariableTableEntry(char *identifier, int line, Type type, TokenData *token)
 {
@@ -338,20 +397,43 @@ void createVariableTableEntry(char *identifier, int line, Type type, TokenData *
   }
   else
   {
-    SymbolTableEntry *entry = createTableEntry(identifier, line, NATURE_variable, type, getSizeFromType(type), token);
-    addEntryToTopScopeTable(entry);
-    if (type == TYPE_UNDEFINED)
-    {
-      addVariableToListDeclaration(identifier);
+      SymbolTableEntry *entry = createTableEntry(identifier, line, NATURE_variable, type, getSizeFromType(type), token);
+      addEntryToTopScopeTable(entry);
+      if (type == TYPE_UNDEFINED)
+      {
+        addVariableToListDeclaration(identifier);
+      }
     }
-  }
 
-  printf("Table after variable %s creation:\n", identifier);
-  printTable(getCurrentScope());
-  printf("\n\n");
+    printf("Table after variable %s creation:\n", identifier);
+    printTable(getCurrentScope());
+    printf("\n\n");
 }
 
-void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token);
+void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token){
+
+    if(type==TYPE_UNDEFINED){
+        printf("[WARNING] Creating a vector without a type\n");
+    }
+
+    SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), identifier);
+
+     if (redeclared != NULL)
+      {
+        throwDeclaredError(identifier, redeclared->line);
+      }
+     else
+      {
+        SymbolTableEntry *entry = createTableEntry(identifier, line, NATURE_vector, type, getVectorSize(type,size), token);
+        addEntryToTopScopeTable(entry);
+
+        if (type == TYPE_UNDEFINED)
+          {
+            addVariableToListDeclaration(identifier);
+          }
+
+      }
+}
 
 void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *token)
 {
@@ -521,6 +603,28 @@ char *getTypeName(Type type)
     break;
   }
 }
+
+int getVectorSize(Type type, int size){
+       switch (type)
+         {
+         case TYPE_INTEGER:
+           return 4 * size;
+           break;
+         case TYPE_FLOAT:
+           return 8 * size;
+           break;
+         case TYPE_STRING:
+           return 1 * size;
+           break;
+         case TYPE_BOOL:
+           return 1 * size;
+           break;
+         default:
+           return 0;
+           break;
+         }
+
+    }
 
 char *getNatureName(Nature nature)
 {

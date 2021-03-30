@@ -60,7 +60,7 @@ SymbolTableEntry *getCurrentScope();
 SymbolTableStack *getGlobalStack();
 
 // Criaçao de entradas da tabela
-void createLiteralTableEntry(char *identifier, int line, Type type, TokenData *token);
+void createLiteralTableEntry(int line, Type type, TokenData *token);
 void createVariableTableEntry(char *identifier, int line, Type type, TokenData *token);
 void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token);
 void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *token);
@@ -90,3 +90,5 @@ void throwFunctionError(char *name, int declarationLine, Nature nature);
 // Tipos e naturezas
 char *getTypeName(Type type);
 char *getNatureName(Nature nature);
+char* generateLiteralKey(TokenData *token);
+int getVectorSize(Type type, int size);

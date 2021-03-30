@@ -166,7 +166,8 @@ optionalConst: TK_PR_CONST  { $$ = NULL; }
 
 globalVariable: optionalStatic type identifier globalVariableList ';' { 
         $$=NULL; 
-        endVariableListDeclaration($2); };
+        endVariableListDeclaration($2); };  // <==== Is this not gonna be a token/node being attributed to a function expecting a Type? #PEDRO
+
 globalVariableList: ',' identifier globalVariableList {$$=NULL;}
         | { $$=NULL; };
 
@@ -176,12 +177,14 @@ type: TK_PR_INT { $$ = TYPE_INTEGER; }
         | TK_PR_BOOL  { $$ = TYPE_BOOL; }
         | TK_PR_STRING  { $$ = TYPE_STRING; };
 
-value: TK_LIT_INT {$$=createNode($1, TYPE_INTEGER);}
-        | TK_LIT_FLOAT {$$=createNode($1, TYPE_FLOAT);}
-        | TK_LIT_FALSE {$$=createNode($1, TYPE_BOOL);}
-        | TK_LIT_TRUE {$$=createNode($1, TYPE_BOOL);}
-        | TK_LIT_CHAR {$$=createNode($1, TYPE_CHAR);}
-        | TK_LIT_STRING {$$=createNode($1, TYPE_STRING);};
+value: TK_LIT_INT {$$=createNode($1, TYPE_INTEGER);
+	createLiteralTableEntry(yylineno, TYPE_INTEGER,$1);
+		}
+        | TK_LIT_FLOAT { createLiteralTableEntry(yylineno, TYPE_FLOAT, $1); $$=createNode($1, TYPE_FLOAT);}
+        | TK_LIT_FALSE {createLiteralTableEntry(yylineno, TYPE_BOOL, $1); $$=createNode($1, TYPE_BOOL);}
+        | TK_LIT_TRUE {createLiteralTableEntry(yylineno, TYPE_BOOL, $1); $$=createNode($1, TYPE_BOOL);}
+        | TK_LIT_CHAR {createLiteralTableEntry(yylineno, TYPE_CHAR, $1); $$=createNode($1, TYPE_CHAR);}
+        | TK_LIT_STRING {createLiteralTableEntry(yylineno, TYPE_STRING, $1); $$=createNode($1, TYPE_STRING);};
 
 functionDefinition: functionHeader functionCommandBlockInit commandBlockEnd {
         addChild($1,$3);
@@ -424,13 +427,17 @@ identifier: TK_IDENTIFICADOR {
         freeToken($1);
         $$=NULL; }
           | TK_IDENTIFICADOR '[' positive_integer ']' {
-                  // Criar vetor na tabela
+                  createVectorTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, $3->data->value.valueInt, NULL);
                   freeToken($1);
                   freeAST($3); };
 
 
-positive_integer: '+' TK_LIT_INT {$$=createNode($2, TYPE_INTEGER);}
-		| TK_LIT_INT {$$=createNode($1, TYPE_INTEGER);};
+positive_integer: '+' TK_LIT_INT {
+	createLiteralTableEntry(yylineno, TYPE_INTEGER, $2);
+	$$=createNode($2, TYPE_INTEGER);}
+		| TK_LIT_INT {
+		createLiteralTableEntry(yylineno, TYPE_INTEGER, $1);
+		$$=createNode($1, TYPE_INTEGER);};
 
 
 %%
