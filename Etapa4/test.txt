@@ -29,6 +29,8 @@ int main(int x, int y){
     // main = "teste"; // Erro
     // main[8] = 'm'; // Erro
     int i, a, b, j;
+    float l <= 22;
+    return l;
     for( i=2 : 2 <= 3 : i=i+1){
         char c <= 'a';
         bool b <= true;
