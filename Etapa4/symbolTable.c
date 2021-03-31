@@ -329,24 +329,21 @@ void createLiteralTableEntry(int line, Type type, TokenData *token){
 
     SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), key);
 
-     if (redeclared != NULL)
+     if (redeclared == NULL)
       {
-        throwDeclaredError(key, redeclared->line);
+                SymbolTableEntry *entry = createTableEntry(key, line, NATURE_literal, type, getSizeFromType(type), token);
+                addEntryToTopScopeTable(entry);
+        //       if (type == TYPE_UNDEFINED)
+        //        {
+        //          addVariableToListDeclaration(identifier);
+        //        }
+
+              printf("Table after literal %s creation:\n", key);
+              printTable(getCurrentScope());
+              printf("\n\n");
+
       }
-     else
-      {
-        SymbolTableEntry *entry = createTableEntry(key, line, NATURE_literal, type, getSizeFromType(type), token);
-        addEntryToTopScopeTable(entry);
-//       if (type == TYPE_UNDEFINED)
-//        {
-//          addVariableToListDeclaration(identifier);
-//        }
 
-      printf("Table after literal %s creation:\n", key);
-      printTable(getCurrentScope());
-      printf("\n\n");
-
-        }
 }
 
 
