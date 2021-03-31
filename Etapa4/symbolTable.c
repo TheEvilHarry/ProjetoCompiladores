@@ -580,6 +580,23 @@ Type inferType(Type type1, Type type2)
   }
   else if (type1 == TYPE_CHAR || type2 == TYPE_CHAR)
   {
+    throwCharToXError(NULL);
+  }
+  else if (type1 == TYPE_STRING || type2 == TYPE_STRING)
+  {
+    throwStringToXError(NULL);
+  }
+  else if (type1 == TYPE_FLOAT || type2 == TYPE_FLOAT)
+  {
+    return TYPE_FLOAT;
+  }
+  else if (type1 == TYPE_INTEGER || type2 == TYPE_INTEGER)
+  {
+    return TYPE_INTEGER;
+  }
+  else
+  {
+    return TYPE_BOOL;
   }
 }
 
@@ -687,11 +704,11 @@ void throwWrongTypeError(char *name)
   printf("[ERROR][Line %d]: %s was used with an incorrect type.", get_line_number(), name);
   exit(ERR_WRONG_TYPE);
 }
-void throwStringToXError(char *identifier, int line)
+void throwStringToXError(char *name)
 {
-  if (identifier != NULL)
+  if (name != NULL)
   {
-    printf("[ERROR][Line %d]: %s is a String and cannot be converted implicitly.\n", get_line_number(), identifier);
+    printf("[ERROR][Line %d]: %s is a String and cannot be converted implicitly.\n", get_line_number(), name);
   }
   else
   {
@@ -700,11 +717,11 @@ void throwStringToXError(char *identifier, int line)
   exit(ERR_STRING_TO_X);
 }
 
-void throwCharToXError(char *identifier, int line)
+void throwCharToXError(char *name)
 {
-  if (identifier != NULL)
+  if (name != NULL)
   {
-    printf("[ERROR][Line %d]: %s is a Char and cannot be converted implicitly.\n", get_line_number(), identifier);
+    printf("[ERROR][Line %d]: %s is a Char and cannot be converted implicitly.\n", get_line_number(), name);
   }
   else
   {

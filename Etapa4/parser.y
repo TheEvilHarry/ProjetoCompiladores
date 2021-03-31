@@ -311,9 +311,9 @@ fluxControl: conditional {$$=$1;}
 conditional: TK_PR_IF '(' expression ')' commandBlockInit commandBlockEnd else {
 
 	if($3->type==TYPE_STRING){
-		throwStringToXError(NULL,yylineno); }
+		throwStringToXError(NULL); }
 	else if($3->type==TYPE_CHAR){
-		throwCharToXError(NULL,yylineno); }
+		throwCharToXError(NULL); }
 
 	$$=createCustomLabelNode("if", yylineno, TYPE_UNDEFINED);
 	addChild($$,$3);
@@ -326,9 +326,9 @@ else: TK_PR_ELSE commandBlockInit commandBlockEnd {$$=createCustomLabelNode("els
 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlockInit commandBlockEnd {
 
 	if($3->type==TYPE_STRING){
-        		throwStringToXError(NULL,yylineno); }
+        		throwStringToXError(NULL); }
         	else if($3->type==TYPE_CHAR){
-        		throwCharToXError(NULL,yylineno); }
+        		throwCharToXError(NULL); }
 
 	$$=createCustomLabelNode("while", yylineno, TYPE_UNDEFINED);
 	addChild($$,$3);
@@ -338,9 +338,9 @@ while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlockInit commandBlockEnd 
 for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlockInit commandBlockEnd {
 
 	if($5->type==TYPE_STRING){
-        		throwStringToXError(NULL,yylineno); }
+        		throwStringToXError(NULL); }
         	else if($5->type==TYPE_CHAR){
-        		throwCharToXError(NULL,yylineno); }
+        		throwCharToXError(NULL); }
 
 	$$=createCustomLabelNode("for", yylineno, TYPE_UNDEFINED);
 	addChild($$,$3);
@@ -351,39 +351,75 @@ for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlockI
 expression: orLogicalExpression '?' expression ':' expression {
 
 	if($1->type==TYPE_STRING){
-        	throwStringToXError(NULL,yylineno); }
+        	throwStringToXError(NULL); }
         else if($1->type==TYPE_CHAR){
-        	throwCharToXError(NULL,yylineno); }
+        	throwCharToXError(NULL); }
 
-        $$=createCustomLabelNode("?:", yylineno, $3->type); // Verificar se sao do mesmo tipo?
+        $$=createCustomLabelNode("?:", yylineno, inferType($3->type, $5->type)); // Verificar se sao do mesmo tipo?
         addChild($$,$1);
         addChild($$,$3); 
         addChild($$,$5); }
     | orLogicalExpression {$$=$1;};
 
-orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+orLogicalExpression: orLogicalExpression orLogicalOperator andLogicalExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
         | andLogicalExpression {$$=$1;};
 
-andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+andLogicalExpression: andLogicalExpression andLogicalOperator bitwiseOrExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
     | bitwiseOrExpression {$$=$1;};
 
-bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+bitwiseOrExpression: bitwiseOrExpression bitwiseOrOperator bitwiseAndExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
     | bitwiseAndExpression {$$=$1;};
 
-bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+bitwiseAndExpression: bitwiseAndExpression bitwiseAndOperator equalityExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1); 
+        addChild($2,$3);
+        $$=$2; }
     | equalityExpression {$$=$1;};
 
-equalityExpression: equalityExpression equalityOperator comparisonExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+equalityExpression: equalityExpression equalityOperator comparisonExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
         | comparisonExpression {$$=$1;};
-comparisonExpression: comparisonExpression comparisonOperator sumExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+comparisonExpression: comparisonExpression comparisonOperator sumExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
         | sumExpression {$$=$1;};
 
-sumExpression: sumExpression sumOperator multiplicationExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+sumExpression: sumExpression sumOperator multiplicationExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
         | multiplicationExpression {$$=$1;};
 
-multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
         | powerExpression {$$=$1;};
-powerExpression: powerExpression powerOperator unaryExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
+powerExpression: powerExpression powerOperator unaryExpression {
+        addTypeToNode($2, inferType($1->type, $3->type));
+        addChild($2,$1);
+        addChild($2,$3);
+        $$=$2; }
         | unaryExpression {$$=$1;};
 
 unaryExpression: unaryOperator unaryExpression {

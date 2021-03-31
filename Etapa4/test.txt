@@ -2,7 +2,7 @@ int var_global1, salada, var_global3;
 // int var_global1;
 int main(int x, int y){
     // var_global1(); //Erro
-    char i, a, b, j;
+    int i, a, b, j;
     for( i=2 : 2 <= 3 : i=i+1){
         int b <= 5;
         //cmd();
@@ -39,7 +39,7 @@ int bar(){
 
 int f3(int a){
     int mmm, b;
-    char expp;
+    int expp;
     a = expp ? (1 + 2) : false;
     b = true;
 }

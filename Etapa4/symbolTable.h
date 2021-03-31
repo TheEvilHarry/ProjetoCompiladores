@@ -101,8 +101,8 @@ void throwWrongTypeError(char *name);
 void throwWrongParInput(int line);
 void throwWrongParOutput(int line);
 void throwShiftError(int line);
-void throwCharToXError(char *identifier, int line);
-void throwStringToXError(char *identifier, int line);
+void throwCharToXError(char *name);
+void throwStringToXError(char *name);
 
 // Tipos e naturezas
 char *getTypeName(Type type);
