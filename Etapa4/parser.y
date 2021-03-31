@@ -166,7 +166,7 @@ optionalConst: TK_PR_CONST  { $$ = NULL; }
 
 globalVariable: optionalStatic type identifier globalVariableList ';' { 
         $$=NULL; 
-        endVariableListDeclaration($2); };  // <==== Is this not gonna be a token/node being attributed to a function expecting a Type? #PEDRO
+        endVariableListDeclaration($2); };
 
 globalVariableList: ',' identifier globalVariableList {$$=NULL;}
         | { $$=NULL; };
@@ -250,15 +250,26 @@ command: variableDeclaration ';' {$$ = $1; }
 
 
 attribution: TK_IDENTIFICADOR '=' expression {
-        Type identifierType = getEntryTypeFromKey($1->value.valueString);
-        verifyVariableUse($1->value.valueString);
-        $$=createCustomLabelNode("=", yylineno, inferType(identifierType, $3->type));
-        addChild($$,createNode($1, identifierType));
-        addChild($$,$3); }
-        | vector_identifier '=' expression {
-                $$=createCustomLabelNode("=", yylineno, $1->type);
-                addChild($$,$1);
-                addChild($$,$3); };
+      Type identifierType = getEntryTypeFromKey($1->value.valueString);
+      verifyVariableUse($1->value.valueString);
+
+       SymbolTableEntry *identifier = findEntryInStack(getGlobalStack(), $1->value.valueString);
+       if(identifier!=NULL){
+
+	if(isNodeLiteralAndString($3)==1 && identifier->type==TYPE_STRING){
+		 int newSize = strlen($3->data->value.valueString);
+		 if(identifier->size < newSize){
+			throwStringSizeError(yylineno);}
+		}
+	}
+
+       $$=createCustomLabelNode("=", yylineno, TYPE_UNDEFINED);
+       addChild($$,createNode($1, TYPE_UNDEFINED));
+       addChild($$,$3); }
+       | vector_identifier '=' expression {
+	       $$=createCustomLabelNode("=", yylineno, $1->type);
+	       addChild($$,$1);
+	       addChild($$,$3); };
 
 inputOutput: input {$$=$1;}
         | output {$$=$1;};

@@ -825,6 +825,11 @@ void throwShiftError(int line)
   exit(ERR_WRONG_PAR_SHIFT);
 }
 
+void throwStringSizeError(int line){
+       printf("[ERROR][Line %d]: Attributing bigger string than what was previously established for the variable.\n", line);
+       exit(ERR_STRING_MAX);
+       }
+
 //
 char *getTypeName(Type type)
 {

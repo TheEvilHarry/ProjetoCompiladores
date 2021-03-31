@@ -105,6 +105,8 @@ void throwWrongParOutput(int line);
 void throwShiftError(int line);
 void throwCharToXError(char *name);
 void throwStringToXError(char *name);
+void throwStringSizeError(int line);
+int isNodeLiteralAndString(Node *node);
 
 // Tipos e naturezas
 char *getTypeName(Type type);

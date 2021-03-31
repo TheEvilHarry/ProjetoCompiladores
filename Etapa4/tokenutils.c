@@ -111,6 +111,27 @@ TokenData *createStringLiteralToken(int line, char *value)
   return token;
 }
 
+int isNodeLiteralAndString(Node * node){
+
+    int isLiteral=0;
+    int isString=0;
+
+    if(node->type==TYPE_STRING){
+       isString=1;
+        }
+
+    TokenData *token=node->data;
+
+    if(token->literal == LIT_STRING){
+       isLiteral==1;}
+
+    if(isString==1 && isString==1)
+        return 1;
+    else
+        return 0;
+
+    }
+
 void freeToken(TokenData *token)
 {
   if (token != NULL)
