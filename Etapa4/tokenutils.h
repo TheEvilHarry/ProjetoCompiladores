@@ -1,4 +1,5 @@
 #define MAX_LABEL_SIZE 100
+#define MAX_CHILDREN 4
 
 typedef enum
 {
@@ -48,6 +49,15 @@ typedef struct t_token_data
     LexicalValue value;
 
 } TokenData;
+
+typedef struct t_ast_node
+{
+    TokenData *data;
+    struct t_ast_node *children[MAX_CHILDREN];
+    struct t_ast_node *next;
+    int numberOfChildren;
+    Type type;
+} Node;
 
 TokenData *createNonLiteralToken(int line, Token type, char *value);
 

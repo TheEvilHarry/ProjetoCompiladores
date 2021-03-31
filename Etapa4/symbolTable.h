@@ -80,6 +80,8 @@ void verifyVariableUse(char *identifier);
 void verifyVectorUse(char *identifier);
 void verifyFunctionUse(char *identifier);
 
+void verifyFunctionCallParams(char *functionName, Node *firstParam);
+
 // Lançamento de erros
 void throwDeclaredError(char *name, int previousDeclarationLine);
 void throwUndeclaredError(char *name);
@@ -90,5 +92,5 @@ void throwFunctionError(char *name, int declarationLine, Nature nature);
 // Tipos e naturezas
 char *getTypeName(Type type);
 char *getNatureName(Nature nature);
-char* generateLiteralKey(TokenData *token);
+char *generateLiteralKey(TokenData *token);
 int getVectorSize(Type type, int size);

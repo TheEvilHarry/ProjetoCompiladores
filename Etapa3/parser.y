@@ -207,7 +207,7 @@ command: variableDeclaration ';' {$$ = $1; }
         | shift ';' {$$ = $1; }
         | executionControl ';' {$$ = $1; }      // CHECK IF TRUE
         | fluxControl {$$ = $1;}
-        | commandBlock {$$ = $1;};
+        | commandBlock ';' {$$ = $1;};
 
 
 attribution: TK_IDENTIFICADOR '=' expression {$$=createCustomLabelNode("=", yylineno); addChild($$,createNode($1)); addChild($$,$3);}
@@ -237,7 +237,7 @@ fluxControl: conditional {$$=$1;}
         | for {$$=$1;};
 conditional: TK_PR_IF '(' expression ')' commandBlock else {$$=createCustomLabelNode("if", yylineno); addChild($$,$3);addChild($$,$5);addChild($$,$6);};
 
-else: TK_PR_ELSE commandBlock {$$=createCustomLabelNode("else", yylineno);}
+else: TK_PR_ELSE commandBlock {$$=createCustomLabelNode("else", yylineno); addChild($$, $2);}
         | {$$=NULL;} ;
 
 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlock {$$=createCustomLabelNode("while", yylineno); addChild($$,$3); addChild($$,$6);};
@@ -330,7 +330,7 @@ functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
 
 	$$=createCustomLabelNode(str, yylineno);
 
-	addChild($$,createNode($1));
+	// addChild($$,createNode($1));
 	addChild($$,$3);
 } ;
 
