@@ -1,6 +1,0 @@
-int c;
-
-int main(){
-    int ame;
-
-}
