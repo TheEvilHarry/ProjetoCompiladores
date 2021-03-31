@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [WARNING] Creating a variable without a type
 Table after variable var_global1 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0]
@@ -499,3 +500,5 @@ Table after literal aaaa creation:
 
 
 [ERROR][Line 71]: Attributing bigger string than what was previously established for variable "str". Declared at line 71
+=======
+>>>>>>> 844fcc6f027c8f07ddd66c9dab0059c1ab0d9ee3

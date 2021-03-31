@@ -856,6 +856,12 @@ void throwStringSizeError(char *name, int declarationLine)
   exit(ERR_STRING_MAX);
 }
 
+void throwReturnError(int line)
+{
+  printf("[ERROR][Line %d]: Your return statement does not match the type of the function.\n", line);
+  exit(ERR_WRONG_PAR_RETURN);
+}
+
 //
 char *getTypeName(Type type)
 {

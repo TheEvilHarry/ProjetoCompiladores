@@ -9,6 +9,8 @@ extern void *arvore;
 extern int yylineno;
 int yylex(void);
 int yyerror (char const *s);
+Type currentFunctionReturn=TYPE_UNDEFINED;
+
 %}
 
 %union{
@@ -205,6 +207,7 @@ functionHeader: functionName headerParametersBlockInit headerParametersBlockEnd 
         $$=$1; } ;
 
 functionName: optionalStatic type TK_IDENTIFICADOR { 
+        currentFunctionReturn = $2;
         $$=createNode($3, $2);
         createFunctionTableEntry($3->value.valueString, yylineno, $2, $3); };
 
@@ -310,6 +313,8 @@ shiftOperator: TK_OC_SL {$$=createNode($1, TYPE_UNDEFINED);}
         | TK_OC_SR {$$=createNode($1, TYPE_UNDEFINED);};
 
 executionControl: TK_PR_RETURN expression {
+	if($2->type != currentFunctionReturn){
+		throwReturnError(yylineno);}
         $$=createCustomLabelNode("return", yylineno, $2->type);
         addChild($$,$2); }
         | TK_PR_BREAK {$$=createCustomLabelNode("break", yylineno, TYPE_UNDEFINED);}
