@@ -285,17 +285,54 @@ executionControl: TK_PR_RETURN expression {
 fluxControl: conditional {$$=$1;}
         | while {$$=$1;}
         | for {$$=$1;};
-conditional: TK_PR_IF '(' expression ')' commandBlockInit commandBlockEnd else {$$=createCustomLabelNode("if", yylineno, TYPE_UNDEFINED); addChild($$,$3);addChild($$,$6);addChild($$,$7);};
+
+conditional: TK_PR_IF '(' expression ')' commandBlockInit commandBlockEnd else {
+
+	if($3->type==TYPE_STRING){
+		throwStringToXError(NULL,yylineno); }
+	else if($3->type==TYPE_CHAR){
+		throwCharToXError(NULL,yylineno); }
+
+	$$=createCustomLabelNode("if", yylineno, TYPE_UNDEFINED);
+	addChild($$,$3);
+	addChild($$,$6);
+	addChild($$,$7);};
 
 else: TK_PR_ELSE commandBlockInit commandBlockEnd {$$=createCustomLabelNode("else", yylineno, TYPE_UNDEFINED); addChild($$, $2);}
         | {$$=NULL;} ;
 
-while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlockInit commandBlockEnd {$$=createCustomLabelNode("while", yylineno, TYPE_UNDEFINED); addChild($$,$3); addChild($$,$7);};
+while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlockInit commandBlockEnd {
+
+	if($3->type==TYPE_STRING){
+        		throwStringToXError(NULL,yylineno); }
+        	else if($3->type==TYPE_CHAR){
+        		throwCharToXError(NULL,yylineno); }
+
+	$$=createCustomLabelNode("while", yylineno, TYPE_UNDEFINED);
+	addChild($$,$3);
+	addChild($$,$7); };
 
 
-for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlockInit commandBlockEnd {$$=createCustomLabelNode("for", yylineno, TYPE_UNDEFINED); addChild($$,$3); addChild($$,$5); addChild($$,$7); addChild($$,$10);} ;
+for: TK_PR_FOR '(' attribution  ':' expression ':' attribution ')' commandBlockInit commandBlockEnd {
+
+	if($5->type==TYPE_STRING){
+        		throwStringToXError(NULL,yylineno); }
+        	else if($5->type==TYPE_CHAR){
+        		throwCharToXError(NULL,yylineno); }
+
+	$$=createCustomLabelNode("for", yylineno, TYPE_UNDEFINED);
+	addChild($$,$3);
+	addChild($$,$5);
+	addChild($$,$7);
+	addChild($$,$10);} ;
 
 expression: orLogicalExpression '?' expression ':' expression {
+
+	if($1->type==TYPE_STRING){
+        	throwStringToXError(NULL,yylineno); }
+        else if($1->type==TYPE_CHAR){
+        	throwCharToXError(NULL,yylineno); }
+
         $$=createCustomLabelNode("?:", yylineno, $3->type); // Verificar se sao do mesmo tipo?
         addChild($$,$1);
         addChild($$,$3); 

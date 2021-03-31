@@ -640,9 +640,28 @@ void throwUndeclaredError(char *name)
   exit(ERR_UNDECLARED);
 }
 
-void throwWrongTypeError(char *identifier, int declarationLine)
+void throwStringToXError(char *identifier, int line){
+    if(identifier != NULL){
+        printf("[ERROR][Line %d]: %s is a String and cannot be converted implicitly.\n", get_line_number(), identifier);}
+    else{
+        printf("[ERROR][Line %d]: Strings cannot be converted implicitly.\n", get_line_number());
+        }
+    exit(ERR_STRING_TO_X);
+}
+
+void throwCharToXError(char *identifier, int line){
+    if(identifier != NULL){
+            printf("[ERROR][Line %d]: %s is a Char and cannot be converted implicitly.\n", get_line_number(), identifier);}
+        else{
+            printf("[ERROR][Line %d]: Chars cannot be converted implicitly.\n", get_line_number());
+            }
+        exit(ERR_CHAR_TO_X);
+
+}
+
+void throwWrongTypeError(char* identifier, int declarationLine)
 {
-  printf("[ERROR][Line %d]: %s does not expect an attribution of different type.", get_line_number(), identifier);
+  printf("[ERROR][Line %d]: %s does not expect an attribution of different type.\n", get_line_number(), identifier);
   exit(ERR_WRONG_TYPE);
 }
 
