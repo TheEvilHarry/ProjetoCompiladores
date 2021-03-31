@@ -95,6 +95,9 @@ void throwFunctionError(char *name, int declarationLine, Nature nature);
 void throwExcessArgsError(char *name, int declarationLine);
 void throwMissingArgsError(char *name, int declarationLine);
 void throwWrongTypeArgsError(char *name, int declarationLine);
+void throwWrongParInput(int line);
+void throwWrongParOutput(int line);
+
 // void throwWrongTypeError(int declarationLine, Type type1, Type type2);
 
 // Tipos e naturezas

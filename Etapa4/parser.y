@@ -255,6 +255,10 @@ inputOutput: input {$$=$1;}
 
 output: TK_PR_OUTPUT TK_IDENTIFICADOR {
         Type identifierType = getEntryTypeFromKey($2->value.valueString);
+
+        if(identifierType!=TYPE_INTEGER && identifierType!=TYPE_FLOAT){
+                	throwWrongParOutput(yylineno);}
+
         $$=createCustomLabelNode("output", yylineno, identifierType);
         addChild($$,createNode($2, identifierType)); }
         | TK_PR_OUTPUT value {
@@ -263,6 +267,10 @@ output: TK_PR_OUTPUT TK_IDENTIFICADOR {
 
 input: TK_PR_INPUT TK_IDENTIFICADOR {
         Type identifierType = getEntryTypeFromKey($2->value.valueString);
+
+        if(identifierType!=TYPE_INTEGER && identifierType!=TYPE_FLOAT){
+        	throwWrongParInput(yylineno);}
+
         $$=createCustomLabelNode("input", yylineno, identifierType);
         addChild($$,createNode($2, identifierType)); } ;
 

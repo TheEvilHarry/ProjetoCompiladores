@@ -695,6 +695,15 @@ void throwWrongTypeArgsError(char *name, int declarationLine)
   printf("[ERROR][Line %d]: Function \"%s\" was passed wrong type arguments. Declared at line %d\n", get_line_number(), name, declarationLine);
   exit(ERR_WRONG_TYPE_ARGS);
 }
+void throwWrongParInput(int line){
+    printf("[ERROR][Line %d]: Input command can only receive an Int or a Float value.\n", line);
+    exit(ERR_WRONG_PAR_INPUT);
+    }
+
+void throwWrongParOutput(int line){
+    printf("[ERROR][Line %d]: Output command can only receive an Int or a Float value.\n", line);
+    exit(ERR_WRONG_PAR_OUTPUT);
+    }
 
 //
 char *getTypeName(Type type)
