@@ -572,6 +572,17 @@ int allowsImplicitConversion(Type type1, Type type2)
   }
 }
 
+Type inferType(Type type1, Type type2)
+{
+  if (type1 == type2)
+  {
+    return type1;
+  }
+  else if (type1 == TYPE_CHAR || type2 == TYPE_CHAR)
+  {
+  }
+}
+
 void verifyVectorUse(char *identifier)
 {
   SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), identifier);
