@@ -705,6 +705,11 @@ void throwWrongParOutput(int line){
     exit(ERR_WRONG_PAR_OUTPUT);
     }
 
+void throwShiftError(int line){
+    printf("[ERROR][Line %d]: Shift Command cannot receive a value bigger than 16.\n", line);
+    exit(ERR_WRONG_PAR_SHIFT);
+    }
+
 //
 char *getTypeName(Type type)
 {

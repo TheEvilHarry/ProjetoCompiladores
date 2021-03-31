@@ -97,6 +97,9 @@ void throwMissingArgsError(char *name, int declarationLine);
 void throwWrongTypeArgsError(char *name, int declarationLine);
 void throwWrongParInput(int line);
 void throwWrongParOutput(int line);
+void throwShiftError(int line);
+void throwCharToXError(char *identifier, int line);
+void throwStringToXError(char *identifier, int line);
 
 // void throwWrongTypeError(int declarationLine, Type type1, Type type2);
 

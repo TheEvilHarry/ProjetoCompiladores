@@ -276,6 +276,10 @@ input: TK_PR_INPUT TK_IDENTIFICADOR {
 
 
 shift: TK_IDENTIFICADOR shiftOperator TK_LIT_INT {
+	if($3->value.valueInt > 16){
+	throwShiftError(yylineno);
+	}
+
         addChild($2,createNode($1, getEntryTypeFromKey($1->value.valueString)));
         addChild($2,createNode($3, $3->type));
         $$=$2; }
