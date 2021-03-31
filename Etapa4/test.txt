@@ -1,12 +1,38 @@
-int var_global1, salada, var_global3;
-// int var_global1;
+int var_global1, var_global2, var_global3;
+
+char global_texto[10];
+
+// int var_global1; // Erro
+// char var_global2[6]; // Erro
+// int var_global4, global_texto, var_global3; // Erro
+
 int main(int x, int y){
     // var_global1(); //Erro
+    // var5 = 5; // Erro
+    // var6[7] = 7; // Erro
+    global_texto[7] = '8';
+    var_global3 = 8;
+    int var_global3;
+    {
+        int var;
+    };
+    {
+        int var <= 0;
+    };
+    var_global1 = 5;
+    // var_global1[5] = 5; // Erro
+    // var_global1(5); // Erro
+    global_texto[5] = '9';
+    // global_texto = '6'; // Erro
+    // global_texto('6'); //Erro
+    main(6, 7);
+    // main = "teste"; // Erro
+    // main[8] = 'm'; // Erro
     int i, a, b, j;
     for( i=2 : 2 <= 3 : i=i+1){
-        int b <= 5;
-        //cmd();
-        //main = 6;
+        char c <= 'a';
+        i = c; // Erro
+        c = 5;
         output "diego";
         main(5, 6);
         a = 13;
@@ -17,29 +43,5 @@ int main(int x, int y){
         };
         b >> 4;
         j = 3;
-        // j[5] = 6;
     }
-}
-int main2() { }
-int foo(){
-    int b;
-    b>>3;
-    // main = 5;
-}
-int var_global2, v3, v4, v5;
-int bar(){
-    int i <= 5, expr, a;
-    while(expr) do {
-        a >> 4;
-    }
-    continue;
-    break;
-    a = 2;
-}
-
-int f3(int a){
-    int mmm, b;
-    int expp;
-    a = expp ? (1 + 2) : false;
-    b = true;
 }

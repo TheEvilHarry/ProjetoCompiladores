@@ -119,19 +119,25 @@ void addEntryToTopScopeTable(SymbolTableEntry *entry)
 
 SymbolTableEntry *findEntryInTable(SymbolTableEntry *table, char *key)
 {
-  // printf("Looking for %s in scope table\n", key);
-  // printTable(getCurrentScope());
-  // if (table == NULL)
-  // {
-  //   printf("Table is NULL\n");
-  // }
   SymbolTableEntry *currentEntry;
   for (currentEntry = table; currentEntry != NULL; currentEntry = currentEntry->nextEntry)
   {
-    // printf("Current key is %s and target key is %s\n", currentEntry->key, key);
     if (strcmp(currentEntry->key, key) == 0)
     {
-      // printf("Keys match! Returning entry\n");
+      return currentEntry;
+    }
+  }
+
+  return NULL;
+};
+
+SymbolTableEntry *findLiteralEntryInTable(SymbolTableEntry *table, char *key)
+{
+  SymbolTableEntry *currentEntry;
+  for (currentEntry = table; currentEntry != NULL; currentEntry = currentEntry->nextEntry)
+  {
+    if (strcmp(currentEntry->key, key) == 0 && currentEntry->nature == NATURE_literal)
+    {
       return currentEntry;
     }
   }
@@ -181,7 +187,24 @@ SymbolTableEntry *findEntryInStack(SymbolTableStack *stack, char *key)
   for (currentStackElement = stack; currentStackElement != NULL; currentStackElement = currentStackElement->rest)
   {
     entry = findEntryInTable(currentStackElement->top, key);
-    if (entry != NULL)
+    if (entry != NULL && entry->nature != NATURE_literal)
+    {
+      return entry;
+    }
+  }
+
+  return NULL;
+};
+
+SymbolTableEntry *findLiteralEntryInStack(SymbolTableStack *stack, char *key)
+{
+  SymbolTableStack *currentStackElement = NULL;
+  SymbolTableEntry *entry = NULL;
+
+  for (currentStackElement = stack; currentStackElement != NULL; currentStackElement = currentStackElement->rest)
+  {
+    entry = findEntryInTable(currentStackElement->top, key);
+    if (entry != NULL && entry->nature == NATURE_literal)
     {
       return entry;
     }
@@ -329,7 +352,7 @@ void createLiteralTableEntry(int line, Type type, TokenData *token)
 
   char *key = generateLiteralKey(token);
 
-  SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), key);
+  SymbolTableEntry *redeclared = findLiteralEntryInTable(getCurrentScope(), key);
 
   if (redeclared == NULL)
   {

@@ -42,6 +42,7 @@ void freeStringList(StringList *first);
 // Tabela de simbolos
 SymbolTableEntry *createTableEntry(char *key, int line, Nature nature, Type type, int size, TokenData *data);
 SymbolTableEntry *findEntryInTable(SymbolTableEntry *table, char *key);
+SymbolTableEntry *findLiteralEntryInTable(SymbolTableEntry *table, char *key);
 void addEntryToTopScopeTable(SymbolTableEntry *entry);
 void addEntryToTable(SymbolTableEntry *table, SymbolTableEntry *entry);
 void freeSymbolTable(SymbolTableEntry *table);
@@ -50,6 +51,7 @@ void printTable(SymbolTableEntry *table);
 //Pilha de tabelas de simbolos
 SymbolTableStack *stackScope();
 SymbolTableEntry *findEntryInStack(SymbolTableStack *stack, char *key);
+SymbolTableEntry *findLiteralEntryInStack(SymbolTableStack *stack, char *key);
 SymbolTableStack *popScope();
 void freeTableStack(SymbolTableStack *stack);
 

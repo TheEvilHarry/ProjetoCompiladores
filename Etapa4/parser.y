@@ -250,10 +250,10 @@ command: variableDeclaration ';' {$$ = $1; }
 
 
 attribution: TK_IDENTIFICADOR '=' expression {
-        // Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        Type identifierType = getEntryTypeFromKey($1->value.valueString);
         verifyVariableUse($1->value.valueString);
-        $$=createCustomLabelNode("=", yylineno, TYPE_UNDEFINED);
-        addChild($$,createNode($1, TYPE_UNDEFINED));
+        $$=createCustomLabelNode("=", yylineno, inferType(identifierType, $3->type));
+        addChild($$,createNode($1, identifierType));
         addChild($$,$3); }
         | vector_identifier '=' expression {
                 $$=createCustomLabelNode("=", yylineno, $1->type);
