@@ -392,6 +392,7 @@ variableDeclarationList: ',' variable variableDeclarationList {
 
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
         verifyFunctionUse($1->value.valueString);
+        verifyFunctionCallParams($1->value.valueString, $3);
         // Type identifierType = getEntryTypeFromKey($1->value.valueString);
 	char str[10]="call ";
 

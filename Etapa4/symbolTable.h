@@ -82,13 +82,20 @@ void verifyFunctionUse(char *identifier);
 
 void verifyFunctionCallParams(char *functionName, Node *firstParam);
 
+// Tipos
+
+int allowsImplicitConversion(Type type1, Type type2);
+
 // Lançamento de erros
 void throwDeclaredError(char *name, int previousDeclarationLine);
 void throwUndeclaredError(char *name);
 void throwVariableError(char *name, int declarationLine, Nature nature);
 void throwVectorError(char *name, int declarationLine, Nature nature);
 void throwFunctionError(char *name, int declarationLine, Nature nature);
-void throwWrongTypeError(int declarationLine, Type type1, Type type2);
+void throwExcessArgsError(char *name, int declarationLine);
+void throwMissingArgsError(char *name, int declarationLine);
+void throwWrongTypeArgsError(char *name, int declarationLine);
+// void throwWrongTypeError(int declarationLine, Type type1, Type type2);
 
 // Tipos e naturezas
 char *getTypeName(Type type);

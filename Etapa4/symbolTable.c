@@ -333,7 +333,7 @@ void createLiteralTableEntry(int line, Type type, TokenData *token)
 
   if (redeclared != NULL)
   {
-    throwDeclaredError(key, redeclared->line);
+    // throwDeclaredError(key, redeclared->line);
   }
   else
   {
@@ -526,42 +526,50 @@ void verifyVariableUse(char *identifier)
   }
 }
 
-void checkForWrongTypes(char* key, Type type){
+// void checkForWrongTypes(char *key, Type type)
+// {
 
-    SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), key);
-    Type identifierType = entry->type;
+//   SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), key);
+//   Type identifierType = entry->type;
 
-    if(allowsImplicitConversion(identifierType, type)==0){
-        throwWrongTypeError(key, get_line_number());}
-}
+//   if (allowsImplicitConversion(identifierType, type) == 0)
+//   {
+//     throwWrongTypeError(key, get_line_number());
+//   }
+// }
 
-int allowsImplicitConversion(Type type1, Type type2){
-       switch (type1)
-       {
-       case TYPE_INTEGER:
-       case TYPE_FLOAT:
-       case TYPE_BOOL:
-            if(type2 == TYPE_BOOL || type2==TYPE_FLOAT || type2==TYPE_BOOL)
-                return 1;
-            else
-                return 0;
-            break;
-       case TYPE_CHAR:
-            if(type2==TYPE_CHAR)
-                return 1;
-            else
-                return 0;
-       case TYPE_STRING:
-            if(type2==TYPE_STRING)
-                return 1;
-            else
-                return 0;
-       default:
-            return 0;
-            break;
-       }
-
+int allowsImplicitConversion(Type type1, Type type2)
+{
+  // printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
+  switch (type1)
+  {
+  case TYPE_INTEGER:
+    if (type2 == TYPE_INTEGER)
+    {
+      return 1;
     }
+  case TYPE_FLOAT:
+  case TYPE_BOOL:
+    if (type2 == TYPE_BOOL || type2 == TYPE_FLOAT || type2 == TYPE_BOOL)
+      return 1;
+    else
+      return 0;
+    break;
+  case TYPE_CHAR:
+    if (type2 == TYPE_CHAR)
+      return 1;
+    else
+      return 0;
+  case TYPE_STRING:
+    if (type2 == TYPE_STRING)
+      return 1;
+    else
+      return 0;
+  default:
+    return 0;
+    break;
+  }
+}
 
 void verifyVectorUse(char *identifier)
 {
@@ -596,6 +604,35 @@ void verifyFunctionCallParams(char *functionName, Node *firstParam)
   {
     throwUndeclaredError(functionName);
   }
+
+  SymbolTableEntry *currentFunctionArgument = functionTableEntry->arguments;
+  Node *currentProvidedArgument = firstParam;
+
+  while (currentFunctionArgument != NULL && currentProvidedArgument != NULL)
+  {
+    if (allowsImplicitConversion(currentFunctionArgument->type, currentProvidedArgument->type) == 0)
+    {
+      throwWrongTypeArgsError(functionName, functionTableEntry->line);
+    }
+    currentFunctionArgument = currentFunctionArgument->nextEntry;
+    currentProvidedArgument = currentProvidedArgument->next;
+  }
+
+  if (currentFunctionArgument == NULL && currentProvidedArgument == NULL)
+  {
+    return;
+  }
+  else
+  {
+    if (currentFunctionArgument == NULL)
+    {
+      throwExcessArgsError(functionName, functionTableEntry->line);
+    }
+    else if (currentProvidedArgument == NULL)
+    {
+      throwMissingArgsError(functionName, functionTableEntry->line);
+    }
+  }
 }
 
 //
@@ -611,8 +648,7 @@ void throwUndeclaredError(char *name)
   exit(ERR_UNDECLARED);
 }
 
-
-void throwWrongTypeError(char* identifier, int declarationLine)
+void throwWrongTypeError(char *identifier, int declarationLine)
 {
   printf("[ERROR][Line %d]: %s does not expect an attribution of different type.", get_line_number(), identifier);
   exit(ERR_WRONG_TYPE);
@@ -632,6 +668,21 @@ void throwFunctionError(char *name, int declarationLine, Nature nature)
 {
   printf("[ERROR][Line %d]: Identifier \"%s\" is a %s but is being used as a FUNCTION. Declared at line %d\n", get_line_number(), name, getNatureName(nature), declarationLine);
   exit(ERR_FUNCTION);
+}
+void throwExcessArgsError(char *name, int declarationLine)
+{
+  printf("[ERROR][Line %d]: Function \"%s\" was passed too many arguments. Declared at line %d\n", get_line_number(), name, declarationLine);
+  exit(ERR_EXCESS_ARGS);
+}
+void throwMissingArgsError(char *name, int declarationLine)
+{
+  printf("[ERROR][Line %d]: Function \"%s\" was passed too few arguments. Declared at line %d\n", get_line_number(), name, declarationLine);
+  exit(ERR_MISSING_ARGS);
+}
+void throwWrongTypeArgsError(char *name, int declarationLine)
+{
+  printf("[ERROR][Line %d]: Function \"%s\" was passed wrong type arguments. Declared at line %d\n", get_line_number(), name, declarationLine);
+  exit(ERR_WRONG_TYPE_ARGS);
 }
 
 //

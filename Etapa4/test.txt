@@ -3,17 +3,18 @@ int var_global1, salada, var_global3;
 int main(int x, int y){
     // var_global1(); //Erro
     char i, a, b, j;
-    for( i=1 : 2 <= 3 : i=i+1){
+    for( i=2 : 2 <= 3 : i=i+1){
         int b <= 5;
         //cmd();
         //main = 6;
         output "diego";
-        a = 12;
+        main(5, "6");
+        a = 13;
         a = 12 + 1;
         {
             int c;
             c = 6;
-        }
+        };
         b >> 4;
         j = 3;
         // j[5] = 6;
