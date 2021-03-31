@@ -1,47 +1,6 @@
-int var_global1, var_global2, var_global3;
+int c;
 
-char global_texto[10];
+int main(){
+    int ame;
 
-// int var_global1; // Erro
-// char var_global2[6]; // Erro
-// int var_global4, global_texto, var_global3; // Erro
-
-int main(int x, int y){
-    // var_global1(); //Erro
-    // var5 = 5; // Erro
-    // var6[7] = 7; // Erro
-    global_texto[7] = '8';
-    var_global3 = 8;
-    int var_global3;
-    {
-        int var;
-    };
-    {
-        int var <= 0;
-    };
-    var_global1 = 5;
-    // var_global1[5] = 5; // Erro
-    // var_global1(5); // Erro
-    global_texto[5] = '9';
-    // global_texto = '6'; // Erro
-    // global_texto('6'); //Erro
-    main(6, 7);
-    // main = "teste"; // Erro
-    // main[8] = 'm'; // Erro
-    int i, a, b, j;
-    for( i=2 : 2 <= 3 : i=i+1){
-        char c <= 'a';
-        i = c; // Erro
-        c = 5;
-        output "diego";
-        main(5, 6);
-        a = 13;
-        a = 12 + 1;
-        {
-            int c;
-            c = 6;
-        };
-        b >> 4;
-        j = 3;
-    }
 }
