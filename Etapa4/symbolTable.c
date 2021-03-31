@@ -828,7 +828,12 @@ void throwShiftError(int line)
 void throwStringSizeError(int line){
        printf("[ERROR][Line %d]: Attributing bigger string than what was previously established for the variable.\n", line);
        exit(ERR_STRING_MAX);
-       }
+}
+
+void throwReturnError(int line){
+       printf("[ERROR][Line %d]: Your return statement does not match the type of the function.\n", line);
+       exit(ERR_WRONG_PAR_RETURN);
+}
 
 //
 char *getTypeName(Type type)
