@@ -687,6 +687,31 @@ void throwWrongTypeError(char *name)
   printf("[ERROR][Line %d]: %s was used with an incorrect type.", get_line_number(), name);
   exit(ERR_WRONG_TYPE);
 }
+void throwStringToXError(char *identifier, int line)
+{
+  if (identifier != NULL)
+  {
+    printf("[ERROR][Line %d]: %s is a String and cannot be converted implicitly.\n", get_line_number(), identifier);
+  }
+  else
+  {
+    printf("[ERROR][Line %d]: Strings cannot be converted implicitly.\n", get_line_number());
+  }
+  exit(ERR_STRING_TO_X);
+}
+
+void throwCharToXError(char *identifier, int line)
+{
+  if (identifier != NULL)
+  {
+    printf("[ERROR][Line %d]: %s is a Char and cannot be converted implicitly.\n", get_line_number(), identifier);
+  }
+  else
+  {
+    printf("[ERROR][Line %d]: Chars cannot be converted implicitly.\n", get_line_number());
+  }
+  exit(ERR_CHAR_TO_X);
+}
 
 void throwVariableError(char *name, int declarationLine, Nature nature)
 {
@@ -722,6 +747,24 @@ void throwFunctionStringError(char *name, int declarationLine)
 {
   printf("[ERROR][Line %d]: Function \"%s\" has string has a string as an argument or return type. Declared at line %d\n", get_line_number(), name, declarationLine);
   exit(ERR_WRONG_TYPE_ARGS);
+}
+
+void throwWrongParInput(int line)
+{
+  printf("[ERROR][Line %d]: Input command can only receive an Int or a Float value.\n", line);
+  exit(ERR_WRONG_PAR_INPUT);
+}
+
+void throwWrongParOutput(int line)
+{
+  printf("[ERROR][Line %d]: Output command can only receive an Int or a Float value.\n", line);
+  exit(ERR_WRONG_PAR_OUTPUT);
+}
+
+void throwShiftError(int line)
+{
+  printf("[ERROR][Line %d]: Shift Command cannot receive a value bigger than 16.\n", line);
+  exit(ERR_WRONG_PAR_SHIFT);
 }
 
 //

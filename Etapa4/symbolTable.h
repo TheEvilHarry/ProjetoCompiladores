@@ -98,6 +98,11 @@ void throwMissingArgsError(char *name, int declarationLine);
 void throwWrongTypeArgsError(char *name, int declarationLine);
 void throwFunctionStringError(char *name, int declarationLine);
 void throwWrongTypeError(char *name);
+void throwWrongParInput(int line);
+void throwWrongParOutput(int line);
+void throwShiftError(int line);
+void throwCharToXError(char *identifier, int line);
+void throwStringToXError(char *identifier, int line);
 
 // Tipos e naturezas
 char *getTypeName(Type type);
