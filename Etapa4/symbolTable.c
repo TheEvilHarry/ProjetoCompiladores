@@ -528,7 +528,11 @@ Type getEntryTypeFromKey(char *key)
 
   if (entry == NULL) // Talvez seja melhor mover essa logica para uma funçao separada mais tarde
   {
-    throwUndeclaredError(key);
+    entry = findLiteralEntryInStack(getGlobalStack(), key);
+    if (entry == NULL)
+    {
+      throwUndeclaredError(key);
+    }
   }
   else
   {
@@ -564,7 +568,7 @@ void verifyVariableUse(char *identifier)
 
 int allowsImplicitConversion(Type type1, Type type2)
 {
-  // printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
+  printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
   switch (type1)
   {
   case TYPE_INTEGER:
@@ -572,10 +576,24 @@ int allowsImplicitConversion(Type type1, Type type2)
     {
       return 1;
     }
+    else
+    {
+      return 0;
+    }
   case TYPE_FLOAT:
-  case TYPE_BOOL:
-    if (type2 == TYPE_BOOL || type2 == TYPE_FLOAT || type2 == TYPE_BOOL)
+    if (type2 == TYPE_INTEGER)
+    {
       return 1;
+    }
+    else
+    {
+      return 0;
+    }
+  case TYPE_BOOL:
+    if (type2 == TYPE_BOOL || type2 == TYPE_FLOAT || type2 == TYPE_INTEGER)
+    {
+      return 1;
+    }
     else
       return 0;
     break;
@@ -785,7 +803,7 @@ void throwWrongTypeArgsError(char *name, int declarationLine)
 }
 void throwFunctionStringError(char *name, int declarationLine)
 {
-  printf("[ERROR][Line %d]: Function \"%s\" has string has a string as an argument or return type. Declared at line %d\n", get_line_number(), name, declarationLine);
+  printf("[ERROR][Line %d]: Function \"%s\" has a string as an argument or return type. Declared at line %d\n", get_line_number(), name, declarationLine);
   exit(ERR_WRONG_TYPE_ARGS);
 }
 
