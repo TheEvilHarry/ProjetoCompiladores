@@ -460,10 +460,19 @@ void addArgumentsToLastDefinedFunction()
     previousScope = previousScope->nextEntry;
   }
 
+  if (previousScope->type == TYPE_STRING)
+  {
+    throwFunctionStringError(previousScope->key, previousScope->line);
+  }
+
   // printf("Last entry of previous entry is %s\n", previousScope->key);
 
   while (currentScopeEntry != NULL)
   {
+    if (currentScopeEntry->type == TYPE_STRING)
+    {
+      throwFunctionStringError(previousScope->key, previousScope->line);
+    }
     SymbolTableEntry *newEntry = createTableEntry(strdup(currentScopeEntry->key), currentScopeEntry->line, currentScopeEntry->nature, currentScopeEntry->type, currentScopeEntry->size, currentScopeEntry->data);
     // printf("Created new entry for %s\n", newEntry->key);
 
@@ -627,6 +636,28 @@ void verifyFunctionCallParams(char *functionName, Node *firstParam)
   }
 }
 
+void verifyUnaryOperatorType(char *operator, Type type)
+{
+  if (strcmp("+", operator) || strcmp("-", operator))
+  {
+    if (type != TYPE_INTEGER && type != TYPE_FLOAT)
+    {
+      throwWrongTypeError(operator);
+    }
+    else
+    {
+      return;
+    }
+  }
+  else
+  {
+    if (type != TYPE_INTEGER && type != TYPE_BOOL)
+    {
+      throwWrongTypeError(operator);
+    }
+  }
+}
+
 //
 void throwDeclaredError(char *name, int previousDeclarationLine)
 {
@@ -640,9 +671,9 @@ void throwUndeclaredError(char *name)
   exit(ERR_UNDECLARED);
 }
 
-void throwWrongTypeError(char *identifier, int declarationLine)
+void throwWrongTypeError(char *name)
 {
-  printf("[ERROR][Line %d]: %s does not expect an attribution of different type.", get_line_number(), identifier);
+  printf("[ERROR][Line %d]: %s was used with an incorrect type.", get_line_number(), name);
   exit(ERR_WRONG_TYPE);
 }
 
@@ -674,6 +705,11 @@ void throwMissingArgsError(char *name, int declarationLine)
 void throwWrongTypeArgsError(char *name, int declarationLine)
 {
   printf("[ERROR][Line %d]: Function \"%s\" was passed wrong type arguments. Declared at line %d\n", get_line_number(), name, declarationLine);
+  exit(ERR_WRONG_TYPE_ARGS);
+}
+void throwFunctionStringError(char *name, int declarationLine)
+{
+  printf("[ERROR][Line %d]: Function \"%s\" has string has a string as an argument or return type. Declared at line %d\n", get_line_number(), name, declarationLine);
   exit(ERR_WRONG_TYPE_ARGS);
 }
 

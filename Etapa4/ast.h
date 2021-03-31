@@ -8,6 +8,8 @@ Node *addChild(Node *node, Node *child);
 
 Node *addNext(Node *node, Node *next);
 
+Node *addTypeToNode(Node *node, Type type);
+
 void exportAST(Node *node);
 
 void freeAST(Node *node);

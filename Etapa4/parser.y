@@ -177,14 +177,24 @@ type: TK_PR_INT { $$ = TYPE_INTEGER; }
         | TK_PR_BOOL  { $$ = TYPE_BOOL; }
         | TK_PR_STRING  { $$ = TYPE_STRING; };
 
-value: TK_LIT_INT {$$=createNode($1, TYPE_INTEGER);
-	createLiteralTableEntry(yylineno, TYPE_INTEGER,$1);
-		}
-        | TK_LIT_FLOAT { createLiteralTableEntry(yylineno, TYPE_FLOAT, $1); $$=createNode($1, TYPE_FLOAT);}
-        | TK_LIT_FALSE {createLiteralTableEntry(yylineno, TYPE_BOOL, $1); $$=createNode($1, TYPE_BOOL);}
-        | TK_LIT_TRUE {createLiteralTableEntry(yylineno, TYPE_BOOL, $1); $$=createNode($1, TYPE_BOOL);}
-        | TK_LIT_CHAR {createLiteralTableEntry(yylineno, TYPE_CHAR, $1); $$=createNode($1, TYPE_CHAR);}
-        | TK_LIT_STRING {createLiteralTableEntry(yylineno, TYPE_STRING, $1); $$=createNode($1, TYPE_STRING);};
+value: TK_LIT_INT {
+                $$=createNode($1, TYPE_INTEGER);
+	        createLiteralTableEntry(yylineno, TYPE_INTEGER,$1); }
+        | TK_LIT_FLOAT {
+                createLiteralTableEntry(yylineno, TYPE_FLOAT, $1);
+                $$=createNode($1, TYPE_FLOAT); }
+        | TK_LIT_FALSE {
+                createLiteralTableEntry(yylineno, TYPE_BOOL, $1);
+                $$=createNode($1, TYPE_BOOL); }
+        | TK_LIT_TRUE {
+                createLiteralTableEntry(yylineno, TYPE_BOOL, $1);
+                $$=createNode($1, TYPE_BOOL); }
+        | TK_LIT_CHAR {
+                createLiteralTableEntry(yylineno, TYPE_CHAR, $1);
+                $$=createNode($1, TYPE_CHAR); }
+        | TK_LIT_STRING {
+                createLiteralTableEntry(yylineno, TYPE_STRING, $1);
+                $$=createNode($1, TYPE_STRING); };
 
 functionDefinition: functionHeader functionCommandBlockInit commandBlockEnd {
         addChild($1,$3);
@@ -327,7 +337,11 @@ multiplicationExpression: multiplicationExpression multiplicationOperator powerE
 powerExpression: powerExpression powerOperator unaryExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
         | unaryExpression {$$=$1;};
 
-unaryExpression: unaryOperator unaryExpression {$$=$1; addChild($$, $2); }
+unaryExpression: unaryOperator unaryExpression {
+        verifyUnaryOperatorType($1->data->label, $2->type);
+        addTypeToNode($1, $2->type);
+        $$=$1;
+        addChild($$, $2); }
         | operand {$$=$1;};
 
 orLogicalOperator: TK_OC_OR {$$=createNode($1, TYPE_BOOL);};
@@ -400,12 +414,12 @@ variableDeclarationList: ',' variable variableDeclarationList {
 functionCall: TK_IDENTIFICADOR '(' functionParameters ')' {
         verifyFunctionUse($1->value.valueString);
         verifyFunctionCallParams($1->value.valueString, $3);
-        // Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        Type identifierType = getEntryTypeFromKey($1->value.valueString);
 	char str[10]="call ";
 
         strcat(str, $1->label);
 
-	$$=createCustomLabelNode(str, yylineno, TYPE_UNDEFINED);
+	$$=createCustomLabelNode(str, yylineno, identifierType);
 
 	addChild($$,$3);
 } ;
@@ -423,10 +437,10 @@ operand: TK_IDENTIFICADOR {$$=createNode($1, getEntryTypeFromKey($1->value.value
         | '(' expression ')' {$$=$2;};
 
 vector_identifier: TK_IDENTIFICADOR '[' expression ']' {
-        // Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        Type identifierType = getEntryTypeFromKey($1->value.valueString);
         verifyVectorUse($1->value.valueString);
-        $$=createCustomLabelNode("[]", yylineno, TYPE_UNDEFINED); 
-        addChild($$, createNode($1, TYPE_UNDEFINED));
+        $$=createCustomLabelNode("[]", yylineno, identifierType); 
+        addChild($$, createNode($1, identifierType));
         addChild($$, $3); };
 
 identifier: TK_IDENTIFICADOR {

@@ -62,6 +62,20 @@ Node *addNext(Node *node, Node *next)
   return node;
 }
 
+Node *addTypeToNode(Node *node, Type type)
+{
+  if (node == NULL)
+  {
+    printf("[WARNING] Attempted to add type to null node\n");
+    return node;
+  }
+  else
+  {
+    node->type = type;
+    return node;
+  }
+}
+
 void exportAST(Node *node)
 {
   if (node == NULL || node->data == NULL)
