@@ -318,8 +318,10 @@ equalityExpression: equalityExpression equalityOperator comparisonExpression {ad
         | comparisonExpression {$$=$1;};
 comparisonExpression: comparisonExpression comparisonOperator sumExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
         | sumExpression {$$=$1;};
+
 sumExpression: sumExpression sumOperator multiplicationExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
         | multiplicationExpression {$$=$1;};
+
 multiplicationExpression: multiplicationExpression multiplicationOperator powerExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
         | powerExpression {$$=$1;};
 powerExpression: powerExpression powerOperator unaryExpression {addChild($2,$1); addChild($2,$3); $$=$2;}
@@ -338,6 +340,8 @@ comparisonOperator: TK_OC_LE {$$=createNode($1, TYPE_BOOL);}
         | TK_OC_GE {$$=createNode($1, TYPE_BOOL);}
         | '<' {$$=createCustomLabelNode("<", yylineno, TYPE_BOOL);}
         | '>' {$$=createCustomLabelNode(">", yylineno, TYPE_BOOL);};
+
+
 sumOperator: '+' {$$=createCustomLabelNode("+", yylineno, TYPE_UNDEFINED);};
         | '-' {$$=createCustomLabelNode("-", yylineno, TYPE_UNDEFINED);};
 multiplicationOperator: '*' {$$=createCustomLabelNode("*", yylineno, TYPE_UNDEFINED);}
@@ -351,6 +355,9 @@ unaryOperator: '+' {$$=createCustomLabelNode("+", yylineno, TYPE_UNDEFINED);}
         | '*' {$$=createCustomLabelNode("*", yylineno, TYPE_UNDEFINED);}
         | '?' {$$=createCustomLabelNode("?", yylineno, TYPE_UNDEFINED);}
         | '#' {$$=createCustomLabelNode("#", yylineno, TYPE_UNDEFINED);} ;
+
+
+
 
 variableDeclaration: optionalStatic optionalConst type variable variableDeclarationList {
 	if($4==NULL) {
