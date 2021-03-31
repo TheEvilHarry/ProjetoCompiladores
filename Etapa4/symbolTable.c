@@ -526,6 +526,43 @@ void verifyVariableUse(char *identifier)
   }
 }
 
+void checkForWrongTypes(char* key, Type type){
+
+    SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), key);
+    Type identifierType = entry->type;
+
+    if(allowsImplicitConversion(identifierType, type)==0){
+        throwWrongTypeError(key, get_line_number());}
+}
+
+int allowsImplicitConversion(Type type1, Type type2){
+       switch (type1)
+       {
+       case TYPE_INTEGER:
+       case TYPE_FLOAT:
+       case TYPE_BOOL:
+            if(type2 == TYPE_BOOL || type2==TYPE_FLOAT || type2==TYPE_BOOL)
+                return 1;
+            else
+                return 0;
+            break;
+       case TYPE_CHAR:
+            if(type2==TYPE_CHAR)
+                return 1;
+            else
+                return 0;
+       case TYPE_STRING:
+            if(type2==TYPE_STRING)
+                return 1;
+            else
+                return 0;
+       default:
+            return 0;
+            break;
+       }
+
+    }
+
 void verifyVectorUse(char *identifier)
 {
   SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), identifier);
@@ -572,6 +609,13 @@ void throwUndeclaredError(char *name)
 {
   printf("[ERROR][Line %d]: Identifier \"%s\" was used but was not defined\n", get_line_number(), name);
   exit(ERR_UNDECLARED);
+}
+
+
+void throwWrongTypeError(char* identifier, int declarationLine)
+{
+  printf("[ERROR][Line %d]: %s does not expect an attribution of different type.", get_line_number(), identifier);
+  exit(ERR_WRONG_TYPE);
 }
 
 void throwVariableError(char *name, int declarationLine, Nature nature)

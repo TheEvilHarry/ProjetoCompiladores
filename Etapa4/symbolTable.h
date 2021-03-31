@@ -88,6 +88,7 @@ void throwUndeclaredError(char *name);
 void throwVariableError(char *name, int declarationLine, Nature nature);
 void throwVectorError(char *name, int declarationLine, Nature nature);
 void throwFunctionError(char *name, int declarationLine, Nature nature);
+void throwWrongTypeError(int declarationLine, Type type1, Type type2);
 
 // Tipos e naturezas
 char *getTypeName(Type type);
