@@ -68,7 +68,7 @@ int foo(int x, float y, char z) {
     string str <= "te";
     float u <= 7.7;
     str = "a";
-    str = "aaaa";
+    // str = "aaaa"; // Erro
 }
 
 int bar() {
@@ -76,4 +76,24 @@ int bar() {
     foo(5, 5.4, 'b');
     // foo(5.6, 'a', 7); Erro
     // foo('a', 5.5, 6); Erro
+}
+
+bool fn(int x) {
+    char y;
+    string varstring <= "testando";
+    // x = y; // Erro
+    // varstring = y; // Erro
+    // input y; // Erro
+    input x;
+    bool g;
+    // input g; // Erro
+    // output y; // Erro
+    output x;
+    // output g; // Erro
+    return true;
+    return x;
+    // return 'a'; // Erro
+    x << 5;
+    // x << 43; // Erro
+    // x >> 43; // Erro
 }

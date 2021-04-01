@@ -494,19 +494,59 @@ Table after variable u creation:
 
 
 Ending variable list declaration
-Table after literal aaaa creation:
-[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
-[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
-[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
-[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
-[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
-[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1]
-[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0]
-[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 1]
-[KEY: str][LINE: 68][NATURE: 1][TYPE: 3][SIZE: 2]
-[KEY: u][LINE: 69][NATURE: 1][TYPE: 2][SIZE: 8]
-[KEY: aaaa][LINE: 71][NATURE: 0][TYPE: 3][SIZE: 1]
+Stacked new empty scope, now there are 2 scopes
+Table after literal 0.000000 creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
 
 
-[ERROR][Line 71]: Attributing bigger string than what was previously established for variable "str". Declared at line 71
+[WARNING] Creating a variable without a type
+Table after variable y creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal 5 creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 5][LINE: 76][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal b creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 5][LINE: 76][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: b][LINE: 76][NATURE: 0][TYPE: 5][SIZE: 0]
+
+
+Comparing INTEGER and INTEGER
+Comparing FLOAT and FLOAT
+Comparing CHAR and CHAR
+Stacked new empty scope, now there are 2 scopes
+Table after variable x creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+
+
+[WARNING] Creating a variable without a type
+Table after variable y creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal testando creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 1]
+
+
+[WARNING] Creating a variable without a type
+Table after variable varstring creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: varstring][LINE: 83][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+[ERROR][Line 84]: Chars cannot be converted implicitly.
