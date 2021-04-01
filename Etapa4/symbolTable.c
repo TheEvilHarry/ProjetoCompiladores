@@ -569,6 +569,10 @@ void verifyVariableUse(char *identifier)
 int allowsImplicitConversion(Type type1, Type type2)
 {
   printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
+
+  if(type1==type2)
+    return 1;
+
   switch (type1)
   {
   case TYPE_INTEGER:
