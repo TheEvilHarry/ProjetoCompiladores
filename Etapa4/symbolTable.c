@@ -576,7 +576,7 @@ int allowsImplicitConversion(Type type1, Type type2)
   switch (type1)
   {
   case TYPE_INTEGER:
-    if (type2 == TYPE_INTEGER)
+    if (type2 == TYPE_BOOL || type2 == TYPE_FLOAT || type2 == TYPE_INTEGER)
     {
       return 1;
     }
@@ -585,7 +585,7 @@ int allowsImplicitConversion(Type type1, Type type2)
       return 0;
     }
   case TYPE_FLOAT:
-    if (type2 == TYPE_INTEGER)
+    if (type2 == TYPE_BOOL || type2 == TYPE_FLOAT || type2 == TYPE_INTEGER)
     {
       return 1;
     }
