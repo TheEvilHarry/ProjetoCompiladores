@@ -426,6 +426,35 @@ void createVariableTableEntry(char *identifier, int line, Type type, TokenData *
   printf("\n\n");
 }
 
+// void createStringVariableTableEntry(char *identifier, int line, TokenData *token, char *value) {
+//   // printf("Starting variable table entry creation for %s\n", identifier);
+//   // printTable(getCurrentScope());
+//   if (type == TYPE_UNDEFINED)
+//   {
+//     printf("[WARNING] Creating a variable without a type\n");
+//   }
+
+//   SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), identifier);
+
+//   if (redeclared != NULL)
+//   {
+//     throwDeclaredError(identifier, redeclared->line);
+//   }
+//   else
+//   {
+//     SymbolTableEntry *entry = createTableEntry(identifier, line, NATURE_variable, type, getSizeFromType(type), token);
+//     addEntryToTopScopeTable(entry);
+//     if (type == TYPE_UNDEFINED)
+//     {
+//       addVariableToListDeclaration(identifier);
+//     }
+//   }
+
+//   printf("Table after variable %s creation:\n", identifier);
+//   printTable(getCurrentScope());
+//   printf("\n\n");
+// }
+
 void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token)
 {
 
@@ -506,12 +535,8 @@ void addArgumentsToLastDefinedFunction()
     else
     {
       SymbolTableEntry *aux = previousScope->arguments;
-      while (aux->nextEntry != NULL)
-      {
-        aux = aux->nextEntry;
-      }
-
-      aux->nextEntry = newEntry;
+      newEntry->nextEntry = aux;
+      previousScope->arguments = newEntry;
     }
 
     currentScopeEntry = currentScopeEntry->nextEntry;
@@ -570,7 +595,7 @@ int allowsImplicitConversion(Type type1, Type type2)
 {
   printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
 
-  if(type1==type2)
+  if (type1 == type2)
     return 1;
 
   switch (type1)
@@ -829,14 +854,16 @@ void throwShiftError(int line)
   exit(ERR_WRONG_PAR_SHIFT);
 }
 
-void throwStringSizeError(int line){
-       printf("[ERROR][Line %d]: Attributing bigger string than what was previously established for the variable.\n", line);
-       exit(ERR_STRING_MAX);
+void throwStringSizeError(char *name, int declarationLine)
+{
+  printf("[ERROR][Line %d]: Attributing bigger string than what was previously established for variable \"%s\". Declared at line %d\n", get_line_number(), name, declarationLine);
+  exit(ERR_STRING_MAX);
 }
 
-void throwReturnError(int line){
-       printf("[ERROR][Line %d]: Your return statement does not match the type of the function.\n", line);
-       exit(ERR_WRONG_PAR_RETURN);
+void throwReturnError(int line)
+{
+  printf("[ERROR][Line %d]: Your return statement does not match the type of the function.\n", line);
+  exit(ERR_WRONG_PAR_RETURN);
 }
 
 //
@@ -858,6 +885,9 @@ char *getTypeName(Type type)
     break;
   case TYPE_UNDEFINED:
     return "UNDEFINED";
+    break;
+  case TYPE_CHAR:
+    return "CHAR";
     break;
   default:
     return 0;

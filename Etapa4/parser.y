@@ -253,21 +253,21 @@ command: variableDeclaration ';' {$$ = $1; }
 
 
 attribution: TK_IDENTIFICADOR '=' expression {
-      Type identifierType = getEntryTypeFromKey($1->value.valueString);
-      verifyVariableUse($1->value.valueString);
+        Type identifierType = getEntryTypeFromKey($1->value.valueString);
+        verifyVariableUse($1->value.valueString);
 
-       SymbolTableEntry *identifier = findEntryInStack(getGlobalStack(), $1->value.valueString);
+        SymbolTableEntry *identifier = findEntryInStack(getGlobalStack(), $1->value.valueString);
        if(identifier!=NULL){
 
 	if(isNodeLiteralAndString($3)==1 && identifier->type==TYPE_STRING){
 		 int newSize = strlen($3->data->value.valueString);
 		 if(identifier->size < newSize){
-			throwStringSizeError(yylineno);}
+			throwStringSizeError($1->value.valueString, yylineno);}
 		}
 	}
 
-       $$=createCustomLabelNode("=", yylineno, TYPE_UNDEFINED);
-       addChild($$,createNode($1, TYPE_UNDEFINED));
+       $$=createCustomLabelNode("=", yylineno, inferType(identifierType, $3->type));
+       addChild($$,createNode($1, identifierType));
        addChild($$,$3); }
        | vector_identifier '=' expression {
 	       $$=createCustomLabelNode("=", yylineno, $1->type);
@@ -489,13 +489,13 @@ variable: TK_IDENTIFICADOR {
         $$=NULL;
         createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL); }
         | TK_IDENTIFICADOR TK_OC_LE value {
-                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL);
+                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, $1);
                 Type identifierType = getEntryTypeFromKey($1->value.valueString);
                 $$=createNode($2, identifierType); // Verificar inferencia
                 addChild($$,createNode($1, identifierType));
                 addChild($$,$3); }
         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {
-                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL);
+                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, $1);
                 Type identifierType = getEntryTypeFromKey($1->value.valueString);
                 $$=createNode($2, identifierType);
                 addChild($$,createNode($1, identifierType));

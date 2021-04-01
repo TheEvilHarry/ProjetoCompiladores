@@ -1,5 +1,7 @@
 int var_global1, var_global2, var_global3;
+
 char global_texto[10];
+
 // int var_global1; // Erro
 // char var_global2[6]; // Erro
 // int var_global4, global_texto, var_global3; // Erro
@@ -31,8 +33,10 @@ int main(int x, int y){
     return l;
     for( i=2 : 2 <= 3 : i=i+1){
         char c <= 'a';
-        i = c; // Erro
-        c = 5;
+        bool b <= true;
+        //i = c; // Erro
+        i = b;
+        //c = 5; // Erro
         output "diego";
         main(5, 6);
         a = 13;
@@ -44,4 +48,32 @@ int main(int x, int y){
         b >> 4;
         j = 3;
     }
+}
+
+// string foo(int x) { } // Erro
+
+// int foo(string x) {  } // Erro
+
+int foo(int x, float y, char z) {
+    // foo(); // Erro
+    // foo(x, y); // Erro
+    // foo(5, 5.4, 'a', 'a'); // Erro
+    foo(x, y, z);
+    foo(5, 5.4, 'a');
+    bool t;
+    t = x + y;
+    char h;
+    // h = t + z; // Erro
+    // h = var_global1 + y; // Erro
+    string str <= "teste";
+    float u <= 7.7;
+    str = "a";
+    str = "aaaa";
+}
+
+int bar() {
+    float y <= 6.76;
+    foo(5, 5.4, 'b');
+    // foo(5.6, 'a', 7); Erro
+    // foo('a', 5.5, 6); Erro
 }
