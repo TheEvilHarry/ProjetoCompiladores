@@ -96,4 +96,6 @@ bool fn(int x) {
     x << 5;
     // x << 43; // Erro
     // x >> 43; // Erro
+    string p;
+    // p = "a"; // Erro
 }

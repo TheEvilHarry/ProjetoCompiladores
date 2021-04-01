@@ -333,7 +333,7 @@ int getSizeFromType(Type type)
     return 8;
     break;
   case TYPE_STRING:
-    return 1;
+    return 0;
     break;
   case TYPE_BOOL:
     return 1;
