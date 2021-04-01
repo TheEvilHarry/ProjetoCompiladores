@@ -205,4 +205,348 @@ Table after variable l creation:
 
 Ending variable list declaration
 Comparing INTEGER and FLOAT
-[ERROR][Line 33]: Your return statement does not match the type of the function.
+Table after literal 2 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 2][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 3 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 2][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 3][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 1 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 2][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 3][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 1][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Stacked new empty scope, now there are 3 scopes
+Table after literal a creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+
+
+[WARNING] Creating a variable without a type
+Table after variable c creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal false creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+
+
+[WARNING] Creating a variable without a type
+Table after variable b creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal diego creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+
+
+Table after literal 5 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 6 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Comparing INTEGER and INTEGER
+Comparing INTEGER and INTEGER
+Table after literal 13 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 12 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 12][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 1 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 12][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 1][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Stacked new empty scope, now there are 4 scopes
+[WARNING] Creating a variable without a type
+Table after variable c creation:
+[KEY: c][LINE: 45][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal 6 creation:
+[KEY: c][LINE: 45][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 6][LINE: 46][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 3 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 12][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 1][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 3][LINE: 49][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Stacked new empty scope, now there are 2 scopes
+Table after variable z creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+
+
+Table after variable y creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+
+
+Table after variable x creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+
+
+Comparing INTEGER and INTEGER
+Comparing FLOAT and FLOAT
+Comparing CHAR and CHAR
+Table after literal 5 creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal 0.000000 creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+
+
+Table after literal a creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
+
+
+Comparing INTEGER and INTEGER
+Comparing FLOAT and FLOAT
+Comparing CHAR and CHAR
+[WARNING] Creating a variable without a type
+Table after variable t creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+[WARNING] Creating a variable without a type
+Table after variable h creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal te creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 1]
+
+
+[WARNING] Creating a variable without a type
+Table after variable str creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: str][LINE: 68][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+[WARNING] Creating a variable without a type
+Table after variable u creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: str][LINE: 68][NATURE: 1][TYPE: 3][SIZE: 2]
+[KEY: u][LINE: 69][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Stacked new empty scope, now there are 2 scopes
+Table after literal 0.000000 creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+
+
+[WARNING] Creating a variable without a type
+Table after variable y creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal 5 creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 5][LINE: 76][NATURE: 0][TYPE: 1][SIZE: 4]
+
+
+Table after literal b creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 2][SIZE: 8]
+[KEY: 5][LINE: 76][NATURE: 0][TYPE: 1][SIZE: 4]
+[KEY: b][LINE: 76][NATURE: 0][TYPE: 5][SIZE: 0]
+
+
+Comparing INTEGER and INTEGER
+Comparing FLOAT and FLOAT
+Comparing CHAR and CHAR
+Stacked new empty scope, now there are 2 scopes
+Table after variable x creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+
+
+[WARNING] Creating a variable without a type
+Table after variable y creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+Table after literal testando creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 1]
+
+
+[WARNING] Creating a variable without a type
+Table after variable varstring creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 1]
+[KEY: varstring][LINE: 83][NATURE: 1][TYPE: 0][SIZE: 0]
+
+
+Ending variable list declaration
+[ERROR][Line 84]: Chars cannot be converted implicitly.

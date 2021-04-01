@@ -489,10 +489,12 @@ variable: TK_IDENTIFICADOR {
         $$=NULL;
         createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, NULL); }
         | TK_IDENTIFICADOR TK_OC_LE value {
-                createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, $1);
-                Type identifierType = getEntryTypeFromKey($1->value.valueString);
-                $$=createNode($2, identifierType); // Verificar inferencia
-                addChild($$,createNode($1, identifierType));
+                SymbolTableEntry *entry = createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, $1);
+                if ($3->type == TYPE_STRING) {
+                        updateEntrySize(entry, strlen($3->data->value.valueString));
+                }
+                $$=createNode($2, TYPE_UNDEFINED); // Verificar inferencia
+                addChild($$,createNode($1, TYPE_UNDEFINED));
                 addChild($$,$3); }
         | TK_IDENTIFICADOR TK_OC_LE TK_IDENTIFICADOR {
                 createVariableTableEntry($1->value.valueString, yylineno, TYPE_UNDEFINED, $1);
