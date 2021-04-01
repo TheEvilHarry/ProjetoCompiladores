@@ -285,8 +285,11 @@ void endVariableListDeclaration(Type type)
     currentEntry = findEntryInTable(getCurrentScope(), currentKey->value);
     if (currentEntry != NULL)
     {
-      currentEntry->type = type;
-      currentEntry->size = getSizeFromType(type);
+      if(type==TYPE_STRING && currentEntry->nature==NATURE_vector){
+        throwStringVectorError(get_line_number());}
+      else{
+         currentEntry->type = type;
+         currentEntry->size = getSizeFromType(type);}
     }
     else
     {
@@ -874,6 +877,11 @@ void throwReturnError(int line)
   printf("[ERROR][Line %d]: Your return statement does not match the type of the function.\n", line);
   exit(ERR_WRONG_PAR_RETURN);
 }
+
+void throwStringVectorError(int line){
+    printf("[ERROR][Line %d]: You can't create a String typed Vector.\n", line);
+      exit(ERR_STRING_VECTOR);
+    }
 
 //
 char *getTypeName(Type type)
