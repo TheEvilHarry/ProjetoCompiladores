@@ -286,7 +286,10 @@ void endVariableListDeclaration(Type type)
     if (currentEntry != NULL)
     {
       currentEntry->type = type;
-      currentEntry->size = getSizeFromType(type);
+      if (type != TYPE_STRING)
+      {
+        currentEntry->size = getSizeFromType(type);
+      }
     }
     else
     {
@@ -396,7 +399,12 @@ char *generateLiteralKey(TokenData *token)
   return new_key;
 }
 
-void createVariableTableEntry(char *identifier, int line, Type type, TokenData *token)
+void updateEntrySize(SymbolTableEntry *entry, int size)
+{
+  entry->size = size;
+}
+
+SymbolTableEntry *createVariableTableEntry(char *identifier, int line, Type type, TokenData *token)
 {
   // printf("Starting variable table entry creation for %s\n", identifier);
   // printTable(getCurrentScope());
@@ -419,11 +427,13 @@ void createVariableTableEntry(char *identifier, int line, Type type, TokenData *
     {
       addVariableToListDeclaration(identifier);
     }
-  }
 
-  printf("Table after variable %s creation:\n", identifier);
-  printTable(getCurrentScope());
-  printf("\n\n");
+    printf("Table after variable %s creation:\n", identifier);
+    printTable(getCurrentScope());
+    printf("\n\n");
+
+    return entry;
+  }
 }
 
 // void createStringVariableTableEntry(char *identifier, int line, TokenData *token, char *value) {

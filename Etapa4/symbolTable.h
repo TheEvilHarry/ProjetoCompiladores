@@ -63,10 +63,12 @@ SymbolTableStack *getGlobalStack();
 
 // Criaçao de entradas da tabela
 void createLiteralTableEntry(int line, Type type, TokenData *token);
-void createVariableTableEntry(char *identifier, int line, Type type, TokenData *token);
+SymbolTableEntry *createVariableTableEntry(char *identifier, int line, Type type, TokenData *token);
 void createStringVariableTableEntry(char *identifier, int line, TokenData *token, char *value);
 void createVectorTableEntry(char *identifier, int line, Type type, int size, TokenData *token);
 void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *token);
+
+void updateEntrySize(SymbolTableEntry *entry, int size);
 
 void addArgumentsToLastDefinedFunction();
 

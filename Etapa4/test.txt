@@ -65,7 +65,7 @@ int foo(int x, float y, char z) {
     char h;
     // h = t + z; // Erro
     // h = var_global1 + y; // Erro
-    string str <= "teste";
+    string str <= "te";
     float u <= 7.7;
     str = "a";
     str = "aaaa";
