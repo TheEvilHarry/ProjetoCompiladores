@@ -313,7 +313,7 @@ shiftOperator: TK_OC_SL {$$=createNode($1, TYPE_UNDEFINED);}
         | TK_OC_SR {$$=createNode($1, TYPE_UNDEFINED);};
 
 executionControl: TK_PR_RETURN expression {
-	if($2->type != currentFunctionReturn){
+	if(allowsImplicitConversion(currentFunctionReturn,$2->type) == 0){
 		throwReturnError(yylineno);}
         $$=createCustomLabelNode("return", yylineno, $2->type);
         addChild($$,$2); }
