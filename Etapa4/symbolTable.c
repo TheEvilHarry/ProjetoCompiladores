@@ -573,10 +573,13 @@ void verifyVariableUse(char *identifier)
   {
     throwUndeclaredError(identifier);
   }
-  else if (entry->nature != NATURE_variable)
-  {
-    throwVariableError(identifier, entry->line, entry->nature);
-  }
+  else if (entry->nature != NATURE_vector)
+    {
+      if(entry->nature == NATURE_function){
+          throwFunctionError(identifier, entry->line, NATURE_variable); }
+      else if(entry->nature == NATURE_vector){
+          throwVariableError(identifier, entry->line, NATURE_variable);}
+    }
 }
 
 // void checkForWrongTypes(char *key, Type type)
@@ -679,7 +682,10 @@ void verifyVectorUse(char *identifier)
   }
   else if (entry->nature != NATURE_vector)
   {
-    throwVectorError(identifier, entry->line, entry->nature);
+    if(entry->nature == NATURE_function){
+        throwFunctionError(identifier, entry->line, NATURE_vector); }
+    else if(entry->nature == NATURE_variable){
+        throwVariableError(identifier, entry->line, NATURE_vector);}
   }
 }
 void verifyFunctionUse(char *identifier)
@@ -690,9 +696,12 @@ void verifyFunctionUse(char *identifier)
     throwUndeclaredError(identifier);
   }
   else if (entry->nature != NATURE_function)
-  {
-    throwFunctionError(identifier, entry->line, entry->nature);
-  }
+    {
+      if(entry->nature == NATURE_vector){
+          throwVectorError(identifier, entry->line, NATURE_function); }
+      else if(entry->nature == NATURE_variable){
+          throwVariableError(identifier, entry->line, NATURE_function);}
+    }
 }
 
 void verifyFunctionCallParams(char *functionName, Node *firstParam)
@@ -800,9 +809,9 @@ void throwCharToXError(char *name)
   exit(ERR_CHAR_TO_X);
 }
 
-void throwVariableError(char *name, int declarationLine, Nature nature)
+void throwVariableError(char *name, int declarationLine)
 {
-  printf("[ERROR][Line %d]: Identifier \"%s\" is a %s but is being used as a VARIABLE. Declared at line %d\n", get_line_number(), name, getNatureName(nature), declarationLine);
+  printf("[ERROR][Line %d]: Identifier \"%s\" is a a VARIABLE but is being used as %s . Declared at line %d\n", get_line_number(), name, getNatureName(nature), declarationLine);
   exit(ERR_VARIABLE);
 }
 void throwVectorError(char *name, int declarationLine, Nature nature)
