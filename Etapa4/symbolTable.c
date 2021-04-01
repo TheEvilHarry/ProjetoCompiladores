@@ -50,7 +50,7 @@ void printTable(SymbolTableEntry *table)
     {
       printf("ARGUMENTS: ");
       printTable(currentEntry->arguments);
-      printf("\n");
+      printf("\n\n");
     }
     currentEntry = currentEntry->nextEntry;
   }
@@ -174,7 +174,7 @@ SymbolTableStack *stackScope()
 
   stack = newStack;
 
-  printf("Stacked new empty scope, now there are %d scopes\n", getNumberOfStackedScopes());
+  // printf("Stacked new empty scope, now there are %d scopes\n", getNumberOfStackedScopes());
 
   return newStack;
 };
@@ -255,7 +255,7 @@ void createGlobalScope()
   }
   else
   {
-    printf("[WARNING] Attempted to create global scope but a scope is already defined\n");
+    // printf("[WARNING] Attempted to create global scope but a scope is already defined\n");
   }
 }
 
@@ -271,13 +271,13 @@ SymbolTableEntry *getCurrentScope()
 
 void initiateVariableListDeclaration()
 {
-  printf("Starting variable list declaration\n");
+  // printf("Starting variable list declaration\n");
   declaringVariableList = 1;
 }
 
 void endVariableListDeclaration(Type type)
 {
-  printf("Ending variable list declaration\n");
+  // printf("Ending variable list declaration\n");
   StringList *currentKey = variableListDeclarationKeys;
   SymbolTableEntry *currentEntry = NULL;
   while (currentKey != NULL)
@@ -285,16 +285,19 @@ void endVariableListDeclaration(Type type)
     currentEntry = findEntryInTable(getCurrentScope(), currentKey->value);
     if (currentEntry != NULL)
     {
-      if(type==TYPE_STRING && currentEntry->nature==NATURE_vector){
-        throwStringVectorError(get_line_number());}
-      else{
-         currentEntry->type = type;
-         if (type != TYPE_STRING)
-           {
-               currentEntry->size = getSizeFromType(type);
-           }
-           }
-     }
+      if (type == TYPE_STRING && currentEntry->nature == NATURE_vector)
+      {
+        throwStringVectorError(get_line_number());
+      }
+      else
+      {
+        currentEntry->type = type;
+        if (type != TYPE_STRING)
+        {
+          currentEntry->size = getSizeFromType(type);
+        }
+      }
+    }
     else
     {
       printf("[WARNING] Key %s from variable list declaration is not in current scope. Could not add type.", currentKey->value);
@@ -354,7 +357,7 @@ void createLiteralTableEntry(int line, Type type, TokenData *token)
 
   if (type == TYPE_UNDEFINED)
   {
-    printf("[WARNING] Creating a literal without a type\n");
+    // printf("[WARNING] Creating a literal without a type\n");
   }
 
   char *key = generateLiteralKey(token);
@@ -366,9 +369,9 @@ void createLiteralTableEntry(int line, Type type, TokenData *token)
     SymbolTableEntry *entry = createTableEntry(key, line, NATURE_literal, type, getSizeFromType(type), token);
     addEntryToTopScopeTable(entry);
 
-    printf("Table after literal %s creation:\n", key);
-    printTable(getCurrentScope());
-    printf("\n\n");
+    // printf("Table after literal %s creation:\n", key);
+    // printTable(getCurrentScope());
+    // printf("\n\n");
   }
 }
 
@@ -414,7 +417,7 @@ SymbolTableEntry *createVariableTableEntry(char *identifier, int line, Type type
   // printTable(getCurrentScope());
   if (type == TYPE_UNDEFINED)
   {
-    printf("[WARNING] Creating a variable without a type\n");
+    // printf("[WARNING] Creating a variable without a type\n");
   }
 
   SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), identifier);
@@ -432,9 +435,9 @@ SymbolTableEntry *createVariableTableEntry(char *identifier, int line, Type type
       addVariableToListDeclaration(identifier);
     }
 
-    printf("Table after variable %s creation:\n", identifier);
-    printTable(getCurrentScope());
-    printf("\n\n");
+    // printf("Table after variable %s creation:\n", identifier);
+    // printTable(getCurrentScope());
+    // printf("\n\n");
 
     return entry;
   }
@@ -474,7 +477,7 @@ void createVectorTableEntry(char *identifier, int line, Type type, int size, Tok
 
   if (type == TYPE_UNDEFINED)
   {
-    printf("[WARNING] Creating a vector without a type\n");
+    // printf("[WARNING] Creating a vector without a type\n");
   }
 
   SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), identifier);
@@ -500,7 +503,7 @@ void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *
   // printf("Starting function table entry creation for %s\n", identifier);
   if (type == TYPE_UNDEFINED)
   {
-    printf("[WARNING] Creating a function without a type\n");
+    // printf("[WARNING] Creating a function without a type\n");
   }
 
   SymbolTableEntry *redeclared = findEntryInTable(getCurrentScope(), identifier);
@@ -614,7 +617,7 @@ void verifyVariableUse(char *identifier)
 
 int allowsImplicitConversion(Type type1, Type type2)
 {
-  printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
+  // printf("Comparing %s and %s\n", getTypeName(type1), getTypeName(type2));
 
   if (type1 == type2)
     return 1;
@@ -901,10 +904,11 @@ void throwReturnError(int line)
   exit(ERR_WRONG_PAR_RETURN);
 }
 
-void throwStringVectorError(int line){
-    printf("[ERROR][Line %d]: You can't create a String typed Vector.\n", line);
-      exit(ERR_STRING_VECTOR);
-    }
+void throwStringVectorError(int line)
+{
+  printf("[ERROR][Line %d]: You can't create a String typed Vector.\n", line);
+  exit(ERR_STRING_VECTOR);
+}
 
 //
 char *getTypeName(Type type)
