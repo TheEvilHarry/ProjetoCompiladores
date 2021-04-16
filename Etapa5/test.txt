@@ -1,0 +1,101 @@
+int var_global1, var_global2, var_global3;
+
+char global_texto[10];
+
+// int var_global1; // Erro
+// char var_global2[6]; // Erro
+// int var_global4, global_texto, var_global3; // Erro
+
+int main(int x, int y){
+    // var_global1(); //Erro
+    // var5 = 5; // Erro
+    // var6[7] = 7; // Erro
+    global_texto[7] = '8';
+    var_global3 = 8;
+    int var_global3;
+    {
+        int var;
+    };
+    {
+        int var <= 0;
+    };
+    var_global1 = 5;
+    // var_global1[5] = 5; // Erro
+    // var_global1(5); // Erro
+    global_texto[5] = '9';
+    // global_texto = '6'; // Erro
+    // global_texto('6'); //Erro
+    main(6, 7);
+    // main = "teste"; // Erro
+    // main[8] = 'm'; // Erro
+    int i, a, b, j;
+    float l <= 22;
+    return l;
+    for( i=2 : 2 <= 3 : i=i+1){
+        char c <= 'a';
+        bool b <= true;
+        //i = c; // Erro
+        i = b;
+        //c = 5; // Erro
+        output "diego";
+        main(5, 6);
+        a = 13;
+        a = 12 + 1;
+        {
+            int c;
+            c = 6;
+        };
+        b >> 4;
+        j = 3;
+    }
+}
+
+// string foo(int x) { } // Erro
+
+// int foo(string x) {  } // Erro
+
+int foo(int x, float y, char z) {
+    // foo(); // Erro
+    // foo(x, y); // Erro
+    // foo(5, 5.4, 'a', 'a'); // Erro
+    foo(x, y, z);
+    foo(5, 5.4, 'a');
+    bool t;
+    t = x + y;
+    char h;
+    // h = t + z; // Erro
+    // h = var_global1 + y; // Erro
+    string str <= "te";
+    float u <= 7.7;
+    str = "a";
+    // str = "aaaa"; // Erro
+}
+
+int bar() {
+    float y <= 6.76;
+    foo(5, 5.4, 'b');
+    // foo(5.6, 'a', 7); Erro
+    // foo('a', 5.5, 6); Erro
+}
+
+bool fn(int x) {
+    char y;
+    string varstring <= "testando";
+    // x = y; // Erro
+    // varstring = y; // Erro
+    // input y; // Erro
+    input x;
+    bool g;
+    // input g; // Erro
+    // output y; // Erro
+    output x;
+    // output g; // Erro
+    return true;
+    return x;
+    // return 'a'; // Erro
+    x << 5;
+    // x << 43; // Erro
+    // x >> 43; // Erro
+    string p;
+    // p = "a"; // Erro
+}
