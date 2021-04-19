@@ -1,3 +1,5 @@
+#include "ilocfunctions.h"
+
 #define MAX_LABEL_SIZE 100
 #define MAX_CHILDREN 4
 
@@ -57,6 +59,7 @@ typedef struct t_ast_node
     struct t_ast_node *next;
     int numberOfChildren;
     Type type;
+    Code *code;
 } Node;
 
 TokenData *createNonLiteralToken(int line, Token type, char *value);
