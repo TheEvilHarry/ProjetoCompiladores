@@ -2,10 +2,12 @@
 
 #define MAXLABELSIZE 15
 #define MAXREGISTERSIZE 15
+#define RBSS  //register for global variables
+#define RFP   //register for local variables
 
 typedef enum {
-    HALT,
     NOP,
+    HALT,
     ADD,
     SUB,
     MULT,
@@ -36,6 +38,7 @@ typedef struct t_code {
     char *dest1;
     char *dest2;
     struct t_code *next;
+    struct t_code *prev;
 
 } Code;
 
