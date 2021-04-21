@@ -27,7 +27,7 @@ char* generateRegisterName(int flag){
      return newRegister;
 }
 
-Code *createCode(int label, Operation op, char* arg1, char* arg2, char* arg3, char* dest1, char* dest2){
+Code *createCode(Operation op, char* arg1, char* arg2, char* arg3, char* dest1, char* dest2){
 
     Code *code = (Code*) malloc(sizeof(Code));
     code->opCode = op;
@@ -40,11 +40,8 @@ Code *createCode(int label, Operation op, char* arg1, char* arg2, char* arg3, ch
     code->next = NULL;
     code->prev= NULL;
 
-    if(label==-1){
-        code->label = NULL;}
-    else{
-        code->label = generateLabelName();
-        currentLabel++;    }                //CHECK WITH PEDRO IF THIS IS RIGHT?!
+    code->label = generateLabelName();
+    currentLabel++;    }                //CHECK WITH PEDRO IF THIS IS RIGHT?!
 
     return code;
 }
@@ -66,7 +63,7 @@ Code *joinCodes(Code* code1, Code* code2){
 Code *generatesAttributionCode(Node *attr, Node* exp){
     int offset, scope;
     offset = offset(attr->data->value.valueString, &scope);
-    return createCode(-1,STOREAI,expr->local, NULL, NULL, getsDestForLOADAI(), offset, NULL );
+    return createCode(STOREAI,expr->local, NULL, NULL, getsDestForLOADAI(), offset, NULL );
 
    }
 
@@ -90,12 +87,20 @@ Code *generatesInitializationCode(Node *start){
 
  }
 
- Code *generatesBinaryExp(TokenData data, Node * child1, Node* child2, char* dest){
-        Code *code = createCode(-1, getOperationFromData(data), child1->local, child2->local, NULL, dest, NULL);
+ Code *generatesBinaryExp(Operation op, Node * child1, Node* child2, char* dest){
+        Code *code = createCode(op, child1->local, child2->local, NULL, dest, NULL);
         return joinCodes(joinCodes(child1->code, child2->code), code);
   }
 
 Operation getOperationFromData(TokenData data){
     //TODO
     }
+
+Code * generatesUnaryOperator(Operation operation, Code *op ){
+    Code* code = createCode(operation, NULL, NULL,NULL, NULL, NULL, NULL );
+    return joinCodes(code, op);
+
+}
+
+
 
