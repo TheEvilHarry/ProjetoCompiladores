@@ -1,5 +1,4 @@
 #include "symbolTable.h"
-#include "ilocfunctions.h"
 
 Node *createNode(TokenData *data, Type type);
 

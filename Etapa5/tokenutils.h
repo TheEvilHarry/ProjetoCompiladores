@@ -1,7 +1,42 @@
-#include "ilocfunctions.h"
-
 #define MAX_LABEL_SIZE 100
 #define MAX_CHILDREN 4
+
+typedef enum
+{
+    NOP,
+    HALT,
+    ADD,
+    SUB,
+    MULT,
+    DIV,
+    ADDI,
+    LOADI,
+    LOADAI,
+    STOREAI,
+    I2I,
+    JUMPI,
+    JUMP,
+    CBR,
+    CMP_LT,
+    CMP_LE,
+    CMP_EQ,
+    CMP_GE,
+    CMP_GT,
+    CMP_NE
+} Operation;
+
+typedef struct t_code
+{
+    char *labeloffset;
+    Operation opCode;
+    char *arg1;
+    char *arg2;
+    char *arg3;
+    char *dest1;
+    char *dest2;
+    struct t_code *next;
+    struct t_code *prev;
+} Code;
 
 typedef enum
 {

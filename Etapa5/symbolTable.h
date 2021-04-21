@@ -25,6 +25,7 @@ typedef struct symbolTableEntry
 
 typedef struct symbolTableStack
 {
+    int isGlobal;
     SymbolTableEntry *top;
     struct symbolTableStack *rest;
 } SymbolTableStack;

@@ -26,7 +26,7 @@ Node *createCustomLabelNode(char *label, int line, Type type)
   node->type = type;
 
   node->next = NULL;
-  node->local= gen
+  // node->local= gen
 
   return node;
 }

@@ -171,6 +171,7 @@ SymbolTableStack *stackScope()
 
   newStack->top = NULL;
   newStack->rest = stack;
+  newStack->isGlobal = 0;
 
   stack = newStack;
 
@@ -250,6 +251,7 @@ void createGlobalScope()
 
     newStack->top = NULL;
     newStack->rest = NULL;
+    newStack->isGlobal = 1;
 
     stack = newStack;
   }
