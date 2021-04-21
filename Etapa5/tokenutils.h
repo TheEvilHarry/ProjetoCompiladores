@@ -48,7 +48,8 @@ typedef enum
 
 typedef struct t_code
 {
-    char *labeloffset;
+    char *label;
+    char *local;
     Operation opCode;
     char *arg1;
     char *arg2;
@@ -57,6 +58,7 @@ typedef struct t_code
     char *dest2;
     struct t_code *next;
     struct t_code *prev;
+
 } Code;
 
 typedef enum

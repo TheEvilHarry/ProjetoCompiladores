@@ -9,17 +9,19 @@
 
 #include "ilocfunctions.h"
 
+
 int currentLabel = 1;
 int currentRegister = 0;
 
-// char *generateLabelName()
-// {
+ char *generateLabelName()
+ {
 
-//     char newLabel[MAXLABELSIZE] = "L";
-//     char index[] = itoa(currentLabel);
-//     strcat(newLabel, index);
-//     return newLabel;
-// }
+     char newLabel[MAXLABELSIZE] = "L";
+     char index[10] = itoa(currentLabel);
+     strcat(newLabel, index);
+     currentLabel++;
+     return newLabel;
+ }
 
 // char *generateRegisterName(int flag)
 // {
@@ -28,26 +30,41 @@ int currentRegister = 0;
 //     strcat(newRegister, index);
 //     return newRegister;
 // }
+ Code * generateEmptyCode(char *local){
+    Code *code = (Code *)malloc(sizeof(Code));
+     code->opCode = NULL;
+     code->arg1 = NULL;
+     code->arg2 = NULL;
+     code->arg3 = NULL;
+     code->dest1 = NULL;
+     code->dest2 = NULL;
+     code->next = NULL;
+     code->prev = NULL;
+     code->label = NULL;
+     code->local = local;
+     return code;
 
-// Code *createCode(Operation op, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
-// {
+    }
+ Code *createCode(Operation op, char * local ,char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
+ {
 
-//     Code *code = (Code *)malloc(sizeof(Code));
-//     code->opCode = op;
-//     code->arg1 = arg1;
-//     code->arg2 = arg2;
-//     code->arg3 = arg3;
-//     code->dest1 = dest1;
-//     code->dest2 = dest2;
-//     code->dest3 = dest3;
-//     code->next = NULL;
-//     code->prev = NULL;
+     Code *code = (Code *)malloc(sizeof(Code));
+     code->opCode = op;
+     code->arg1 = arg1;
+     code->arg2 = arg2;
+     code->arg3 = arg3;
+     code->dest1 = dest1;
+     code->dest2 = dest2;
+     code->local=local;
+     code->next = NULL;
+     code->prev = NULL;
 
-//     code->label = generateLabelName();
-//     currentLabel++;
 
-//     return code;
-// } //CHECK WITH PEDRO IF THIS IS RIGHT?!
+     code->label = generateLabelName();
+     currentLabel++;
+
+     return code;
+ } //CHECK WITH PEDRO IF THIS IS RIGHT?!
 
 Code *joinCodes(Code *code1, Code *code2)
 {
@@ -57,54 +74,86 @@ Code *joinCodes(Code *code1, Code *code2)
         return code1;
 
     Code *point = code2;
-    while (point->next)
+    while (point->prev)
     {
-        point = point->next;
+        point = point->prev;
     }
 
-    point->next = code1;
+    code1->next = point;
+    point->prev = code1;
+
+    return code2;
 }
 
-// Code *generatesAttributionCode(Node *attr, Node *exp)
-// {
-//     int offset, scope;
-//     offset = offset(attr->data->value.valueString, &scope);
-//     return createCode(STOREAI, expr->local, NULL, NULL, getsDestForLOADAI(), offset, NULL);
-// }
+ Code *generatesAttributionCode(Node *attr, Node *exp)
+ {
+     SymbolTableEntry *expression = findEntryInTable(getCurrentScope(), exp->data->value.valueString);
+     Code *code;
+     SymbolTableStack *scope = getCurrentScope();   //CHECK THISSSSSSSS
+     if(scope->isGlobal ==1){
+        char local[4] = RBSS;
+        code = createCode(STOREAI,local,NULL, NULL, NULL, NULL, NULL);
+        }
+     else{
+       char local[4] = RFP;
+       code = createCode(STOREAI,local,NULL, NULL, NULL, NULL, NULL);
+       }
 
-int offset(char *symbol, int *scope)
+
+    return joinCodes(expression->code, code);
+
+ }
+
+ Code *generatesIfCode(Node * expr, Node *trueExpr, Node *falseExpr){
+       char* label1 = generateLabelName();
+       char* label2 = generateLabelName();
+       char* label3 = generateLabelName();
+
+       //TODO:
+       //Where are we getting the result of if expressions?
+        char* result;
+       Code *ifCode = createCBRCode(expr, result, label1, label2, trueExpr);
+
+       Code *trueJump = generateTrueConditionalJump(label1);
+       ifCode = joinCodes(ifCode,trueJump);
+       Code* labelCode = generateLabelCode(label3);
+       if(falseExpr!=NULL){
+            SymbolTableEntry *entry = findEntryInTable(getCurrentScope(), falseExpr->data->value.valueString);
+            labelCode = joinCodes(entry->code, labelCode);
+        }
+
+        free(label1);
+        free(label2);
+        free(label3);
+
+        return joinCodes(ifCode,labelCode);
+
+        }
+
+Code *generateLabelCode(char * label){
+    Code *code = createCode(NOP,NULL, label, NULL, NULL, NULL, NULL);
+    return code;
+    }
+Code *generateTrueConditionalJump(char *l1){
+        Code *jumpi = createCode(JUMPI,NULL, NULL, NULL, NULL,l1,NULL);
+        return jumpi;
+      }
+
+Code *createCBRCode(Node *expr, char* r1, char *l1, char *l2, Node* trueExpr){
+    SymbolTableEntry *entry = findEntryInTable(getCurrentScope(), expr->data->value.valueString);
+    SymbolTableEntry *entryTrue = findEntryInTable(getCurrentScope(), expr->data->value.valueString);
+
+    Code *cbr = createCode(CBR,NULL, r1, NULL, NULL, l1,l2);
+    cbr = joinCodes(entry->code, cbr);
+    cbr = joinCodes(cbr,entryTrue->code);
+    return cbr;
+    }
+
+int setsOffset(char *symbol, int *scope)
 {
     //TODO;
     //NOT DONE BECAUSE I DIDNT KNOW HOW TO TEST THE SCOPE AND I'M TOO SLEEPY TO TRY.
     return 0;
-}
-
-char *getsDestForLOADAI()
-{
-    //TODO:
-    //IF SCOPE IS GLOBAL THEN RETURN RBSS ELSE RFB
-    //NOT DONE BECAUSE I DIDNT KNOW HOW TO TEST THE SCOPE AND I'M TOO SLEEPY TO TRY.
-}
-
-// Code *generatesInitializationCode(Node *start)
-// {
-//     if (init == NULL)
-//     {
-//         return NULL;
-//     }
-//     Code *code = generatesAttributionCode(start->children[0], start->children[1]);
-//     return joinCodes(start->children[1]->code, generatesInitializationCode(start->next));
-// }
-
-// Code *generatesBinaryExp(TokenData data, Node *child1, Node *child2, char *dest)
-// {
-//     Code *code = createCode(-1, getOperationFromData(data), child1->local, child2->local, NULL, dest, NULL);
-//     return joinCodes(joinCodes(child1->code, child2->code), code);
-// }
-
-Operation getOperationFromData(TokenData data)
-{
-    //TODO
 }
 
 // Code *generatesBinaryExp(Operation op, Node *child1, Node *child2, char *dest)
