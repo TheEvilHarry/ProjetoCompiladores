@@ -8,49 +8,5 @@
 
 char *generateLabelName();
 char *generateRegisterName();
-typedef enum
-{
-    NOP,
-    HALT,
-    ADD,
-    SUB,
-    MULT,
-    DIV,
-    ADDI,
-    SUBI,
-    RSUBI,
-    MULTI,
-    DIVI,
-    AND,
-    ANDI,
-    OR,
-    ORI,
-    LOAD,
-    LOADI,
-    LOADAI,
-    LOAD0,
-    CLOAD,
-    CLOADAI,
-    CLOADA0,
-    STORE,
-    STOREAI,
-    STOREA0,
-    CSTORE,
-    CSTOREAI,
-    CSTOREA0,
-    I2I,
-    C2C,
-    C2I,
-    I2C,
-    JUMPI,
-    JUMP,
-    CBR,
-    CMP_LT,
-    CMP_LE,
-    CMP_EQ,
-    CMP_GE,
-    CMP_GT,
-    CMP_NE
-} Operation;
 
 Code *generate(Node *node);

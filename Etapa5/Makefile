@@ -5,4 +5,4 @@ etapa3: scanner.l main.c
 	gcc -o etapa5 main.o lex.yy.o parser.tab.o tokenutils.o ast.o symbolTable.o ilocfunctions.o -ll
 
 clean:
-	rm -f *.tab.c *.tab.h *.yy.c *.o *.output etapa3 bison.report tree
+	rm -f *.tab.c *.tab.h *.yy.c *.o *.output etapa5 bison.report tree

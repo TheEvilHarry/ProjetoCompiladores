@@ -1,117 +1,117 @@
-Node with label global_texto
-Node with label 7
-Node with label []
-Node with label 8
-Node with label =
-Node with label var_global3
-Node with label 8
-Node with label =
-Node with label var
-Node with label 0
-Node with label <=
-Node with label var_global1
-Node with label 5
-Node with label =
-Node with label global_texto
-Node with label 5
-Node with label []
-Node with label 9
-Node with label =
-Node with label 6
-Node with label 7
-Node with label call main
-Node with label l
-Node with label 22
-Node with label <=
-Node with label l
-Node with label return
-Node with label i
-Node with label 2
-Node with label =
-Node with label 2
-Node with label 3
-Node with label <=
-Node with label i
-Node with label i
-Node with label 1
-Node with label +
-Node with label =
-Node with label c
-Node with label a
-Node with label <=
-Node with label b
-Node with label true
-Node with label <=
-Node with label i
-Node with label b
-Node with label =
-Node with label diego
-Node with label output
-Node with label 5
-Node with label 6
-Node with label call main
-Node with label a
-Node with label 13
-Node with label =
-Node with label a
-Node with label 12
-Node with label 1
-Node with label +
-Node with label =
-Node with label c
-Node with label 6
-Node with label =
-Node with label b
-Node with label 4
-Node with label >>
-Node with label j
-Node with label 3
-Node with label =
-Node with label for
-Node with label main
-Node with label x
-Node with label y
-Node with label z
-Node with label call foo
-Node with label 5
-Node with label 5.4
-Node with label a
-Node with label call foo
-Node with label t
-Node with label x
-Node with label y
-Node with label +
-Node with label =
-Node with label str
-Node with label te
-Node with label <=
-Node with label u
-Node with label 7.7
-Node with label <=
-Node with label str
-Node with label a
-Node with label =
-Node with label foo
-Node with label y
-Node with label 6.76
-Node with label <=
-Node with label 5
-Node with label 5.4
-Node with label b
-Node with label call foo
-Node with label bar
-Node with label varstring
-Node with label testando
-Node with label <=
-Node with label x
-Node with label input
-Node with label x
-Node with label output
-Node with label true
-Node with label return
-Node with label x
-Node with label return
-Node with label x
-Node with label 5
-Node with label <<
-Node with label fn
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Or operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Add operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Add operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Halt operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Halt operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Add operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Halt operation
+Halt operation
+Halt operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
+Unrecognized operation
