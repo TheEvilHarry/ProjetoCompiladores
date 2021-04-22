@@ -147,13 +147,13 @@ Code *generateLabelCode(char *label)
 {
     Code *code = createCode(NOP, NULL, label, NULL, NULL, NULL, NULL);
     return code;
-}
 
-Code *generateTrueConditionalJump(char *l1)
-{
-    Code *jumpi = createCode(JUMPI, NULL, NULL, NULL, NULL, l1, NULL);
-    return jumpi;
-}
+    }
+
+Code *generateTrueConditionalJump(char *label){
+        Code *jumpi = createCode(JUMPI,NULL, NULL, NULL, NULL,label,NULL);
+        return jumpi;
+      }
 
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, Node *trueExpr)
 {
@@ -165,6 +165,36 @@ Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, Node *trueExpr)
     cbr = joinCodes(cbr, entryTrue->code);
     return cbr;
 }
+
+Code *generateWhileCode(Node* expr, Node* commands){
+
+    SymbolTableEntry *entry = findEntryInStack(getCurrentStack(), expr->data->value.valueString);
+    SymbolTableEntry *entryCommands = findEntryInStack(getCurrentStack(), commands->data->value.valueString);
+    char* label1 = generateLabelName();
+    char* label2 = generateLabelName();
+    char* label3 = generateLabelName();
+
+    Code *labelCode = generateLabelCode(l1);
+    labelCode = joinCodes(labelCode, entry->code);
+
+    Code *exprCode = createCBRCode(expr, l2, l3, commands);
+
+    Code *labelCode = generateLabelCode(l1);
+    labelCode = joinCodes(labelCode, entry->code);
+
+    Code *labelCode2 = generateLabelCode(l2);
+    labelCode2 = joinCodes(exprCode,labelCode2);
+    labelCode2 = joinCodes(labelCode2, entryCommands->code);
+
+    Code *jumpCode = generateTrueConditionalJump(label1);
+    jumpCode = joinCodes(labelCode2,jumpCode);
+
+    Code *labelCode3 = generateLabelCode(label3);
+    labelCode3 = joinCodes(jumpCode,labelCode3);
+
+    return labelCode3;
+
+    }
 
 int setsOffset(char *symbol, int *scope)
 {
