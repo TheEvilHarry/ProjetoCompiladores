@@ -4,6 +4,8 @@
 #include "symbolTable.h"
 #include "errors.h"
 
+#define DEBUG 1
+
 // Variaveis globais
 SymbolTableStack *stack = NULL;
 int declaringVariableList = 0;
@@ -45,7 +47,7 @@ void printTable(SymbolTableEntry *table)
   SymbolTableEntry *currentEntry = table;
   while (currentEntry != NULL)
   {
-    printf("[KEY: %s][LINE: %d][NATURE: %d][TYPE: %d][SIZE: %d]\n", currentEntry->key, currentEntry->line, currentEntry->nature, currentEntry->type, currentEntry->size);
+    printf("[KEY: %s][LINE: %d][NATURE: %d][TYPE: %d][SIZE: %d][OFFSET: %d]\n", currentEntry->key, currentEntry->line, currentEntry->nature, currentEntry->type, currentEntry->size, currentEntry->entryOffset);
     if (currentEntry->arguments != NULL)
     {
       printf("ARGUMENTS: ");
@@ -80,6 +82,7 @@ SymbolTableEntry *createTableEntry(char *key, int line, Nature nature, Type type
   entry->type = type;
   entry->data = data;
   entry->nextEntry = NULL;
+  entry->entryOffset = getGlobalStack()->tableOffset;
 };
 
 // void addEntryToTable(SymbolTableEntry *table, SymbolTableEntry *entry)
@@ -114,6 +117,7 @@ void addEntryToTopScopeTable(SymbolTableEntry *entry)
     }
 
     aux->nextEntry = entry;
+    stack->tableOffset = stack->tableOffset + entry->size; // Increment table offset by entry size
   }
 }
 
@@ -172,6 +176,7 @@ SymbolTableStack *stackScope()
   newStack->top = NULL;
   newStack->rest = stack;
   newStack->isGlobal = 0;
+  newStack->tableOffset = stack->tableOffset; // Initialize offset with parent table's offset
 
   stack = newStack;
 
@@ -217,6 +222,7 @@ SymbolTableEntry *findLiteralEntryInStack(SymbolTableStack *stack, char *key)
 SymbolTableStack *popScope()
 {
   SymbolTableStack *newStackTop = stack->rest;
+  newStackTop->tableOffset = stack->tableOffset; // Update previous table offset to account for inner table offset
   freeSymbolTable(stack->top);
   stack->top = NULL;
   free(stack);
@@ -252,6 +258,7 @@ void createGlobalScope()
     newStack->top = NULL;
     newStack->rest = NULL;
     newStack->isGlobal = 1;
+    newStack->tableOffset = 0; // TODO: Initialize with RBSS
 
     stack = newStack;
   }
@@ -294,9 +301,11 @@ void endVariableListDeclaration(Type type)
       else
       {
         currentEntry->type = type;
+        currentEntry->entryOffset = getGlobalStack()->tableOffset;
         if (type != TYPE_STRING)
         {
           currentEntry->size = getSizeFromType(type);
+          getGlobalStack()->tableOffset = getGlobalStack()->tableOffset + currentEntry->size;
         }
       }
     }
@@ -371,9 +380,12 @@ void createLiteralTableEntry(int line, Type type, TokenData *token)
     SymbolTableEntry *entry = createTableEntry(key, line, NATURE_literal, type, getSizeFromType(type), token);
     addEntryToTopScopeTable(entry);
 
-    // printf("Table after literal %s creation:\n", key);
-    // printTable(getCurrentScope());
-    // printf("\n\n");
+    if (DEBUG == 1)
+    {
+      printf("Table after literal %s creation:\n", key);
+      printTable(getCurrentScope());
+      printf("\n\n");
+    }
   }
 }
 
@@ -411,6 +423,8 @@ char *generateLiteralKey(TokenData *token)
 void updateEntrySize(SymbolTableEntry *entry, int size)
 {
   entry->size = size;
+  getGlobalStack()->tableOffset = getGlobalStack()->tableOffset + size;
+  // TODO: update previous entries offset???? maybe not
 }
 
 SymbolTableEntry *createVariableTableEntry(char *identifier, int line, Type type, TokenData *token)
@@ -437,9 +451,12 @@ SymbolTableEntry *createVariableTableEntry(char *identifier, int line, Type type
       addVariableToListDeclaration(identifier);
     }
 
-    // printf("Table after variable %s creation:\n", identifier);
-    // printTable(getCurrentScope());
-    // printf("\n\n");
+    if (DEBUG == 1)
+    {
+      printf("Table after variable %s creation:\n", identifier);
+      printTable(getCurrentScope());
+      printf("\n\n");
+    }
 
     return entry;
   }

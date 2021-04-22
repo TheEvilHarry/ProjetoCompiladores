@@ -1,117 +1,517 @@
-Node with label global_texto: OPERATION_TYPE_NOP
-Node with label 7: OPERATION_TYPE_NOP
-Node with label []: OPERATION_TYPE_NOP
-Node with label 8: OPERATION_TYPE_NOP
-Node with label var_global3: OPERATION_TYPE_NOP
-Node with label 8: OPERATION_TYPE_NOP
-Node with label var: OPERATION_TYPE_NOP
-Node with label 0: OPERATION_TYPE_NOP
-Node with label var_global1: OPERATION_TYPE_NOP
-Node with label 5: OPERATION_TYPE_NOP
-Node with label global_texto: OPERATION_TYPE_NOP
-Node with label 5: OPERATION_TYPE_NOP
-Node with label []: OPERATION_TYPE_NOP
-Node with label 9: OPERATION_TYPE_NOP
-Node with label 7: OPERATION_TYPE_NOP
-Node with label 6: OPERATION_TYPE_NOP
-Node with label l: OPERATION_TYPE_NOP
-Node with label 22: OPERATION_TYPE_NOP
-Node with label l: OPERATION_TYPE_NOP
-Node with label i: OPERATION_TYPE_NOP
-Node with label 2: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label 2: OPERATION_TYPE_NOP
-Node with label 3: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label i: OPERATION_TYPE_NOP
-Node with label i: OPERATION_TYPE_NOP
-Node with label 1: OPERATION_TYPE_NOP
-Node with label +: OPERATION_TYPE_ADD
-Node with label =: OPERATION_TYPE_NOP
-Node with label c: OPERATION_TYPE_NOP
-Node with label a: OPERATION_TYPE_NOP
-Node with label b: OPERATION_TYPE_NOP
-Node with label true: OPERATION_TYPE_NOP
-Node with label i: OPERATION_TYPE_NOP
-Node with label b: OPERATION_TYPE_NOP
-Node with label diego: OPERATION_TYPE_NOP
-Node with label 6: OPERATION_TYPE_NOP
-Node with label 5: OPERATION_TYPE_NOP
-Node with label a: OPERATION_TYPE_NOP
-Node with label 13: OPERATION_TYPE_NOP
-Node with label a: OPERATION_TYPE_NOP
-Node with label 12: OPERATION_TYPE_NOP
-Node with label 1: OPERATION_TYPE_NOP
-Node with label +: OPERATION_TYPE_ADD
-Node with label c: OPERATION_TYPE_NOP
-Node with label 6: OPERATION_TYPE_NOP
-Node with label b: OPERATION_TYPE_NOP
-Node with label 4: OPERATION_TYPE_NOP
-Node with label j: OPERATION_TYPE_NOP
-Node with label 3: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label >>: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label call main: OPERATION_TYPE_NOP
-Node with label output: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label for: OPERATION_TYPE_FOR
-Node with label return: OPERATION_TYPE_RETURN
-Node with label <=: OPERATION_TYPE_NOP
-Node with label call main: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label z: OPERATION_TYPE_NOP
-Node with label y: OPERATION_TYPE_NOP
-Node with label x: OPERATION_TYPE_NOP
-Node with label a: OPERATION_TYPE_NOP
-Node with label 5.4: OPERATION_TYPE_NOP
-Node with label 5: OPERATION_TYPE_NOP
-Node with label t: OPERATION_TYPE_NOP
-Node with label x: OPERATION_TYPE_NOP
-Node with label y: OPERATION_TYPE_NOP
-Node with label +: OPERATION_TYPE_ADD
-Node with label str: OPERATION_TYPE_NOP
-Node with label te: OPERATION_TYPE_NOP
-Node with label u: OPERATION_TYPE_NOP
-Node with label 7.7: OPERATION_TYPE_NOP
-Node with label str: OPERATION_TYPE_NOP
-Node with label a: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label =: OPERATION_TYPE_NOP
-Node with label call foo: OPERATION_TYPE_NOP
-Node with label call foo: OPERATION_TYPE_NOP
-Node with label y: OPERATION_TYPE_NOP
-Node with label 6.76: OPERATION_TYPE_NOP
-Node with label b: OPERATION_TYPE_NOP
-Node with label 5.4: OPERATION_TYPE_NOP
-Node with label 5: OPERATION_TYPE_NOP
-Node with label call foo: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label varstring: OPERATION_TYPE_NOP
-Node with label testando: OPERATION_TYPE_NOP
-Node with label x: OPERATION_TYPE_NOP
-Node with label x: OPERATION_TYPE_NOP
-Node with label true: OPERATION_TYPE_NOP
-Node with label x: OPERATION_TYPE_NOP
-Node with label x: OPERATION_TYPE_NOP
-Node with label 5: OPERATION_TYPE_NOP
-Node with label <<: OPERATION_TYPE_NOP
-Node with label return: OPERATION_TYPE_RETURN
-Node with label return: OPERATION_TYPE_RETURN
-Node with label output: OPERATION_TYPE_NOP
-Node with label input: OPERATION_TYPE_NOP
-Node with label <=: OPERATION_TYPE_NOP
-Node with label fn: OPERATION_TYPE_NOP
-Node with label bar: OPERATION_TYPE_NOP
-Node with label foo: OPERATION_TYPE_NOP
-Node with label main: OPERATION_TYPE_NOP
+Table after variable var_global1 creation:
+[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+
+
+Table after variable var_global2 creation:
+[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+[KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+
+
+Table after variable var_global3 creation:
+[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+[KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+[KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+
+
+Table after literal 10 creation:
+[KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
+[KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: 10][LINE: 3][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 12]
+
+
+Table after variable y creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+
+
+Table after variable x creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+
+
+Table after literal 7 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+
+
+Table after literal 8 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+
+
+Table after variable var_global3 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 28]
+
+
+Table after variable var creation:
+[KEY: var][LINE: 17][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
+
+
+Table after literal 0 creation:
+[KEY: 0][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+
+
+Table after variable var creation:
+[KEY: 0][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: var][LINE: 20][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 36]
+
+
+Table after literal 5 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+
+
+Table after literal 9 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+
+
+Table after literal 6 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+
+
+Table after variable i creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+
+
+Table after variable a creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+
+
+Table after variable b creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+
+
+Table after variable j creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 48]
+
+
+Table after literal 22 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+
+
+Table after variable l creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 68]
+
+
+Table after literal 2 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 68]
+[KEY: 2][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+
+
+Table after literal 3 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 68]
+[KEY: 2][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 3][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 80]
+
+
+Table after literal 1 creation:
+[KEY: y][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 9][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: 7][LINE: 13][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: 8][LINE: 13][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 28]
+[KEY: var_global3][LINE: 15][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 5][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: 9][LINE: 25][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 44]
+[KEY: 6][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: i][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: a][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: b][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: j][LINE: 31][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 22][LINE: 32][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: l][LINE: 32][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 68]
+[KEY: 2][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 3][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 80]
+[KEY: 1][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 84]
+
+
+Table after literal a creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+
+
+Table after variable c creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 88]
+
+
+Table after literal false creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+
+
+Table after variable b creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 89]
+
+
+Table after literal diego creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+
+
+Table after literal 5 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 90]
+
+
+Table after literal 6 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 90]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 94]
+
+
+Table after literal 13 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 90]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 94]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 98]
+
+
+Table after literal 12 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 90]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 94]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 98]
+[KEY: 12][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 102]
+
+
+Table after literal 1 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 90]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 94]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 98]
+[KEY: 12][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 102]
+[KEY: 1][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 106]
+
+
+Table after variable c creation:
+[KEY: c][LINE: 45][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 110]
+
+
+Table after literal 6 creation:
+[KEY: c][LINE: 45][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 110]
+[KEY: 6][LINE: 46][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 114]
+
+
+Table after literal 3 creation:
+[KEY: a][LINE: 35][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: c][LINE: 35][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 88]
+[KEY: false][LINE: 36][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 88]
+[KEY: b][LINE: 36][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 89]
+[KEY: diego][LINE: 40][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 90]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 90]
+[KEY: 6][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 94]
+[KEY: 13][LINE: 42][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 98]
+[KEY: 12][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 102]
+[KEY: 1][LINE: 43][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 106]
+[KEY: 3][LINE: 49][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 118]
+
+
+Table after variable z creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+
+
+Table after variable y creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+
+
+Table after variable x creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+
+
+Table after literal 5 creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+
+
+Table after literal 0.000000 creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+
+
+Table after literal a creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 150]
+
+
+Table after variable t creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 150]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 150]
+
+
+Table after variable h creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 150]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 150]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 151]
+
+
+Table after literal te creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 150]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 150]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 151]
+[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 151]
+
+
+Table after variable str creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 150]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 150]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 151]
+[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 151]
+[KEY: str][LINE: 68][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 151]
+
+
+Table after variable u creation:
+[KEY: z][LINE: 57][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 126]
+[KEY: y][LINE: 57][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 126]
+[KEY: x][LINE: 57][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 134]
+[KEY: 5][LINE: 62][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 138]
+[KEY: 0.000000][LINE: 62][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 142]
+[KEY: a][LINE: 62][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 150]
+[KEY: t][LINE: 63][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 150]
+[KEY: h][LINE: 65][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 151]
+[KEY: te][LINE: 68][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 151]
+[KEY: str][LINE: 68][NATURE: 1][TYPE: 3][SIZE: 2][OFFSET: 153]
+[KEY: u][LINE: 69][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 153]
+
+
+Table after literal 0.000000 creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 165]
+
+
+Table after variable y creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 165]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 165]
+
+
+Table after literal 5 creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 165]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 165]
+[KEY: 5][LINE: 76][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 173]
+
+
+Table after literal b creation:
+[KEY: 0.000000][LINE: 75][NATURE: 0][TYPE: 2][SIZE: 8][OFFSET: 165]
+[KEY: y][LINE: 75][NATURE: 1][TYPE: 2][SIZE: 8][OFFSET: 165]
+[KEY: 5][LINE: 76][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 173]
+[KEY: b][LINE: 76][NATURE: 0][TYPE: 5][SIZE: 0][OFFSET: 177]
+
+
+Table after variable x creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+
+
+Table after variable y creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 178]
+
+
+Table after literal testando creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 178]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 178]
+
+
+Table after variable varstring creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 178]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 178]
+[KEY: varstring][LINE: 83][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 178]
+
+
+Table after variable g creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 178]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 178]
+[KEY: varstring][LINE: 83][NATURE: 1][TYPE: 3][SIZE: 8][OFFSET: 186]
+[KEY: g][LINE: 88][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 186]
+
+
+Table after literal false creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 178]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 178]
+[KEY: varstring][LINE: 83][NATURE: 1][TYPE: 3][SIZE: 8][OFFSET: 186]
+[KEY: g][LINE: 88][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 186]
+[KEY: false][LINE: 93][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 187]
+
+
+Table after variable p creation:
+[KEY: x][LINE: 81][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 178]
+[KEY: y][LINE: 82][NATURE: 1][TYPE: 5][SIZE: 0][OFFSET: 178]
+[KEY: testando][LINE: 83][NATURE: 0][TYPE: 3][SIZE: 0][OFFSET: 178]
+[KEY: varstring][LINE: 83][NATURE: 1][TYPE: 3][SIZE: 8][OFFSET: 186]
+[KEY: g][LINE: 88][NATURE: 1][TYPE: 4][SIZE: 1][OFFSET: 186]
+[KEY: false][LINE: 93][NATURE: 0][TYPE: 4][SIZE: 1][OFFSET: 187]
+[KEY: p][LINE: 99][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 188]
+
+

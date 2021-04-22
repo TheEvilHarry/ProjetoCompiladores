@@ -19,7 +19,8 @@ typedef struct symbolTableEntry
     int size;
     struct symbolTableEntry *arguments;
     TokenData *data;
-    Code * code;
+    Code *code;
+    int entryOffset;
 
     struct symbolTableEntry *nextEntry;
 } SymbolTableEntry;
@@ -27,6 +28,7 @@ typedef struct symbolTableEntry
 typedef struct symbolTableStack
 {
     int isGlobal;
+    int tableOffset;
     SymbolTableEntry *top;
     struct symbolTableStack *rest;
 } SymbolTableStack;
