@@ -1,117 +1,117 @@
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Or operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Add operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Add operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Halt operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Halt operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Add operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Halt operation
-Halt operation
-Halt operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
-Unrecognized operation
+Node with label global_texto: OPERATION_TYPE_NOP
+Node with label 7: OPERATION_TYPE_NOP
+Node with label []: OPERATION_TYPE_NOP
+Node with label 8: OPERATION_TYPE_NOP
+Node with label var_global3: OPERATION_TYPE_NOP
+Node with label 8: OPERATION_TYPE_NOP
+Node with label var: OPERATION_TYPE_NOP
+Node with label 0: OPERATION_TYPE_NOP
+Node with label var_global1: OPERATION_TYPE_NOP
+Node with label 5: OPERATION_TYPE_NOP
+Node with label global_texto: OPERATION_TYPE_NOP
+Node with label 5: OPERATION_TYPE_NOP
+Node with label []: OPERATION_TYPE_NOP
+Node with label 9: OPERATION_TYPE_NOP
+Node with label 7: OPERATION_TYPE_NOP
+Node with label 6: OPERATION_TYPE_NOP
+Node with label l: OPERATION_TYPE_NOP
+Node with label 22: OPERATION_TYPE_NOP
+Node with label l: OPERATION_TYPE_NOP
+Node with label i: OPERATION_TYPE_NOP
+Node with label 2: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label 2: OPERATION_TYPE_NOP
+Node with label 3: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label i: OPERATION_TYPE_NOP
+Node with label i: OPERATION_TYPE_NOP
+Node with label 1: OPERATION_TYPE_NOP
+Node with label +: OPERATION_TYPE_ADD
+Node with label =: OPERATION_TYPE_NOP
+Node with label c: OPERATION_TYPE_NOP
+Node with label a: OPERATION_TYPE_NOP
+Node with label b: OPERATION_TYPE_NOP
+Node with label true: OPERATION_TYPE_NOP
+Node with label i: OPERATION_TYPE_NOP
+Node with label b: OPERATION_TYPE_NOP
+Node with label diego: OPERATION_TYPE_NOP
+Node with label 6: OPERATION_TYPE_NOP
+Node with label 5: OPERATION_TYPE_NOP
+Node with label a: OPERATION_TYPE_NOP
+Node with label 13: OPERATION_TYPE_NOP
+Node with label a: OPERATION_TYPE_NOP
+Node with label 12: OPERATION_TYPE_NOP
+Node with label 1: OPERATION_TYPE_NOP
+Node with label +: OPERATION_TYPE_ADD
+Node with label c: OPERATION_TYPE_NOP
+Node with label 6: OPERATION_TYPE_NOP
+Node with label b: OPERATION_TYPE_NOP
+Node with label 4: OPERATION_TYPE_NOP
+Node with label j: OPERATION_TYPE_NOP
+Node with label 3: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label >>: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label call main: OPERATION_TYPE_NOP
+Node with label output: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label for: OPERATION_TYPE_FOR
+Node with label return: OPERATION_TYPE_RETURN
+Node with label <=: OPERATION_TYPE_NOP
+Node with label call main: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label z: OPERATION_TYPE_NOP
+Node with label y: OPERATION_TYPE_NOP
+Node with label x: OPERATION_TYPE_NOP
+Node with label a: OPERATION_TYPE_NOP
+Node with label 5.4: OPERATION_TYPE_NOP
+Node with label 5: OPERATION_TYPE_NOP
+Node with label t: OPERATION_TYPE_NOP
+Node with label x: OPERATION_TYPE_NOP
+Node with label y: OPERATION_TYPE_NOP
+Node with label +: OPERATION_TYPE_ADD
+Node with label str: OPERATION_TYPE_NOP
+Node with label te: OPERATION_TYPE_NOP
+Node with label u: OPERATION_TYPE_NOP
+Node with label 7.7: OPERATION_TYPE_NOP
+Node with label str: OPERATION_TYPE_NOP
+Node with label a: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label =: OPERATION_TYPE_NOP
+Node with label call foo: OPERATION_TYPE_NOP
+Node with label call foo: OPERATION_TYPE_NOP
+Node with label y: OPERATION_TYPE_NOP
+Node with label 6.76: OPERATION_TYPE_NOP
+Node with label b: OPERATION_TYPE_NOP
+Node with label 5.4: OPERATION_TYPE_NOP
+Node with label 5: OPERATION_TYPE_NOP
+Node with label call foo: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label varstring: OPERATION_TYPE_NOP
+Node with label testando: OPERATION_TYPE_NOP
+Node with label x: OPERATION_TYPE_NOP
+Node with label x: OPERATION_TYPE_NOP
+Node with label true: OPERATION_TYPE_NOP
+Node with label x: OPERATION_TYPE_NOP
+Node with label x: OPERATION_TYPE_NOP
+Node with label 5: OPERATION_TYPE_NOP
+Node with label <<: OPERATION_TYPE_NOP
+Node with label return: OPERATION_TYPE_RETURN
+Node with label return: OPERATION_TYPE_RETURN
+Node with label output: OPERATION_TYPE_NOP
+Node with label input: OPERATION_TYPE_NOP
+Node with label <=: OPERATION_TYPE_NOP
+Node with label fn: OPERATION_TYPE_NOP
+Node with label bar: OPERATION_TYPE_NOP
+Node with label foo: OPERATION_TYPE_NOP
+Node with label main: OPERATION_TYPE_NOP
