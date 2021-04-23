@@ -2,6 +2,10 @@
 // Functions signed with the TO DO sign;
 // Treatment of new variable Local in Node object
 
+// WE MUST HAVE A REGISTER IN EACH NODE OR TABLE ENTRY SPECIFYING THE LOCAL OF THE CODE, NOT THE SAME
+// AS THE : LOCAL : VAR WE ARE USING TO DELIMIT THE DATA AREA
+//FIND OUT WHERE THIS REGISTER SHOULD BE GENERATED
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,6 +65,7 @@ Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, 
     code->local = local;
     code->next = NULL;
     code->prev = NULL;
+    code->res=NULL;
 
     code->label = generateLabelName();
 
@@ -121,11 +126,13 @@ Code *generatesIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     char *label1 = generateLabelName();
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
+    SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
+
 
     //TODO:
     //Where are we getting the result of if expressions?
-    char *result;
-    Code *ifCode = createCBRCode(expr, result, label1, label2, trueExpr);
+    char *reg = exprEntry->code->res;
+    Code *ifCode = createCBRCode(expr, reg, label1, label2, trueExpr);
 
     Code *trueJump = generateTrueConditionalJump(label1);
     ifCode = joinCodes(ifCode, trueJump);
@@ -135,10 +142,6 @@ Code *generatesIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
         SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), falseExpr->data->value.valueString);
         labelCode = joinCodes(entry->code, labelCode);
     }
-
-    free(label1);
-    free(label2);
-    free(label3);
 
     return joinCodes(ifCode, labelCode);
 }
@@ -166,6 +169,45 @@ Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, Node *trueExpr)
     return cbr;
 }
 
+Code * generateI2ICode(char* r1, char *r2){
+    Code * code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL);
+    }
+
+Code *generateTernaryOpCode(Node *expr, Node *exprTrue, Node *exprFalse){
+
+    SymbolTableEntry *entryFalse = findEntryInStack(getGlobalStack(), exprFalse->data->value.valueString);
+    SymbolTableEntry *entryTrue = findEntryInStack(getGlobalStack(), exprTrue->data->value.valueString);
+    SymbolTableEntry *entryExpr = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
+    char *label1 = generateLabelName();
+    char *label2 = generateLabelName();
+    char *label3 = generateLabelName();
+    char *reg1 = generateRegisterName();
+
+    char *result = entryExpr->code->res; // <===this has to be changed
+    Code *cbr = createCBRCode(expr,result,label1,label2,exprTrue);
+
+    char *resultTrue = entryTrue->code->res; // <===this has to be changed
+    Code *i2iCode = generateI2ICode(resultTrue,reg1);
+
+    Code* jumpCode = generateTrueConditionalJump(label3);
+    jumpCode = joinCodes(i2iCode,jumpCode);
+
+    cbr = joinCodes(cbr,jumpCode);
+    cbr = joinCodes(cbr, entryFalse->code);
+
+    char *resultFalse = entryFalse->code->res; // <===this has to be changed
+    Code* i2iCode2 = generateI2ICode(resultFalse,reg1);
+
+    Code* labelCode = generateLabelCode(label3);
+    labelCode = joinCodes(i2iCode,labelCode);
+    cbr = joinCodes(cbr,labelCode);
+
+    cbr->res=reg1;
+    return cbr;
+
+
+    }
+
 Code *generateWhileCode(Node* expr, Node* commands){
 
     SymbolTableEntry *entry = findEntryInStack(getCurrentStack(), expr->data->value.valueString);
@@ -177,7 +219,10 @@ Code *generateWhileCode(Node* expr, Node* commands){
     Code *labelCode = generateLabelCode(l1);
     labelCode = joinCodes(labelCode, entry->code);
 
-    Code *exprCode = createCBRCode(expr, l2, l3, commands);
+    //TODO:
+    //Where are we getting the result of if expressions?
+    char *reg = entry->code->res;
+    Code *exprCode = createCBRCode(expr, reg,l2, l3, commands);
 
     Code *labelCode = generateLabelCode(l1);
     labelCode = joinCodes(labelCode, entry->code);
@@ -196,6 +241,38 @@ Code *generateWhileCode(Node* expr, Node* commands){
 
     }
 
+Code *generateForCode(Node* start, Node* expr, Node* incr, Node * commands){
+       char *label1 = generateLabelName();
+       char *label2 = generateLabelName();
+       char *label3 = generateLabelName();
+
+       SymbolTableEntry *startEntry = findEntryInStack(getGlobalStack(), start->data->value.valueString)
+       SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString)
+       SymbolTableEntry *commandsEntry = findEntryInStack(getGlobalStack(), commands->data->value.valueString)
+       SymbolTableEntry *incrEntry = findEntryInStack(getGlobalStack(), incr->data->value.valueString)
+
+       Code *labelCode = generateLabelCode(label1);
+       labelCode = joinCodes(startEntry->code,labelCode);
+       labelCode = joinCodes(labelCode,exprEntry->code);
+
+          //TODO:
+         //Where are we getting the result of if expressions?
+        char *reg = exprEntry->code->res;
+        Code *conditionCode = createCBRCode(expr,reg,label2,label3);
+        conditionCode = joinCodes(labelCode, conditionCode);
+
+        Code *labelCode2 = generateLabelCode(label2);
+        labelCode = joinCodes(conditionCode,labelCode2);
+        labelCode = joinCodes(labelCode2,commandsEntry->code);
+        labelCode = joinCodes(labelCode2,incrEntry->code);
+
+        Code *jumpCode = generateTrueConditionalJump(label1);
+        labelCode = joinCodes(labelCode2,jumpCode);
+
+        Code *labelCode3 = generateLabelCode(label3);
+        labelCode3 = joinCodes(jumpCode,labelCode3);
+        return labelCode3;
+    }
 int setsOffset(char *symbol, int *scope)
 {
     //TODO;

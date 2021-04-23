@@ -50,6 +50,7 @@ typedef struct t_code
 {
     char *label;
     char *local;
+    char *res;
     Operation opCode;
     char *arg1;
     char *arg2;
