@@ -180,9 +180,9 @@ type: TK_PR_INT { $$ = type_TK_PR_INT(NULL); }
 value: TK_LIT_INT { $$=value_TK_LIT_INT($1); }
         | TK_LIT_FLOAT { $$=value_TK_LIT_FLOAT($1); }
         | TK_LIT_FALSE { $$=value_TK_LIT_FALSE($1); }
-        | TK_LIT_TRUE { value_TK_LIT_TRUE($1); }
-        | TK_LIT_CHAR { value_TK_LIT_CHAR($1); }
-        | TK_LIT_STRING { value_TK_LIT_STRING($1); };
+        | TK_LIT_TRUE { $$=value_TK_LIT_TRUE($1); }
+        | TK_LIT_CHAR { $$=value_TK_LIT_CHAR($1); }
+        | TK_LIT_STRING { $$=value_TK_LIT_STRING($1); };
 
 functionDefinition: functionHeader functionCommandBlockInit commandBlockEnd { 
         $$=functionDefinition_functionHeader_functionCommandBlockInit_commandBlockEnd($1, NULL, $3); };  //CHECK LATER
