@@ -117,7 +117,15 @@ void addEntryToTopScopeTable(SymbolTableEntry *entry)
     }
 
     aux->nextEntry = entry;
-    stack->tableOffset = stack->tableOffset + entry->size; // Increment table offset by entry size
+  }
+
+  stack->tableOffset = stack->tableOffset + entry->size; // Increment table offset by entry size
+  if (DEBUG == 1)
+  {
+    if (entry->key != NULL)
+    {
+      printf("Incrementing top scope table offset by %d because of entry %s, wich has an offset of %d. Offset is now %d\n", entry->size, entry->key, entry->entryOffset, stack->tableOffset);
+    }
   }
 }
 
@@ -275,7 +283,7 @@ void createGlobalScope()
     newStack->top = NULL;
     newStack->rest = NULL;
     newStack->isGlobal = 1;
-    newStack->tableOffset = 0; // TODO: Initialize with RBSS
+    newStack->tableOffset = 0; // TODO: Initialize with RBSS?
 
     stack = newStack;
   }

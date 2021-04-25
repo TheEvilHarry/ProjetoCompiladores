@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 #include "parserUtils.h"
 
 Type currentFunctionReturn = TYPE_UNDEFINED;
@@ -115,6 +116,7 @@ void headerParametersBlockInit() { stackScope(); }
 
 Node *headerParameters_optionalConst_type_TK_IDENTIFICADOR_headerParametersList(Node *optionalConst, Type type, TokenData *p_TK_IDENTIFICADOR, Node *headerParametersList)
 {
+  printf("headerParameters rule for parameter %s with type %s\n", p_TK_IDENTIFICADOR->value.valueString, getTypeName(type));
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), type, NULL);
   freeToken(p_TK_IDENTIFICADOR);
   return NULL;
@@ -123,7 +125,9 @@ Node *headerParameters_empty() { return NULL; }
 
 Node *headerParametersList_comma_optionalConst_type_TK_IDENTIFICADOR_headerParametersList(void *comma, Node *optionalConst, Type type, TokenData *p_TK_IDENTIFICADOR, Node *headerParametersList)
 {
+  printf("headerParametersList rule for parameter %s with type %s\n", p_TK_IDENTIFICADOR->value.valueString, getTypeName(type));
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), type, NULL);
+  freeToken(p_TK_IDENTIFICADOR);
   return NULL;
 }
 Node *headerParametersList_empty() { return NULL; }

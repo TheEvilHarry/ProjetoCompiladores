@@ -13,6 +13,10 @@
 
 #include "ilocfunctions.h"
 
+int RBSSOffset = 0;
+int RFPOffset = 0;
+int RSPOffset = 0;
+
 int currentLabel = 1;
 int currentRegister = 0;
 
@@ -36,21 +40,11 @@ char *generateRegisterName()
     return newRegister;
 }
 
-Code *generateEmptyCode(char *local)
+int setOffset(char *symbol, int *scope)
 {
-    Code *code = (Code *)malloc(sizeof(Code));
-    code->opCode = NOP;
-    code->arg1 = NULL;
-    code->arg2 = NULL;
-    code->arg3 = NULL;
-    code->dest1 = NULL;
-    code->dest2 = NULL;
-    code->next = NULL;
-    code->prev = NULL;
-    code->label = NULL;
-    code->local = local;
-
-    return code;
+    //TODO;
+    //NOT DONE BECAUSE I DIDNT KNOW HOW TO TEST THE SCOPE AND I'M TOO SLEEPY TO TRY.
+    return 0;
 }
 
 Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
@@ -72,7 +66,25 @@ Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, 
     return code;
 } //CHECK WITH PEDRO IF THIS IS RIGHT?!
 
+Code *generateEmptyCode(char *local)
+{
+    Code *code = (Code *)malloc(sizeof(Code));
+    code->opCode = NOP;
+    code->arg1 = NULL;
+    code->arg2 = NULL;
+    code->arg3 = NULL;
+    code->dest1 = NULL;
+    code->dest2 = NULL;
+    code->next = NULL;
+    code->prev = NULL;
+    code->label = NULL;
+    code->local = local;
+
+    return code;
+}
+
 Code *joinCodes(Code *code1, Code *code2)
+
 {
     if (code1 == NULL)
         return code2;
@@ -91,18 +103,18 @@ Code *joinCodes(Code *code1, Code *code2)
     return code2;
 }
 
-// Code *generateInitialInstructions()
-// {
-//     Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main"), NULL);
-//     jump->next = createCode(HALT, "L0", NULL, NULL, NULL, NULL, NULL);
-//     Code *RBSSDefault = createCode(LOADI, NULL, getNumberOfInstructions(), NULL, NULL, RBSS, NULL);
-//     RBSSDefault->next = jump;
-//     Code *RFPDefault = createCode(LOADI, NULL, "1024", NULL, NULL, RFP, NULL);
-//     RFPDefault->next = RBSSDefault;
-//     return RFPDefault;
-// }
+Code *generateInitialInstructions()
+{
+    // Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main"), NULL);
+    // jump->next = createCode(HALT, "L0", NULL, NULL, NULL, NULL, NULL);
+    // Code *RBSSDefault = createCode(LOADI, NULL, getNumberOfInstructions(), NULL, NULL, RBSS, NULL);
+    // RBSSDefault->next = jump;
+    // Code *RFPDefault = createCode(LOADI, NULL, "1024", NULL, NULL, RFP, NULL);
+    // RFPDefault->next = RBSSDefault;
+    // return RFPDefault;
+}
 
-Code *generatesAttributionCode(Node *attr, Node *exp)
+Code *generateAttributionCode(Node *attr, Node *exp)
 {
     SymbolTableEntry *expression = findEntryInTable(getCurrentScope(), exp->data->value.valueString);
     Code *code;
@@ -121,7 +133,7 @@ Code *generatesAttributionCode(Node *attr, Node *exp)
     return joinCodes(expression->code, code);
 }
 
-Code *generatesIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
+Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
 {
     char *label1 = generateLabelName();
     char *label2 = generateLabelName();
@@ -173,7 +185,7 @@ Code *generateI2ICode(char *r1, char *r2)
     Code *code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL);
 }
 
-Code *generateTernaryOpCode(Node *expr, Node *exprTrue, Node *exprFalse)
+Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
 {
 
     SymbolTableEntry *entryFalse = findEntryInStack(getGlobalStack(), exprFalse->data->value.valueString);
@@ -240,144 +252,50 @@ Code *generateWhileCode(Node *expr, Node *commands)
     return labelCode3;
 }
 
-// Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
-// {
-//     char *label1 = generateLabelName();
-//     char *label2 = generateLabelName();
-//     char *label3 = generateLabelName();
-
-//     SymbolTableEntry *startEntry = findEntryInStack(getGlobalStack(), start->data->value.valueString);
-//     SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
-//     SymbolTableEntry *commandsEntry = findEntryInStack(getGlobalStack(), commands->data->value.valueString);
-//     SymbolTableEntry *incrEntry = findEntryInStack(getGlobalStack(), incr->data->value.valueString);
-
-//     Code *labelCode = generateLabelCode(label1);
-//     labelCode = joinCodes(startEntry->code, labelCode);
-//     labelCode = joinCodes(labelCode, exprEntry->code);
-
-//     //TODO:
-//     //Where are we getting the result of if expressions?
-//     char *reg = exprEntry->code->res;
-//     Code *conditionCode = createCBRCode(expr, reg, label2, label3);
-//     conditionCode = joinCodes(labelCode, conditionCode);
-
-//     Code *labelCode2 = generateLabelCode(label2);
-//     labelCode = joinCodes(conditionCode, labelCode2);
-//     labelCode = joinCodes(labelCode2, commandsEntry->code);
-//     labelCode = joinCodes(labelCode2, incrEntry->code);
-
-//     Code *jumpCode = generateTrueConditionalJump(label1);
-//     labelCode = joinCodes(labelCode2, jumpCode);
-
-//     Code *labelCode3 = generateLabelCode(label3);
-//     labelCode3 = joinCodes(jumpCode, labelCode3);
-//     return labelCode3;
-// }
-int setsOffset(char *symbol, int *scope)
+Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
 {
-    //TODO;
-    //NOT DONE BECAUSE I DIDNT KNOW HOW TO TEST THE SCOPE AND I'M TOO SLEEPY TO TRY.
-    return 0;
+    char *label1 = generateLabelName();
+    char *label2 = generateLabelName();
+    char *label3 = generateLabelName();
+
+    SymbolTableEntry *startEntry = findEntryInStack(getGlobalStack(), start->data->value.valueString);
+    SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
+    SymbolTableEntry *commandsEntry = findEntryInStack(getGlobalStack(), commands->data->value.valueString);
+    SymbolTableEntry *incrEntry = findEntryInStack(getGlobalStack(), incr->data->value.valueString);
+
+    Code *labelCode = generateLabelCode(label1);
+    labelCode = joinCodes(startEntry->code, labelCode);
+    labelCode = joinCodes(labelCode, exprEntry->code);
+
+    //TODO:
+    //Where are we getting the result of if expressions?
+    char *reg = exprEntry->code->res;
+    Code *conditionCode = createCBRCode(expr, reg, label2, label3);
+    conditionCode = joinCodes(labelCode, conditionCode);
+
+    Code *labelCode2 = generateLabelCode(label2);
+    labelCode = joinCodes(conditionCode, labelCode2);
+    labelCode = joinCodes(labelCode2, commandsEntry->code);
+    labelCode = joinCodes(labelCode2, incrEntry->code);
+
+    Code *jumpCode = generateTrueConditionalJump(label1);
+    labelCode = joinCodes(labelCode2, jumpCode);
+
+    Code *labelCode3 = generateLabelCode(label3);
+    labelCode3 = joinCodes(jumpCode, labelCode3);
+    return labelCode3;
 }
 
-// Code *generatesBinaryExp(Operation op, Node *child1, Node *child2, char *dest)
-// {
-//     Code *code = createCode(op, child1->local, child2->local, NULL, dest, NULL);
-//     return joinCodes(joinCodes(child1->code, child2->code), code);
-// }
-
-// Code *generatesUnaryOperator(Operation operation, Code *op)
-// {
-//     Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
-//     return joinCodes(code, op);
-// }
-
-OperationType getOperationFromTokenData(TokenData *data)
+Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
 {
-    if (strcmp(data->label, "+") == 0)
-    {
-        return OPERATION_TYPE_ADD;
-    }
-    else if (strcmp(data->label, "-") == 0)
-    {
-        return OPERATION_TYPE_SUB;
-    }
-    else if (strcmp(data->label, "*") == 0)
-    {
-        return OPERATION_TYPE_MULT;
-    }
-    else if (strcmp(data->label, "/") == 0)
-    {
-        return OPERATION_TYPE_DIV;
-    }
-    else if (strcmp(data->label, "output") == 0)
-    {
-        return OPERATION_TYPE_NOP; // Verify
-    }
-    else if (strcmp(data->label, "input") == 0)
-    {
-        return OPERATION_TYPE_NOP; // Verify
-    }
-    else if (strcmp(data->label, "return") == 0)
-    {
-        return OPERATION_TYPE_RETURN; // Verify
-    }
-    else if (strcmp(data->label, "break") == 0)
-    {
-        return OPERATION_TYPE_NOP;
-    }
-    else if (strcmp(data->label, "continue") == 0)
-    {
-        return OPERATION_TYPE_NOP;
-    }
-    else if (strcmp(data->label, "if") == 0)
-    {
-        return OPERATION_TYPE_IF_ELSE;
-    }
-    else if (strcmp(data->label, "else") == 0)
-    {
-        return OPERATION_TYPE_IF_ELSE;
-    }
-    else if (strcmp(data->label, "while") == 0)
-    {
-        return OPERATION_TYPE_WHILE;
-    }
-    else if (strcmp(data->label, "for") == 0)
-    {
-        return OPERATION_TYPE_FOR;
-    }
-    else if (strcmp(data->label, "?:") == 0)
-    {
-        return OPERATION_TYPE_TERNARY;
-    }
-    else if (strcmp(data->label, "||") == 0)
-    {
-        return OPERATION_TYPE_OR;
-    }
-    else if (strcmp(data->label, "<") == 0)
-    {
-        return OPERATION_TYPE_LESS_THAN;
-    }
-    else if (strcmp(data->label, ">") == 0)
-    {
-        return OPERATION_TYPE_GREATER_THAN;
-    }
-    else if (strcmp(data->label, "%") == 0)
-    {
-        return OPERATION_TYPE_NOP;
-    }
-    else if (strcmp(data->label, "^") == 0)
-    {
-        return OPERATION_TYPE_NOP;
-    }
-    else if (strcmp(data->label, "!") == 0)
-    {
-        return OPERATION_TYPE_NOT;
-    }
-    else
-    {
-        return OPERATION_TYPE_NOP;
-    }
+    Code *code = createCode(op, child1->local, child2->local, NULL, dest, NULL);
+    return joinCodes(joinCodes(child1->code, child2->code), code);
+}
+
+Code *generateUnaryExpression(Operation operation, Code *op)
+{
+    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
+    return joinCodes(code, op);
 }
 
 char *generate(Node *node)

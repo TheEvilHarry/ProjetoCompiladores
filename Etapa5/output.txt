@@ -1,18 +1,22 @@
+Incrementing top scope table offset by 0 because of entry var_global1, wich has an offset of 0. Offset is now 0
 Table after variable var_global1 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
 
 
+Incrementing top scope table offset by 0 because of entry var_global2, wich has an offset of 0. Offset is now 0
 Table after variable var_global2 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
 
 
+Incrementing top scope table offset by 0 because of entry var_global3, wich has an offset of 0. Offset is now 0
 Table after variable var_global3 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
 
 
+Incrementing top scope table offset by 0 because of entry var_global4, wich has an offset of 12. Offset is now 12
 Table after variable var_global4 creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
@@ -20,6 +24,7 @@ Table after variable var_global4 creation:
 [KEY: var_global4][LINE: 3][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 12]
 
 
+Incrementing top scope table offset by 4 because of entry main, wich has an offset of 16. Offset is now 20
 Table after function main creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
@@ -28,335 +33,380 @@ Table after function main creation:
 [KEY: main][LINE: 5][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 16]
 
 
+headerParametersList rule for parameter y with type INTEGER
+Incrementing top scope table offset by 4 because of entry y, wich has an offset of 0. Offset is now 4
 Table after variable y creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 
 
+headerParameters rule for parameter x with type INTEGER
+Incrementing top scope table offset by 4 because of entry x, wich has an offset of 4. Offset is now 8
 Table after variable x creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
 
 
+Incrementing top scope table offset by 4 because of entry 8, wich has an offset of 8. Offset is now 12
 Table after literal 8 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
 
 
+Incrementing top scope table offset by 0 because of entry var_global3, wich has an offset of 12. Offset is now 12
 Table after variable var_global3 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 8]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 12]
 
 
+Incrementing top scope table offset by 0 because of entry var, wich has an offset of 16. Offset is now 16
 Table after variable var creation:
-[KEY: var][LINE: 9][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 12]
+[KEY: var][LINE: 9][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 16]
 
 
+Incrementing top scope table offset by 4 because of entry 0, wich has an offset of 20. Offset is now 24
 Table after literal 0 creation:
-[KEY: 0][LINE: 12][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 16]
+[KEY: 0][LINE: 12][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
 
 
+Incrementing top scope table offset by 0 because of entry var, wich has an offset of 24. Offset is now 24
 Table after variable var creation:
-[KEY: 0][LINE: 12][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 16]
-[KEY: var][LINE: 12][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 16]
+[KEY: 0][LINE: 12][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: var][LINE: 12][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 24]
 
 
+Incrementing top scope table offset by 4 because of entry 5, wich has an offset of 28. Offset is now 32
 Table after literal 5 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
 
 
+Incrementing top scope table offset by 4 because of entry 6, wich has an offset of 32. Offset is now 36
 Table after literal 6 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
 
 
+Incrementing top scope table offset by 4 because of entry 7, wich has an offset of 36. Offset is now 40
 Table after literal 7 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
 
 
+Incrementing top scope table offset by 0 because of entry i, wich has an offset of 40. Offset is now 40
 Table after variable i creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
 
 
+Incrementing top scope table offset by 0 because of entry a, wich has an offset of 40. Offset is now 40
 Table after variable a creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
 
 
+Incrementing top scope table offset by 0 because of entry b, wich has an offset of 40. Offset is now 40
 Table after variable b creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: b][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: b][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
 
 
+Incrementing top scope table offset by 0 because of entry j, wich has an offset of 40. Offset is now 40
 Table after variable j creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: b][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: j][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: b][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: j][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
 
 
+Incrementing top scope table offset by 0 because of entry l, wich has an offset of 40. Offset is now 40
 Table after variable l creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: b][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: j][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
-[KEY: l][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 32]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: b][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: j][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
+[KEY: l][LINE: 16][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 40]
 
 
+Incrementing top scope table offset by 4 because of entry 2, wich has an offset of 60. Offset is now 64
 Table after literal 2 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 36]
-[KEY: b][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 40]
-[KEY: j][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 44]
-[KEY: l][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
-[KEY: 2][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: b][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: j][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: l][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: 2][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 60]
 
 
+Incrementing top scope table offset by 4 because of entry 3, wich has an offset of 64. Offset is now 68
 Table after literal 3 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 36]
-[KEY: b][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 40]
-[KEY: j][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 44]
-[KEY: l][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
-[KEY: 2][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 52]
-[KEY: 3][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: b][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: j][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: l][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: 2][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 3][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
 
 
+Incrementing top scope table offset by 4 because of entry 1, wich has an offset of 68. Offset is now 72
 Table after literal 1 creation:
 [KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 20]
-[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 24]
-[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
-[KEY: i][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 32]
-[KEY: a][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 36]
-[KEY: b][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 40]
-[KEY: j][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 44]
-[KEY: l][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
-[KEY: 2][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 52]
-[KEY: 3][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 56]
-[KEY: 1][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 8][LINE: 6][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: var_global3][LINE: 7][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 5][LINE: 14][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 28]
+[KEY: 6][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 32]
+[KEY: 7][LINE: 15][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 36]
+[KEY: i][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 40]
+[KEY: a][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 44]
+[KEY: b][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 48]
+[KEY: j][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 52]
+[KEY: l][LINE: 16][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 56]
+[KEY: 2][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 60]
+[KEY: 3][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: 1][LINE: 18][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 68]
 
 
+Incrementing top scope table offset by 4 because of entry 5, wich has an offset of 72. Offset is now 76
 Table after literal 5 creation:
-[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
 
 
+Incrementing top scope table offset by 4 because of entry 6, wich has an offset of 76. Offset is now 80
 Table after literal 6 creation:
-[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
+[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
+[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
 
 
+Incrementing top scope table offset by 4 because of entry 13, wich has an offset of 80. Offset is now 84
 Table after literal 13 creation:
-[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 68]
+[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
+[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 80]
 
 
+Incrementing top scope table offset by 4 because of entry 12, wich has an offset of 84. Offset is now 88
 Table after literal 12 creation:
-[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 68]
-[KEY: 12][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
+[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
+[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 80]
+[KEY: 12][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 84]
 
 
+Incrementing top scope table offset by 4 because of entry 1, wich has an offset of 88. Offset is now 92
 Table after literal 1 creation:
-[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 68]
-[KEY: 12][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
-[KEY: 1][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
+[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 80]
+[KEY: 12][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 84]
+[KEY: 1][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 88]
 
 
+Incrementing top scope table offset by 0 because of entry c, wich has an offset of 92. Offset is now 92
 Table after variable c creation:
-[KEY: c][LINE: 24][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 80]
+[KEY: c][LINE: 24][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 92]
 
 
+Incrementing top scope table offset by 4 because of entry 6, wich has an offset of 96. Offset is now 100
 Table after literal 6 creation:
-[KEY: c][LINE: 24][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 80]
-[KEY: 6][LINE: 25][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 84]
+[KEY: c][LINE: 24][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 92]
+[KEY: 6][LINE: 25][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 96]
 
 
+Incrementing top scope table offset by 4 because of entry 3, wich has an offset of 100. Offset is now 104
 Table after literal 3 creation:
-[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 64]
-[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 68]
-[KEY: 12][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
-[KEY: 1][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
-[KEY: 3][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 88]
+[KEY: 5][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 72]
+[KEY: 6][LINE: 20][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 76]
+[KEY: 13][LINE: 21][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 80]
+[KEY: 12][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 84]
+[KEY: 1][LINE: 22][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 88]
+[KEY: 3][LINE: 28][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 100]
 
 
+Incrementing top scope table offset by 4 because of entry foo, wich has an offset of 20. Offset is now 24
 Table after function foo creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 [KEY: var_global4][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
 [KEY: main][LINE: 5][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 16]
-ARGUMENTS: [KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+ARGUMENTS: [KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 
 
 [KEY: foo][LINE: 32][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 20]
 
 
+headerParametersList rule for parameter z with type INTEGER
+Incrementing top scope table offset by 4 because of entry z, wich has an offset of 0. Offset is now 4
 Table after variable z creation:
 [KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 
 
+headerParametersList rule for parameter y with type INTEGER
+Incrementing top scope table offset by 4 because of entry y, wich has an offset of 4. Offset is now 8
 Table after variable y creation:
 [KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
+[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
 
 
+headerParameters rule for parameter x with type INTEGER
+Incrementing top scope table offset by 4 because of entry x, wich has an offset of 8. Offset is now 12
 Table after variable x creation:
 [KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 
 
+Incrementing top scope table offset by 4 because of entry 5, wich has an offset of 12. Offset is now 16
 Table after literal 5 creation:
 [KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: 5][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: 5][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 12]
 
 
+Incrementing top scope table offset by 4 because of entry 7, wich has an offset of 16. Offset is now 20
 Table after literal 7 creation:
 [KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: 5][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: 7][LINE: 36][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: 5][LINE: 34][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: 7][LINE: 36][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 16]
 
 
+Incrementing top scope table offset by 4 because of entry bar, wich has an offset of 24. Offset is now 28
 Table after function bar creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 [KEY: var_global4][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
 [KEY: main][LINE: 5][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 16]
-ARGUMENTS: [KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+ARGUMENTS: [KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 
 
 [KEY: foo][LINE: 32][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 20]
-ARGUMENTS: [KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+ARGUMENTS: [KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
 
 
 [KEY: bar][LINE: 39][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 24]
 
 
+Incrementing top scope table offset by 4 because of entry 6, wich has an offset of 0. Offset is now 4
 Table after literal 6 creation:
 [KEY: 6][LINE: 40][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 0]
 
 
+Incrementing top scope table offset by 0 because of entry y, wich has an offset of 4. Offset is now 4
 Table after variable y creation:
 [KEY: 6][LINE: 40][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: y][LINE: 40][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+[KEY: y][LINE: 40][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 4]
 
 
+Incrementing top scope table offset by 4 because of entry 5, wich has an offset of 8. Offset is now 12
 Table after literal 5 creation:
 [KEY: 6][LINE: 40][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: y][LINE: 40][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: y][LINE: 40][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+[KEY: 5][LINE: 41][NATURE: 0][TYPE: 1][SIZE: 4][OFFSET: 8]
 
 
+Incrementing top scope table offset by 4 because of entry fn, wich has an offset of 28. Offset is now 32
 Table after function fn creation:
 [KEY: var_global1][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 [KEY: var_global2][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
 [KEY: var_global3][LINE: 1][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 [KEY: var_global4][LINE: 3][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
 [KEY: main][LINE: 5][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 16]
-ARGUMENTS: [KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
-[KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 4]
+ARGUMENTS: [KEY: x][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+[KEY: y][LINE: 5][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
 
 
 [KEY: foo][LINE: 32][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 20]
-ARGUMENTS: [KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
-[KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 8]
+ARGUMENTS: [KEY: x][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: y][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
+[KEY: z][LINE: 32][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 12]
 
 
 [KEY: bar][LINE: 39][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 24]
 [KEY: fn][LINE: 44][NATURE: 3][TYPE: 1][SIZE: 4][OFFSET: 28]
 
 
+headerParameters rule for parameter x with type INTEGER
+Incrementing top scope table offset by 4 because of entry x, wich has an offset of 0. Offset is now 4
 Table after variable x creation:
 [KEY: x][LINE: 44][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
 
 
+Incrementing top scope table offset by 0 because of entry g, wich has an offset of 4. Offset is now 4
 Table after variable g creation:
 [KEY: x][LINE: 44][NATURE: 1][TYPE: 1][SIZE: 4][OFFSET: 0]
-[KEY: g][LINE: 46][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 0]
+[KEY: g][LINE: 46][NATURE: 1][TYPE: 0][SIZE: 0][OFFSET: 4]
 
 
