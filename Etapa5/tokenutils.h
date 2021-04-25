@@ -59,7 +59,6 @@ typedef struct t_code
     char *dest2;
     struct t_code *next;
     struct t_code *prev;
-
 } Code;
 
 typedef enum

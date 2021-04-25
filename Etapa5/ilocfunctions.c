@@ -65,7 +65,7 @@ Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, 
     code->local = local;
     code->next = NULL;
     code->prev = NULL;
-    code->res=NULL;
+    code->res = NULL;
 
     code->label = generateLabelName();
 
@@ -95,7 +95,7 @@ Code *joinCodes(Code *code1, Code *code2)
 // {
 //     Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main"), NULL);
 //     jump->next = createCode(HALT, "L0", NULL, NULL, NULL, NULL, NULL);
-//     Code *RBSSDefault = createCode(LOADI, NULL, "500", NULL, NULL, RBSS, NULL);
+//     Code *RBSSDefault = createCode(LOADI, NULL, getNumberOfInstructions(), NULL, NULL, RBSS, NULL);
 //     RBSSDefault->next = jump;
 //     Code *RFPDefault = createCode(LOADI, NULL, "1024", NULL, NULL, RFP, NULL);
 //     RFPDefault->next = RBSSDefault;
@@ -128,7 +128,6 @@ Code *generatesIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     char *label3 = generateLabelName();
     SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
 
-
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = exprEntry->code->res;
@@ -150,13 +149,13 @@ Code *generateLabelCode(char *label)
 {
     Code *code = createCode(NOP, NULL, label, NULL, NULL, NULL, NULL);
     return code;
+}
 
-    }
-
-Code *generateTrueConditionalJump(char *label){
-        Code *jumpi = createCode(JUMPI,NULL, NULL, NULL, NULL,label,NULL);
-        return jumpi;
-      }
+Code *generateTrueConditionalJump(char *label)
+{
+    Code *jumpi = createCode(JUMPI, NULL, NULL, NULL, NULL, label, NULL);
+    return jumpi;
+}
 
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, Node *trueExpr)
 {
@@ -169,11 +168,13 @@ Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, Node *trueExpr)
     return cbr;
 }
 
-Code * generateI2ICode(char* r1, char *r2){
-    Code * code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL);
-    }
+Code *generateI2ICode(char *r1, char *r2)
+{
+    Code *code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL);
+}
 
-Code *generateTernaryOpCode(Node *expr, Node *exprTrue, Node *exprFalse){
+Code *generateTernaryOpCode(Node *expr, Node *exprTrue, Node *exprFalse)
+{
 
     SymbolTableEntry *entryFalse = findEntryInStack(getGlobalStack(), exprFalse->data->value.valueString);
     SymbolTableEntry *entryTrue = findEntryInStack(getGlobalStack(), exprTrue->data->value.valueString);
@@ -184,95 +185,94 @@ Code *generateTernaryOpCode(Node *expr, Node *exprTrue, Node *exprFalse){
     char *reg1 = generateRegisterName();
 
     char *result = entryExpr->code->res; // <===this has to be changed
-    Code *cbr = createCBRCode(expr,result,label1,label2,exprTrue);
+    Code *cbr = createCBRCode(expr, result, label1, label2, exprTrue);
 
     char *resultTrue = entryTrue->code->res; // <===this has to be changed
-    Code *i2iCode = generateI2ICode(resultTrue,reg1);
+    Code *i2iCode = generateI2ICode(resultTrue, reg1);
 
-    Code* jumpCode = generateTrueConditionalJump(label3);
-    jumpCode = joinCodes(i2iCode,jumpCode);
+    Code *jumpCode = generateTrueConditionalJump(label3);
+    jumpCode = joinCodes(i2iCode, jumpCode);
 
-    cbr = joinCodes(cbr,jumpCode);
+    cbr = joinCodes(cbr, jumpCode);
     cbr = joinCodes(cbr, entryFalse->code);
 
     char *resultFalse = entryFalse->code->res; // <===this has to be changed
-    Code* i2iCode2 = generateI2ICode(resultFalse,reg1);
+    Code *i2iCode2 = generateI2ICode(resultFalse, reg1);
 
-    Code* labelCode = generateLabelCode(label3);
-    labelCode = joinCodes(i2iCode,labelCode);
-    cbr = joinCodes(cbr,labelCode);
+    Code *labelCode = generateLabelCode(label3);
+    labelCode = joinCodes(i2iCode, labelCode);
+    cbr = joinCodes(cbr, labelCode);
 
-    cbr->res=reg1;
+    cbr->res = reg1;
     return cbr;
+}
 
+Code *generateWhileCode(Node *expr, Node *commands)
+{
 
-    }
+    SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
+    SymbolTableEntry *entryCommands = findEntryInStack(getGlobalStack(), commands->data->value.valueString);
+    char *label1 = generateLabelName();
+    char *label2 = generateLabelName();
+    char *label3 = generateLabelName();
 
-Code *generateWhileCode(Node* expr, Node* commands){
-
-    SymbolTableEntry *entry = findEntryInStack(getCurrentStack(), expr->data->value.valueString);
-    SymbolTableEntry *entryCommands = findEntryInStack(getCurrentStack(), commands->data->value.valueString);
-    char* label1 = generateLabelName();
-    char* label2 = generateLabelName();
-    char* label3 = generateLabelName();
-
-    Code *labelCode = generateLabelCode(l1);
-    labelCode = joinCodes(labelCode, entry->code);
+    // Code *labelCode = generateLabelCode(label1);
+    // labelCode = joinCodes(labelCode, entry->code);
 
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = entry->code->res;
-    Code *exprCode = createCBRCode(expr, reg,l2, l3, commands);
+    Code *exprCode = createCBRCode(expr, reg, label2, label3, commands);
 
-    Code *labelCode = generateLabelCode(l1);
+    Code *labelCode = generateLabelCode(label1);
     labelCode = joinCodes(labelCode, entry->code);
 
-    Code *labelCode2 = generateLabelCode(l2);
-    labelCode2 = joinCodes(exprCode,labelCode2);
+    Code *labelCode2 = generateLabelCode(label2);
+    labelCode2 = joinCodes(exprCode, labelCode2);
     labelCode2 = joinCodes(labelCode2, entryCommands->code);
 
     Code *jumpCode = generateTrueConditionalJump(label1);
-    jumpCode = joinCodes(labelCode2,jumpCode);
+    jumpCode = joinCodes(labelCode2, jumpCode);
 
     Code *labelCode3 = generateLabelCode(label3);
-    labelCode3 = joinCodes(jumpCode,labelCode3);
+    labelCode3 = joinCodes(jumpCode, labelCode3);
 
     return labelCode3;
+}
 
-    }
+// Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
+// {
+//     char *label1 = generateLabelName();
+//     char *label2 = generateLabelName();
+//     char *label3 = generateLabelName();
 
-Code *generateForCode(Node* start, Node* expr, Node* incr, Node * commands){
-       char *label1 = generateLabelName();
-       char *label2 = generateLabelName();
-       char *label3 = generateLabelName();
+//     SymbolTableEntry *startEntry = findEntryInStack(getGlobalStack(), start->data->value.valueString);
+//     SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
+//     SymbolTableEntry *commandsEntry = findEntryInStack(getGlobalStack(), commands->data->value.valueString);
+//     SymbolTableEntry *incrEntry = findEntryInStack(getGlobalStack(), incr->data->value.valueString);
 
-       SymbolTableEntry *startEntry = findEntryInStack(getGlobalStack(), start->data->value.valueString)
-       SymbolTableEntry *exprEntry = findEntryInStack(getGlobalStack(), expr->data->value.valueString)
-       SymbolTableEntry *commandsEntry = findEntryInStack(getGlobalStack(), commands->data->value.valueString)
-       SymbolTableEntry *incrEntry = findEntryInStack(getGlobalStack(), incr->data->value.valueString)
+//     Code *labelCode = generateLabelCode(label1);
+//     labelCode = joinCodes(startEntry->code, labelCode);
+//     labelCode = joinCodes(labelCode, exprEntry->code);
 
-       Code *labelCode = generateLabelCode(label1);
-       labelCode = joinCodes(startEntry->code,labelCode);
-       labelCode = joinCodes(labelCode,exprEntry->code);
+//     //TODO:
+//     //Where are we getting the result of if expressions?
+//     char *reg = exprEntry->code->res;
+//     Code *conditionCode = createCBRCode(expr, reg, label2, label3);
+//     conditionCode = joinCodes(labelCode, conditionCode);
 
-          //TODO:
-         //Where are we getting the result of if expressions?
-        char *reg = exprEntry->code->res;
-        Code *conditionCode = createCBRCode(expr,reg,label2,label3);
-        conditionCode = joinCodes(labelCode, conditionCode);
+//     Code *labelCode2 = generateLabelCode(label2);
+//     labelCode = joinCodes(conditionCode, labelCode2);
+//     labelCode = joinCodes(labelCode2, commandsEntry->code);
+//     labelCode = joinCodes(labelCode2, incrEntry->code);
 
-        Code *labelCode2 = generateLabelCode(label2);
-        labelCode = joinCodes(conditionCode,labelCode2);
-        labelCode = joinCodes(labelCode2,commandsEntry->code);
-        labelCode = joinCodes(labelCode2,incrEntry->code);
+//     Code *jumpCode = generateTrueConditionalJump(label1);
+//     labelCode = joinCodes(labelCode2, jumpCode);
 
-        Code *jumpCode = generateTrueConditionalJump(label1);
-        labelCode = joinCodes(labelCode2,jumpCode);
-
-        Code *labelCode3 = generateLabelCode(label3);
-        labelCode3 = joinCodes(jumpCode,labelCode3);
-        return labelCode3;
-    }
+//     Code *labelCode3 = generateLabelCode(label3);
+//     labelCode3 = joinCodes(jumpCode, labelCode3);
+//     return labelCode3;
+// }
 int setsOffset(char *symbol, int *scope)
 {
     //TODO;
@@ -380,134 +380,154 @@ OperationType getOperationFromTokenData(TokenData *data)
     }
 }
 
-Code *generate(Node *node)
+char *generate(Node *node)
 {
     if (node == NULL)
     {
         return NULL;
     }
 
-    Code *children[MAX_CHILDREN];
-    for (int i = 0; i < MAX_CHILDREN; i++)
+    char *children[MAX_CHILDREN];
+    for (int i = 0; i < node->numberOfChildren; i++)
     {
         children[i] = generate(node->children[i]);
     }
 
-    Code *next;
+    char *next;
     next = generate(node->next);
 
-    Code *finalCode;
+    // Code *finalCode;
     OperationType nodeOperation = getOperationFromTokenData(node->data);
 
-    printf("Node with label %s: ", node->data->label);
+    SymbolTableEntry *nodeEntry = findEntryInStack(getGlobalStack(), node->data->label);
 
-    switch (nodeOperation)
-    {
-    case OPERATION_TYPE_ADD:
-        printf("OPERATION_TYPE_ADD\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_SUB:
-        printf("OPERATION_TYPE_SUB\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_MULT:
-        printf("OPERATION_TYPE_MULT\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_DIV:
-        printf("OPERATION_TYPE_DIV\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_LESS_THAN:
-        printf("OPERATION_TYPE_LESS_THAN\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_GREATER_THAN:
-        printf("OPERATION_TYPE_GREATER_THAN\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_LESS_EQUAL:
-        printf("OPERATION_TYPE_LESS_EQUAL\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_GREATER_EQUAL:
-        printf("OPERATION_TYPE_GREATER_EQUAL\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_VAR_ACCESS:
-        printf("OPERATION_TYPE_VAR_ACCESS\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_VECTOR_ACCESS:
-        printf("OPERATION_TYPE_VECTOR_ACCESS\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_FUNCTION_DECLARATION:
-        printf("OPERATION_TYPE_FUNCTION_DECLARATION\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_FUNCTION_CALL:
-        printf("OPERATION_TYPE_FUNCTION_CALL\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_OR:
-        printf("OPERATION_TYPE_OR\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_AND:
-        printf("OPERATION_TYPE_AND\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_NOT:
-        printf("OPERATION_TYPE_NOT\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_NEGATIVE:
-        printf("OPERATION_TYPE_NEGATIVE\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_ATTRIBUTION:
-        printf("OPERATION_TYPE_ATTRIBUTION\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_ATTRIBUTION_VECTOR:
-        printf("OPERATION_TYPE_ATTRIBUTION_VECTOR\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_RETURN:
-        printf("OPERATION_TYPE_RETURN\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_IF:
-        printf("OPERATION_TYPE_IF\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_IF_ELSE:
-        printf("OPERATION_TYPE_IF_ELSE\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_TERNARY:
-        printf("OPERATION_TYPE_TERNARY\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_WHILE:
-        printf("OPERATION_TYPE_WHILE\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_FOR:
-        printf("OPERATION_TYPE_FOR\n");
-        finalCode = NULL;
-        break;
-    case OPERATION_TYPE_NOP:
-        printf("OPERATION_TYPE_NOP\n");
-        finalCode = NULL;
-        break;
-    default:
-        printf("Unrecognized operation\n");
-        finalCode = NULL;
-        break;
-    }
+    // if (nodeEntry == NULL)
+    // {
+    //     printf("Entry %s not found\n", node->data->label);
+    //     nodeEntry = findLiteralEntryInStack(getGlobalStack(), node->data->label);
 
-    return finalCode;
+    //     if (nodeEntry == NULL)
+    //     {
+    //         printf("Entry %s STILL not found\n", node->data->label);
+    //     }
+    // }
+
+    printf("Generating code for %s::%s::%s\n", node->data->label, getTypeName(node->type), "sal");
+
+    printTable(getGlobalStack()->top);
+
+    // for (int i = 0; i < node->numberOfChildren; i++)
+    // {
+    //     printf("%d: %s\n", i, children[i]);
+    // }
+
+    // switch (nodeOperation)
+    // {
+    // case OPERATION_TYPE_ADD:
+    //     printf("OPERATION_TYPE_ADD\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_SUB:
+    //     printf("OPERATION_TYPE_SUB\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_MULT:
+    //     printf("OPERATION_TYPE_MULT\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_DIV:
+    //     printf("OPERATION_TYPE_DIV\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_LESS_THAN:
+    //     printf("OPERATION_TYPE_LESS_THAN\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_GREATER_THAN:
+    //     printf("OPERATION_TYPE_GREATER_THAN\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_LESS_EQUAL:
+    //     printf("OPERATION_TYPE_LESS_EQUAL\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_GREATER_EQUAL:
+    //     printf("OPERATION_TYPE_GREATER_EQUAL\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_VAR_ACCESS:
+    //     printf("OPERATION_TYPE_VAR_ACCESS\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_VECTOR_ACCESS:
+    //     printf("OPERATION_TYPE_VECTOR_ACCESS\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_FUNCTION_DECLARATION:
+    //     printf("OPERATION_TYPE_FUNCTION_DECLARATION\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_FUNCTION_CALL:
+    //     printf("OPERATION_TYPE_FUNCTION_CALL\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_OR:
+    //     printf("OPERATION_TYPE_OR\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_AND:
+    //     printf("OPERATION_TYPE_AND\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_NOT:
+    //     printf("OPERATION_TYPE_NOT\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_NEGATIVE:
+    //     printf("OPERATION_TYPE_NEGATIVE\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_ATTRIBUTION:
+    //     printf("OPERATION_TYPE_ATTRIBUTION\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_ATTRIBUTION_VECTOR:
+    //     printf("OPERATION_TYPE_ATTRIBUTION_VECTOR\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_RETURN:
+    //     printf("OPERATION_TYPE_RETURN\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_IF:
+    //     printf("OPERATION_TYPE_IF\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_IF_ELSE:
+    //     printf("OPERATION_TYPE_IF_ELSE\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_TERNARY:
+    //     printf("OPERATION_TYPE_TERNARY\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_WHILE:
+    //     printf("OPERATION_TYPE_WHILE\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_FOR:
+    //     printf("OPERATION_TYPE_FOR\n");
+    //     finalCode = NULL;
+    //     break;
+    // case OPERATION_TYPE_NOP:
+    //     printf("OPERATION_TYPE_NOP\n");
+    //     finalCode = NULL;
+    //     break;
+    // default:
+    //     printf("Unrecognized operation\n");
+    //     finalCode = NULL;
+    //     break;
+    // }
+
+    return node->data->label;
 }

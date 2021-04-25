@@ -50,4 +50,4 @@ Code *generatesIfCode(Node *expr, Node *trueExpr, Node *falseExpr);
 Code *generateLabelCode(char *label);
 Code *generateTrueConditionalJump(char *l1);
 
-Code *generate(Node *node);
+char *generate(Node *node);
