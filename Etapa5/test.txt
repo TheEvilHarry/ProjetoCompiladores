@@ -1,5 +1,7 @@
 int var_global1, var_global2, var_global3;
 
+int var_global4;
+
 int main(int x, int y){
     var_global3 = 8;
     int var_global3;

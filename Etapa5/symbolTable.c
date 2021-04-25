@@ -202,6 +202,23 @@ SymbolTableEntry *findEntryInStack(SymbolTableStack *stack, char *key)
   return NULL;
 };
 
+SymbolTableStack *findEntryTable(SymbolTableStack *topStack, char *key)
+{
+  SymbolTableStack *currentStackElement = NULL;
+  SymbolTableEntry *entry = NULL;
+
+  for (currentStackElement = topStack; currentStackElement != NULL; currentStackElement = currentStackElement->rest)
+  {
+    entry = findEntryInTable(currentStackElement->top, key);
+    if (entry != NULL)
+    {
+      return currentStackElement;
+    }
+  }
+
+  return NULL;
+};
+
 SymbolTableEntry *findLiteralEntryInStack(SymbolTableStack *stack, char *key)
 {
   SymbolTableStack *currentStackElement = NULL;
@@ -222,7 +239,7 @@ SymbolTableEntry *findLiteralEntryInStack(SymbolTableStack *stack, char *key)
 SymbolTableStack *popScope()
 {
   SymbolTableStack *newStackTop = stack->rest;
-  newStackTop->tableOffset = stack->tableOffset; // Update previous table offset to account for inner table offset
+  newStackTop->tableOffset = newStackTop->isGlobal == 1 ? newStackTop->tableOffset : stack->tableOffset; // Update previous table offset to account for inner table offset
   freeSymbolTable(stack->top);
   stack->top = NULL;
   free(stack);
@@ -535,6 +552,13 @@ void createFunctionTableEntry(char *identifier, int line, Type type, TokenData *
   {
     SymbolTableEntry *entry = createTableEntry(identifier, line, NATURE_function, type, getSizeFromType(type), token);
     addEntryToTopScopeTable(entry);
+  }
+
+  if (DEBUG == 1)
+  {
+    printf("Table after function %s creation:\n", identifier);
+    printTable(getCurrentScope());
+    printf("\n\n");
   }
 }
 
