@@ -176,7 +176,7 @@ SymbolTableStack *stackScope()
   newStack->top = NULL;
   newStack->rest = stack;
   newStack->isGlobal = 0;
-  newStack->tableOffset = stack->tableOffset; // Initialize offset with parent table's offset
+  newStack->tableOffset = getGlobalStack()->isGlobal == 1 ? 0 : getGlobalStack()->tableOffset; // Initialize offset with parent table's offset if its unnamed
 
   stack = newStack;
 
