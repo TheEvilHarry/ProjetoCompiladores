@@ -19,7 +19,6 @@ typedef struct symbolTableEntry
     int size;
     struct symbolTableEntry *arguments;
     TokenData *data;
-    Code *code;
     int entryOffset;
 
     struct symbolTableEntry *nextEntry;
