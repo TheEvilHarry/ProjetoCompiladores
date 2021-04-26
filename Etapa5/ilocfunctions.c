@@ -189,8 +189,7 @@ Code *generateTrueConditionalJump(char *label)
 
 Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
 {
-    Code *haltCode = generateHaltCommand();
-    Code *body;
+
 
     if (strcmp(identifier, "main") == 0)
     {
@@ -222,8 +221,8 @@ Code* generateRegularFunctionCode(Node* header, char* identifier, Code* code, No
         Code *loadCode3 = createCode(LOADAI, NULL, rfp, offsetEight, NULL,register3,NULL);
         loadCode3 = joinCodes(loadCode2,loadCode3);
 
-        Code *i2iCode = generateI2ICode(register2,rsp);
-        i2iCode = joinCodes(labelCode3,i2iCode);
+        Code *i2iCode = generateI2ICode(register2,rfp);
+        i2iCode = joinCodes(loadCode3,i2iCode);
 
         Code* i2iCode2 = generateI2ICode(register3,rfp);
         i2iCode2 = joinCodes(i2iCode, i2iCode2);
@@ -246,8 +245,9 @@ Code* generateRegularFunctionCode(Node* header, char* identifier, Code* code, No
 
 Code *generateMainFunctionCode(Node* header, char* identifier, Code* code, Node* commands, char* labelReturn){
         Code* jumpICode = generateTrueConditionalJump(identifier);
-
         Code *ending = code;
+        Code *haltCode = generateHaltCommand();
+        Code *body;
 
         while(ending->prev){
             ending = ending->prev;
@@ -263,7 +263,6 @@ Code *generateMainFunctionCode(Node* header, char* identifier, Code* code, Node*
             }
 
         ending->next=jumpICode;
-
 
         if(commands !=NULL){
             body = joinCodes(commands->code,haltCode);
@@ -286,18 +285,6 @@ Code * generateHaltCommand(){
     return code;
 
     }
-
-Code *generateJump(char *reg)
-{
-    return createCode(JUMP, NULL, NULL, NULL, NULL, reg, NULL);
-}
-
-Code *generateHaltCommand()
-{
-
-    Code *code = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL);
-    return code;
-}
 
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel ,Node *trueExpr)
 {
