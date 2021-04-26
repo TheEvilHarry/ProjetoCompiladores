@@ -49,7 +49,7 @@ typedef enum
 typedef struct t_code
 {
     char *label;
-    char *local;
+    char *pointer;
     char *res;
     Operation opCode;
     char *arg1;

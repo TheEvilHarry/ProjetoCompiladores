@@ -47,7 +47,7 @@ int setOffset(char *symbol, int *scope)
     return 0;
 }
 
-Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
+Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
 {
     Code *code = (Code *)malloc(sizeof(Code));
     code->opCode = op;
@@ -56,7 +56,7 @@ Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, 
     code->arg3 = arg3;
     code->dest1 = dest1;
     code->dest2 = dest2;
-    code->local = local;
+    code->pointer = pointer;
     code->next = NULL;
     code->prev = NULL;
     code->res = NULL;
@@ -66,7 +66,7 @@ Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, 
     return code;
 } //CHECK WITH PEDRO IF THIS IS RIGHT?!
 
-Code *generateEmptyCode(char *local)
+Code *generateEmptyCode(char *pointer)
 {
     Code *code = (Code *)malloc(sizeof(Code));
     code->opCode = NOP;
@@ -78,7 +78,7 @@ Code *generateEmptyCode(char *local)
     code->next = NULL;
     code->prev = NULL;
     code->label = NULL;
-    code->local = local;
+    code->pointer = pointer;
 
     return code;
 }
@@ -103,6 +103,24 @@ Code *joinCodes(Code *code1, Code *code2)
     return code2;
 }
 
+Code * generateReturnCode(Node* child, Node *parent, char *label){
+
+    SymbolTableEntry *childEntry = findEntryInStack(getGlobalStack(), child->value->valueString);
+    SymbolTableEntry *parentEntry = findEntryInStack(getGlobalStack(), parent->value->valueString);
+
+
+    char *rfp = malloc(4);
+    char *offset = malloc(4);
+    sprintf(rfp,"%s",RFP);
+    sprintf(rfp,"%s",offset);
+    Code *returnCode = createCode(STOREAI,rfp,childEntry->code->res,NULL,NULL,rfp,offset);
+    Code *jumpCode = generateTrueConditionalJump(label);
+    jumpCode = joinCodes(returnCode,jumpCode);
+    parent->code = joinCodes(childEntry->code, jumpCode);
+    return parent->code;
+
+    }
+
 Code *generateInitialInstructions()
 {
     // Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main"), NULL);
@@ -121,13 +139,13 @@ Code *generateAttributionCode(Node *attr, Node *exp)
     SymbolTableStack *scope = getGlobalStack(); //CHECK THISSSSSSSS
     if (scope->isGlobal == 1)
     {
-        char local[4] = RBSS;
-        code = createCode(STOREAI, local, NULL, NULL, NULL, NULL, NULL);
+        char pointer[4] = RBSS;
+        code = createCode(STOREAI, pointer, NULL, NULL, NULL, NULL, NULL);
     }
     else
     {
-        char local[4] = RFP;
-        code = createCode(STOREAI, local, NULL, NULL, NULL, NULL, NULL);
+        char pointer[4] = RFP;
+        code = createCode(STOREAI, pointer, NULL, NULL, NULL, NULL, NULL);
     }
 
     return joinCodes(expression->code, code);
@@ -143,18 +161,24 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = exprEntry->code->res;
-    Code *ifCode = createCBRCode(expr, reg, label1, label2, trueExpr);
+    Code *ifCode = createCBRCode(expr, reg, label1, label2,label1, trueExpr);
 
-    Code *trueJump = generateTrueConditionalJump(label1);
-    ifCode = joinCodes(ifCode, trueJump);
-    Code *labelCode = generateLabelCode(label3);
+
+    Code *trueJump = generateTrueConditionalJump(label3);
+    Code *labelCode2 = generateLabelCode(label2);
+    labelCode2 = joinCodes(trueJump,labelCode2);
+
+    ifCode = joinCodes(ifCode, labelCode2);
+
+
+    Code *labelCode3 = generateLabelCode(label3);
     if (falseExpr != NULL)
     {
-        SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), falseExpr->data->value.valueString);
-        labelCode = joinCodes(entry->code, labelCode);
+        SymbolTableEntry *entryFalse = findEntryInStack(getGlobalStack(), falseExpr->data->value.valueString);
+        labelCode3 = joinCodes(entryFalse->code, labelCode3);
     }
 
-    return joinCodes(ifCode, labelCode);
+    return joinCodes(ifCode, labelCode3);
 }
 
 Code *generateLabelCode(char *label)
@@ -169,12 +193,20 @@ Code *generateTrueConditionalJump(char *label)
     return jumpi;
 }
 
-Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, Node *trueExpr)
+Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel ,Node *trueExpr)
 {
     SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
     SymbolTableEntry *entryTrue = findEntryInStack(getGlobalStack(), expr->data->value.valueString);
 
     Code *cbr = createCode(CBR, NULL, r1, NULL, NULL, l1, l2);
+    if(followingLabel !=NULL){
+        Code *labelCode1 = generateLabelCode(followingLabel);
+        labelCode1 = joinCodes(cbr,labelCode1);
+        labelCode1 = joinCodes(entry->code, labelCode1);
+        labelCode1 = joinCodes(labelCode1, entryTrue->code);
+        return labelCode1;
+                }
+
     cbr = joinCodes(entry->code, cbr);
     cbr = joinCodes(cbr, entryTrue->code);
     return cbr;
@@ -197,23 +229,25 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
     char *reg1 = generateRegisterName();
 
     char *result = entryExpr->code->res; // <===this has to be changed
-    Code *cbr = createCBRCode(expr, result, label1, label2, exprTrue);
+    Code *cbr = createCBRCode(expr, result, label1, label2, label1, exprTrue);
 
     char *resultTrue = entryTrue->code->res; // <===this has to be changed
     Code *i2iCode = generateI2ICode(resultTrue, reg1);
 
     Code *jumpCode = generateTrueConditionalJump(label3);
     jumpCode = joinCodes(i2iCode, jumpCode);
+    Code* labelCode2 = generateLabelCode(label2);
+    labelCode2 = joinCodes(jumpCode,labelCode2);
 
-    cbr = joinCodes(cbr, jumpCode);
+    cbr = joinCodes(cbr, labelCode2);
     cbr = joinCodes(cbr, entryFalse->code);
 
     char *resultFalse = entryFalse->code->res; // <===this has to be changed
     Code *i2iCode2 = generateI2ICode(resultFalse, reg1);
 
-    Code *labelCode = generateLabelCode(label3);
-    labelCode = joinCodes(i2iCode, labelCode);
-    cbr = joinCodes(cbr, labelCode);
+    Code *labelCode3 = generateLabelCode(label3);
+    labelCode3 = joinCodes(i2iCode, labelCode3);
+    cbr = joinCodes(cbr, labelCode3);
 
     cbr->res = reg1;
     return cbr;
@@ -234,7 +268,7 @@ Code *generateWhileCode(Node *expr, Node *commands)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = entry->code->res;
-    Code *exprCode = createCBRCode(expr, reg, label2, label3, commands);
+    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
 
     Code *labelCode = generateLabelCode(label1);
     labelCode = joinCodes(labelCode, entry->code);
@@ -270,7 +304,7 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = exprEntry->code->res;
-    Code *conditionCode = createCBRCode(expr, reg, label2, label3);
+    Code *conditionCode = createCBRCode(expr, reg, label2, NULL,label3);
     conditionCode = joinCodes(labelCode, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
@@ -285,6 +319,34 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     labelCode3 = joinCodes(jumpCode, labelCode3);
     return labelCode3;
 }
+
+Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized){
+    char *pointer = malloc(10);
+    char *offset ; malloc(3);
+    sprintf(pointer,"%s",RSP);
+    sprintf(offset, "%s", "4");
+    SymbolTableEntry *prevEntry = findEntryInStack(getGlobalStack, prev->data->value.valueString);
+
+    Code *updatesRSP = createCode(ADDI, pointer, pointer,offset,NULL,pointer,NULL);
+
+    if(initialized==1){
+        SymbolTableEntry *identifierEntry = findEntryInStack(getGlobalStack, identifier->data->value.valueString);
+        SymbolTableEntry *initEntry = findEntryInStack(getGlobalStack, init->data->value.valueString);
+
+        char *pointer2 = malloc(10);
+        sprintf(pointer2,"%s",RFP);
+        Code *attribution = createCode(STOREAI, pointer2, initEntry->code->res,NULL, NULL,pointer2, identifierEntry->entryOffset);
+        updatesRSP = joinCodes(updatesRSP, initEntry->code);
+        updatesRSP = joinCodes(updatesRSP,attribution);
+        prevEntry->code = updatesRSP;
+
+        }
+    else if(initialized==0){
+        prevEntry->code = updatesRSP;
+        }
+     return updatesRSP;
+
+    }
 
 Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
 {
