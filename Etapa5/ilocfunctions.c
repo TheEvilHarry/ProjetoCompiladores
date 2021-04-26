@@ -103,6 +103,7 @@ Code *joinCodes(Code *code1, Code *code2)
     return code2;
 }
 
+
 Code * generateReturnCode(Node* child, Node *parent, char *label){
 
 
@@ -115,8 +116,7 @@ Code * generateReturnCode(Node* child, Node *parent, char *label){
     jumpCode = joinCodes(returnCode,jumpCode);
     parent->code = joinCodes(child->code, jumpCode);
     return parent->code;
-
-    }
+}
 
 Code *generateInitialInstructions()
 {
@@ -158,13 +158,11 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     char *reg = expr->code->res;
     Code *ifCode = createCBRCode(expr, reg, label1, label2,label1, trueExpr);
 
-
     Code *trueJump = generateTrueConditionalJump(label3);
     Code *labelCode2 = generateLabelCode(label2);
-    labelCode2 = joinCodes(trueJump,labelCode2);
+    labelCode2 = joinCodes(trueJump, labelCode2);
 
     ifCode = joinCodes(ifCode, labelCode2);
-
 
     Code *labelCode3 = generateLabelCode(label3);
     if (falseExpr != NULL)
@@ -189,16 +187,17 @@ Code *generateTrueConditionalJump(char *label)
 
 //identifier = the label of the header's node
 
-Code *generateFunctionCode(Node* header, char* identifier, Code* code, Node* commands, char* labelReturn){
+Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
+{
     Code *haltCode = generateHaltCommand();
     Code *body;
 
-    if(strcmp(identifier,"main")==0){
-        return generateMainFunctionCode(header,identifier,code,commands,labelReturn);
-        }
-
-     return generateRegularFunctionCode(header,identifier,code,commands,labelReturn)
+    if (strcmp(identifier, "main") == 0)
+    {
+        return generateMainFunctionCode(header, identifier, code, commands, labelReturn);
     }
+        return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
+ }
 
 Code* generateRegularFunctionCode(Node* header, char* identifier, Code* code, Node* commands, char* labelReturn){
         char *register1 = generateRegisterName();
@@ -239,13 +238,11 @@ Code* generateRegularFunctionCode(Node* header, char* identifier, Code* code, No
         else{
             body = joinCodes(NULL,jump);
             }
-
         Code *function = joinCodes(header->code,body);
 
         return joinCodes(code,function);
 
     }
-
 
 Code *generateMainFunctionCode(Node* header, char* identifier, Code* code, Node* commands, char* labelReturn){
         Code* jumpICode = generateTrueConditionalJump(identifier);
@@ -290,6 +287,18 @@ Code * generateHaltCommand(){
 
     }
 
+Code *generateJump(char *reg)
+{
+    return createCode(JUMP, NULL, NULL, NULL, NULL, reg, NULL);
+}
+
+Code *generateHaltCommand()
+{
+
+    Code *code = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL);
+    return code;
+}
+
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel ,Node *trueExpr)
 {
 
@@ -314,6 +323,7 @@ Code *generateI2ICode(char *r1, char *r2)
 
 Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
 {
+
     char *label1 = generateLabelName();
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
@@ -327,8 +337,8 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
 
     Code *jumpCode = generateTrueConditionalJump(label3);
     jumpCode = joinCodes(i2iCode, jumpCode);
-    Code* labelCode2 = generateLabelCode(label2);
-    labelCode2 = joinCodes(jumpCode,labelCode2);
+    Code *labelCode2 = generateLabelCode(label2);
+    labelCode2 = joinCodes(jumpCode, labelCode2);
 
     cbr = joinCodes(cbr, labelCode2);
     cbr = joinCodes(cbr, exprFalse->code);
@@ -350,15 +360,13 @@ Code *generateWhileCode(Node *expr, Node *commands)
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
-    // Code *labelCode = generateLabelCode(label1);
-    // labelCode = joinCodes(labelCode, entry->code);
+    //TODO:
+    //Where are we getting the result of if expressions?
+    char *reg = expr->code->res;
+    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
 
     Code *labelCode = generateLabelCode(label1);
     labelCode = joinCodes(labelCode, expr->code);
-
-    Code *exprCode = createCBRCode(expr, expr->code->res, label2, label3, NULL, commands);
-    exprCode = joinCodes(labelCode,exprCode);
-
 
     Code *labelCode2 = generateLabelCode(label2);
     labelCode2 = joinCodes(exprCode, labelCode2);
@@ -386,7 +394,7 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = expr->code->res;
-    Code *conditionCode = createCBRCode(expr, reg, label2, NULL,label3);
+    Code *conditionCode = createCBRCode(expr, reg, label2, NULL, label3, NULL);
     conditionCode = joinCodes(labelCode, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
@@ -402,42 +410,47 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     return labelCode3;
 }
 
-Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized){
+Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized)
+{
     char *pointer = malloc(10);
-    char *offset ; malloc(3);
-    sprintf(pointer,"%s",RSP);
+    char *offset = malloc(3);
+    sprintf(pointer, "%s", RSP);
     sprintf(offset, "%s", "4");
 
-    Code *updatesRSP = createCode(ADDI, pointer, pointer,offset,NULL,pointer,NULL);
+    Code *updatesRSP = createCode(ADDI, pointer, pointer, offset, NULL, pointer, NULL);
 
-    if(initialized==1){
+    if (initialized == 1)
+    {
+        SymbolTableEntry *identifierEntry = findEntryInStack(getGlobalStack(), identifier->data->value.valueString);
 
         char *pointer2 = malloc(10);
-        sprintf(pointer2,"%s",RFP);
-        Code *attribution = createCode(STOREAI, pointer2, init->code->res,NULL, NULL,pointer2, identifier->entryOffset);
+        sprintf(pointer2, "%s", RFP);
+        char *identifierOffset = malloc(10);
+        sprintf(identifierOffset, "%d", identifierEntry->entryOffset);
+        Code *attribution = createCode(STOREAI, pointer2, init->code->res, NULL, NULL, pointer2, identifierOffset);
         updatesRSP = joinCodes(updatesRSP, init->code);
-        updatesRSP = joinCodes(updatesRSP,attribution);
+        updatesRSP = joinCodes(updatesRSP, attribution);
         prev->code = updatesRSP;
-
-        }
-    else if(initialized==0){
-        prev->code = updatesRSP;
-        }
-     return updatesRSP;
-
     }
-
-Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
-{
-    Code *code = createCode(op, child1->local, child2->local, NULL, dest, NULL);
-    return joinCodes(joinCodes(child1->code, child2->code), code);
+    else if (initialized == 0)
+    {
+        prev->code = updatesRSP;
+    }
+    return updatesRSP;
 }
 
-Code *generateUnaryExpression(Operation operation, Code *op)
-{
-    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
-    return joinCodes(code, op);
-}
+
+// Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
+// {
+//     Code *code = createCode(op, child1->code->label, child2->code->label, NULL, dest, NULL);
+//     return joinCodes(joinCodes(child1->code, child2->code), code);
+// }
+
+// Code *generateUnaryExpression(Operation operation, Code *op)
+// {
+//     Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
+//     return joinCodes(code, op);
+// }
 
 char *generate(Node *node)
 {
@@ -456,9 +469,9 @@ char *generate(Node *node)
     next = generate(node->next);
 
     // Code *finalCode;
-    OperationType nodeOperation = getOperationFromTokenData(node->data);
+    // OperationType nodeOperation = getOperationFromTokenData(node->data);
 
-    SymbolTableEntry *nodeEntry = findEntryInStack(getGlobalStack(), node->data->label);
+    // SymbolTableEntry *nodeEntry = findEntryInStack(getGlobalStack(), node->data->label);
 
     // if (nodeEntry == NULL)
     // {
