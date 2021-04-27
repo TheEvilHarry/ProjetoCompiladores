@@ -45,7 +45,7 @@ Code *generateEmptyCode(char *local);
 Code *joinCodes(Code *code1, Code *code2);
 
 Code *generateInitialInstructions();
-Code *generateAttributionCode(Node *attr, Node *exp);
+Code *generateAttributionCode( TokenData *identifier, Node *exp);
 Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr);
 Code *generateLabelCode(char *label);
 Code *generateTrueConditionalJump(char *label);

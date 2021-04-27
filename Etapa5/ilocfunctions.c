@@ -129,19 +129,21 @@ Code *generateInitialInstructions()
     // return RFPDefault;
 }
 
-Code *generateAttributionCode(Node *attr, Node *exp)
+Code *generateAttributionCode(TokenData *identifier, Node *exp)
 {
     Code *code;
     SymbolTableStack *scope = getGlobalStack(); //CHECK THISSSSSSSS <================
+    SymbolTableEntry *entry = findEntryInStack(getGlobalStack(),identifier->value.valueString);
+
     if (scope->isGlobal == 1)
     {
         char pointer[4] = RBSS;
-        code = createCode(STOREAI, pointer, NULL, NULL, NULL, NULL, NULL);
+        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entry->entryOffset);
     }
     else
     {
         char pointer[4] = RFP;
-        code = createCode(STOREAI, pointer, NULL, NULL, NULL, NULL, NULL);
+        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entry->entryOffset);
     }
 
     return joinCodes(exp->code, code);

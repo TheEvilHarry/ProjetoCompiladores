@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "parserUtils.h"
 
+
 Type currentFunctionReturn = TYPE_UNDEFINED;
 
 Node *program_globalVariable_program(Node *globalVariable, Node *program)
@@ -186,6 +187,8 @@ Node *attribution_TK_IDENTIFICADOR_equalSign_expression(TokenData *p_TK_IDENTIFI
 
   addChild(node, expression);
   addChild(node, createNode(p_TK_IDENTIFICADOR, identifierType));
+  Code *attrCode = generateAttributionCode(p_TK_IDENTIFICADOR, expression);
+  node->code = attrCode;
   return node;
 }
 Node *attribution_vectorIdentifier_equalSign_expression(Node *vectorIdentifier, void *equalSign, Node *expression)
@@ -290,6 +293,8 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
   addChild(node, commandBlockEnd);
   addChild(node, p_else);
 
+  Code *ifCode = generateIfCode(expression, commandBlockEnd, p_else);
+  node->code = ifCode;
 
   return node;
 }
@@ -323,6 +328,8 @@ Node *while_TK_PR_WHILE_openingParenthesis_expression_closingParenthesis_TK_PR_D
 
   addChild(node, expression);
   addChild(node, commandBlockEnd);
+  Code *whileCode = generateWhileCode(expression, commandBlockEnd);
+  node->code=whileCode;
   return node;
 }
 
