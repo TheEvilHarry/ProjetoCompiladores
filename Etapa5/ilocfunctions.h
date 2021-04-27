@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "symbolTable.h"
+#include "ast.h"
 
 #define MAXLABELSIZE 15
 #define MAXREGISTERSIZE 15

@@ -1,4 +1,4 @@
-#include "ast.h"
+#include "ilocfunctions.h"
 
 extern int get_line_number(void);
 
