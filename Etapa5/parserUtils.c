@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "parserUtils.h"
 
-
 Type currentFunctionReturn = TYPE_UNDEFINED;
 
 Node *program_globalVariable_program(Node *globalVariable, Node *program)
@@ -329,7 +328,7 @@ Node *while_TK_PR_WHILE_openingParenthesis_expression_closingParenthesis_TK_PR_D
   addChild(node, expression);
   addChild(node, commandBlockEnd);
   Code *whileCode = generateWhileCode(expression, commandBlockEnd);
-  node->code=whileCode;
+  node->code = whileCode;
   return node;
 }
 
@@ -372,7 +371,6 @@ Node *expression_orLogicalExpression_questionMark_expression_colon_expression(
     void *colon,
     Node *secondExpression)
 {
-
   if (orLogicalExpression->type == TYPE_STRING)
   {
     throwStringToXError(NULL);
@@ -387,6 +385,8 @@ Node *expression_orLogicalExpression_questionMark_expression_colon_expression(
   addChild(node, firstExpression);
   addChild(node, secondExpression);
 
+  addCodeToNode(node, generateTernaryCode(orLogicalExpression, firstExpression, secondExpression));
+
   return node;
 }
 Node *expression_orLogicalExpression(Node *orLogicalExpression) { return orLogicalExpression; }
@@ -397,6 +397,8 @@ Node *orLogicalExpression_orLogicalExpression_orLogicalOperator_andLogicalExpres
   addChild(orLogicalOperator, orLogicalExpression);
   addChild(orLogicalOperator, andLogicalExpression);
 
+  addCodeToNode(orLogicalOperator, generateBinaryExpression(OR, orLogicalExpression, andLogicalExpression, generateRegisterName()));
+
   return orLogicalOperator;
 }
 Node *orLogicalExpression_andLogicalExpression(Node *andLogicalExpression) { return andLogicalExpression; }
@@ -406,6 +408,8 @@ Node *andLogicalExpression_andLogicalExpression_andLogicalOperator_bitwiseOrExpr
   addTypeToNode(andLogicalOperator, inferType(andLogicalExpression->type, bitwiseOrExpression->type));
   addChild(andLogicalOperator, andLogicalExpression);
   addChild(andLogicalOperator, bitwiseOrExpression);
+
+  addCodeToNode(andLogicalOperator, generateBinaryExpression(AND, andLogicalExpression, bitwiseOrExpression, generateRegisterName()));
 
   return andLogicalOperator;
 }

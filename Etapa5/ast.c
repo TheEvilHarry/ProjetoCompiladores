@@ -11,6 +11,8 @@ Node *createNode(TokenData *data, Type type)
   node->numberOfChildren = 0;
   node->type = type;
 
+  node->code = NULL;
+
   node->next = NULL;
 
   return node;
@@ -24,6 +26,8 @@ Node *createCustomLabelNode(char *label, int line, Type type)
   node->data = data;
   node->numberOfChildren = 0;
   node->type = type;
+
+  node->code = NULL;
 
   node->next = NULL;
   // node->local= gen
@@ -75,6 +79,11 @@ Node *addTypeToNode(Node *node, Type type)
     node->type = type;
     return node;
   }
+}
+
+Node *addCodeToNode(Node *node, Code *code)
+{
+  node->code = code;
 }
 
 void exportAST(Node *node)

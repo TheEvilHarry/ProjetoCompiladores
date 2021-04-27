@@ -49,6 +49,8 @@ int setOffset(char *symbol, int *scope)
 
 Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
 {
+    printf("Creating code for operation %d\n", op);
+
     Code *code = (Code *)malloc(sizeof(Code));
     code->opCode = op;
     code->arg1 = arg1;
@@ -103,17 +105,16 @@ Code *joinCodes(Code *code1, Code *code2)
     return code2;
 }
 
-
-Code * generateReturnCode(Node* child, Node *parent, char *label){
-
+Code *generateReturnCode(Node *child, Node *parent, char *label)
+{
 
     char *rfp = malloc(4);
     char *offset = malloc(4);
-    sprintf(rfp,"%s",RFP);
-    sprintf(rfp,"%s",offset);
-    Code *returnCode = createCode(STOREAI,rfp,child->code->res,NULL,NULL,rfp,offset);
+    sprintf(rfp, "%s", RFP);
+    sprintf(rfp, "%s", offset);
+    Code *returnCode = createCode(STOREAI, rfp, child->code->res, NULL, NULL, rfp, offset);
     Code *jumpCode = generateTrueConditionalJump(label);
-    jumpCode = joinCodes(returnCode,jumpCode);
+    jumpCode = joinCodes(returnCode, jumpCode);
     parent->code = joinCodes(child->code, jumpCode);
     return parent->code;
 }
@@ -131,19 +132,27 @@ Code *generateInitialInstructions()
 
 Code *generateAttributionCode(TokenData *identifier, Node *exp)
 {
+    printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
     Code *code;
     SymbolTableStack *scope = getGlobalStack(); //CHECK THISSSSSSSS <================
-    SymbolTableEntry *entry = findEntryInStack(getGlobalStack(),identifier->value.valueString);
+    SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), identifier->value.valueString);
 
     if (scope->isGlobal == 1)
     {
+        printf("Scope is global\n");
         char pointer[4] = RBSS;
-        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entry->entryOffset);
+        char *entryOffsetAsString = malloc(4);
+        sprintf(entryOffsetAsString, "%d", entry->entryOffset);
+        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString);
     }
     else
     {
+        printf("Scope is not global\n");
         char pointer[4] = RFP;
-        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entry->entryOffset);
+        char *entryOffsetAsString = malloc(4);
+        sprintf(entryOffsetAsString, "%d", entry->entryOffset);
+        printf("Before function call\n");
+        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString);
     }
 
     return joinCodes(exp->code, code);
@@ -158,7 +167,7 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = expr->code->res;
-    Code *ifCode = createCBRCode(expr, reg, label1, label2,label1, trueExpr);
+    Code *ifCode = createCBRCode(expr, reg, label1, label2, label1, trueExpr);
 
     Code *trueJump = generateTrueConditionalJump(label3);
     Code *labelCode2 = generateLabelCode(label2);
@@ -192,113 +201,122 @@ Code *generateTrueConditionalJump(char *label)
 Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
 {
 
-
     if (strcmp(identifier, "main") == 0)
     {
         return generateMainFunctionCode(header, identifier, code, commands, labelReturn);
     }
-        return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
- }
+    return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
+}
 
-Code* generateRegularFunctionCode(Node* header, char* identifier, Code* code, Node* commands, char* labelReturn){
-        char *register1 = generateRegisterName();
-        char *register2 = generateRegisterName();
-        char *register3 = generateRegisterName();
-        char rfp[4];
-        char offsetZero[2];
-        char offsetFour[2];
-        char offsetEight[2];
-        sprintf(rfp,"%s",RFP);
-        sprintf(offsetZero,"%s","0");
-        sprintf(offsetFour,"%s","4");
-        sprintf(offsetEight,"%s","8");
+Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
+{
+    char *register1 = generateRegisterName();
+    char *register2 = generateRegisterName();
+    char *register3 = generateRegisterName();
+    char rfp[4];
+    char offsetZero[2];
+    char offsetFour[2];
+    char offsetEight[2];
+    sprintf(rfp, "%s", RFP);
+    sprintf(offsetZero, "%s", "0");
+    sprintf(offsetFour, "%s", "4");
+    sprintf(offsetEight, "%s", "8");
 
-        Code *labelCode = generateLabelCode(labelReturn);
-        Code *loadCode1 = createCode(LOADAI, NULL, rfp, offsetZero, NULL,register1, NULL);
-        loadCode1 = joinCodes(labelCode, loadCode1);
+    Code *labelCode = generateLabelCode(labelReturn);
+    Code *loadCode1 = createCode(LOADAI, NULL, rfp, offsetZero, NULL, register1, NULL);
+    loadCode1 = joinCodes(labelCode, loadCode1);
 
-        Code *loadCode2 = createCode(LOADAI, NULL, rfp, offsetFour, NULL,register2, NULL);
-        loadCode2 = joinCodes(loadCode1,loadCode2);
+    Code *loadCode2 = createCode(LOADAI, NULL, rfp, offsetFour, NULL, register2, NULL);
+    loadCode2 = joinCodes(loadCode1, loadCode2);
 
-        Code *loadCode3 = createCode(LOADAI, NULL, rfp, offsetEight, NULL,register3,NULL);
-        loadCode3 = joinCodes(loadCode2,loadCode3);
+    Code *loadCode3 = createCode(LOADAI, NULL, rfp, offsetEight, NULL, register3, NULL);
+    loadCode3 = joinCodes(loadCode2, loadCode3);
 
-        Code *i2iCode = generateI2ICode(register2,rfp);
-        i2iCode = joinCodes(loadCode3,i2iCode);
+    Code *i2iCode = generateI2ICode(register2, rfp);
+    i2iCode = joinCodes(loadCode3, i2iCode);
 
-        Code* i2iCode2 = generateI2ICode(register3,rfp);
-        i2iCode2 = joinCodes(i2iCode, i2iCode2);
+    Code *i2iCode2 = generateI2ICode(register3, rfp);
+    i2iCode2 = joinCodes(i2iCode, i2iCode2);
 
-        Code* jump = generateJump(register1);
-        jump = joinCodes(i2iCode2, jump);
+    Code *jump = generateJump(register1);
+    jump = joinCodes(i2iCode2, jump);
 
-        Code *body;
-        if(commands != NULL){
-            body = joinCodes(commands->code,jump);
-         }
-        else{
-            body = joinCodes(NULL,jump);
-            }
-        Code *function = joinCodes(header->code,body);
+    Code *body;
+    if (commands != NULL)
+    {
+        body = joinCodes(commands->code, jump);
+    }
+    else
+    {
+        body = joinCodes(NULL, jump);
+    }
+    Code *function = joinCodes(header->code, body);
 
-        return joinCodes(code,function);
+    return joinCodes(code, function);
+}
 
+Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
+{
+    Code *jumpICode = generateTrueConditionalJump(identifier);
+    Code *ending = code;
+    Code *haltCode = generateHaltCommand();
+    Code *body;
+
+    while (ending->prev)
+    {
+        ending = ending->prev;
+    }
+    jumpICode->next = ending->next;
+    jumpICode->prev = ending;
+
+    if (ending->next != NULL)
+    {
+        ending->next->prev = jumpICode;
+    }
+    else
+    {
+        code = jumpICode;
     }
 
-Code *generateMainFunctionCode(Node* header, char* identifier, Code* code, Node* commands, char* labelReturn){
-        Code* jumpICode = generateTrueConditionalJump(identifier);
-        Code *ending = code;
-        Code *haltCode = generateHaltCommand();
-        Code *body;
+    ending->next = jumpICode;
 
-        while(ending->prev){
-            ending = ending->prev;
-            }
-        jumpICode->next = ending->next;
-        jumpICode->prev = ending;
-
-        if(ending->next != NULL){
-            ending->next->prev = jumpICode;
-            }
-        else{
-            code = jumpICode;
-            }
-
-        ending->next=jumpICode;
-
-        if(commands !=NULL){
-            body = joinCodes(commands->code,haltCode);
-            }
-        else{
-            body = joinCodes(NULL, haltCode);}
-
-        Code *function = joinCodes(header->code, body);
-        return joinCodes(code, function);
+    if (commands != NULL)
+    {
+        body = joinCodes(commands->code, haltCode);
+    }
+    else
+    {
+        body = joinCodes(NULL, haltCode);
     }
 
-Code* generateJump(char * reg){
+    Code *function = joinCodes(header->code, body);
+    return joinCodes(code, function);
+}
+
+Code *generateJump(char *reg)
+{
     return createCode(JUMP, NULL, NULL, NULL, NULL, reg, NULL);
-    }
+}
 
+Code *generateHaltCommand()
+{
 
-Code * generateHaltCommand(){
-
-    Code *code = createCode(HALT,NULL,NULL,NULL,NULL,NULL,NULL);
+    Code *code = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL);
     return code;
+}
 
-    }
-
-Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel ,Node *trueExpr)
+Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel, Node *trueExpr)
 {
 
     Code *cbr = createCode(CBR, NULL, r1, NULL, NULL, l1, l2);
-    if(followingLabel !=NULL){
+    if (followingLabel != NULL)
+    {
         Code *labelCode1 = generateLabelCode(followingLabel);
-        labelCode1 = joinCodes(cbr,labelCode1);
+        labelCode1 = joinCodes(cbr, labelCode1);
         labelCode1 = joinCodes(expr->code, labelCode1);
         labelCode1 = joinCodes(labelCode1, trueExpr->code);
         return labelCode1;
-                }
+    }
 
     cbr = joinCodes(expr->code, cbr);
     cbr = joinCodes(cbr, trueExpr->code);
@@ -428,18 +446,17 @@ Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initial
     return updatesRSP;
 }
 
+Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
+{
+    Code *code = createCode(op, NULL, child1->code->label, child2->code->label, NULL, dest, NULL);
+    return joinCodes(joinCodes(child1->code, child2->code), code);
+}
 
-// Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
-// {
-//     Code *code = createCode(op, child1->code->label, child2->code->label, NULL, dest, NULL);
-//     return joinCodes(joinCodes(child1->code, child2->code), code);
-// }
-
-// Code *generateUnaryExpression(Operation operation, Code *op)
-// {
-//     Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
-//     return joinCodes(code, op);
-// }
+Code *generateUnaryExpression(Operation operation, Code *operand)
+{
+    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
+    return joinCodes(code, operand);
+}
 
 char *generate(Node *node)
 {

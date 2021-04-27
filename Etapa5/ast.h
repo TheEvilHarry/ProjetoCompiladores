@@ -10,6 +10,8 @@ Node *addNext(Node *node, Node *next);
 
 Node *addTypeToNode(Node *node, Type type);
 
+Node *addCodeToNode(Node *node, Code *code);
+
 void exportAST(Node *node);
 
 void freeAST(Node *node);
