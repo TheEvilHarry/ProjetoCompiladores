@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "ast.h"
 
+
 #define MAXLABELSIZE 15
 #define MAXREGISTERSIZE 15
 #define RBSS "rbss" //register for global variables
@@ -54,7 +55,7 @@ Code *generateI2ICode(char *r1, char *r2);
 Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse);
 Code *generateWhileCode(Node *expr, Node *commands);
 Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands);
-Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest);
+Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1, Node *child2);
 Code *generateUnaryExpression(Operation operation, Code *op);
 Code *generateHaltCommand();
 Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);

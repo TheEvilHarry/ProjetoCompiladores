@@ -84,6 +84,37 @@ TokenData *createCharLiteralToken(int line, char *value)
   return token;
 }
 
+Operation getOperation(char *op){
+
+
+    if(strcmp(op, "+")==0)
+        return ADD;
+    else if(strcmp(op,"-")==0)
+        return SUB;
+    else if(strcmp(op,"*")==0)
+        return MULT;
+    else if(strcmp(op,"/")==0)
+        return DIV;
+    else if(strcmp(op,"&&")==0)
+        return AND;
+    else if(strcmp(op,"||")==0)
+        return OR;
+    else if(strcmp(op,"<")==0)
+        return CMP_LT;
+    else if(strcmp(op,">")==0)
+        return CMP_GT;
+    else if(strcmp(op,"<=")==0)
+        return CMP_LE;
+    else if(strcmp(op,">=")==0)
+        return CMP_GE;
+    else if(strcmp(op,"==")==0)
+        return CMP_EQ;
+    else if(strcmp(op,"!=")==0)
+        return CMP_NE;
+    else return NOP;
+
+    }
+
 TokenData *createStringLiteralToken(int line, char *value)
 {
   TokenData *token = malloc(sizeof(TokenData));

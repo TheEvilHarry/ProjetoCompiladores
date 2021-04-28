@@ -132,4 +132,6 @@ TokenData *createCharLiteralToken(int line, char *value);
 
 TokenData *createStringLiteralToken(int line, char *value);
 
+Operation getOperation(char *op);
+
 void freeToken(TokenData *data);
