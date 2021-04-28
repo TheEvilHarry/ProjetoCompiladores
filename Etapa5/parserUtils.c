@@ -76,7 +76,7 @@ Node *value_TK_LIT_INT(TokenData *p_TK_LIT_INT)
   char literalValue[16];
   sprintf(literalValue, "%d", p_TK_LIT_INT->value.valueInt);
   // printf("Integer literal rule created value\n");
-  Code *code = createCode(LOADI, literalRegister, literalValue, NULL, NULL, literalRegister, NULL);
+  Code *code = createCode(LOADI, literalRegister, literalValue, NULL, NULL, literalRegister, NULL, NULL);
   // printf("Integer literal rule created code\n");
   addCodeToNode(node, code);
   // printf("Integer literal rule added code to node\n");

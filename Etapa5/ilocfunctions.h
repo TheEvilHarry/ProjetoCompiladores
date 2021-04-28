@@ -41,7 +41,7 @@ char *generateLabelName();
 char *generateRegisterName();
 int setOffset(char *symbol, int *scope);
 
-Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2);
+Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2, char* label);
 Code *generateEmptyCode(char *local);
 Code *joinCodes(Code *code1, Code *code2);
 

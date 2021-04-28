@@ -128,7 +128,7 @@ Code *generateReturnCode(Node *child, Node *parent, char *label)
     char *offset = malloc(4);
     sprintf(rfp, "%s", RFP);
     sprintf(rfp, "%s", offset);
-    Code *returnCode = createCode(STOREAI, rfp, child->code->res, NULL, NULL, rfp, offset);
+    Code *returnCode = createCode(STOREAI, rfp, child->code->res, NULL, NULL, rfp, offset,NULL);
     Code *jumpCode = generateTrueConditionalJump(label);
     jumpCode = joinCodes(returnCode, jumpCode);
     parent->code = joinCodes(child->code, jumpCode);
@@ -165,7 +165,7 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         char pointer[4] = RBSS;
         char *entryOffsetAsString = malloc(4);
         sprintf(entryOffsetAsString, "%d", entry->entryOffset);
-        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString);
+        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString, NULL);
     }
     else
     {
@@ -180,7 +180,7 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         {
             // printf("Before function call\n");
         }
-        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString);
+        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString, NULL);
     }
 
     addToGlobalCodeList(code);
@@ -216,13 +216,13 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
 
 Code *generateLabelCode(char *label)
 {
-    Code *code = createCode(NOP, NULL, label, NULL, NULL, NULL, NULL);
+    Code *code = createCode(NOP, NULL, label, NULL, NULL, NULL, NULL,NULL);
     return code;
 }
 
 Code *generateTrueConditionalJump(char *label)
 {
-    Code *jumpi = createCode(JUMPI, NULL, NULL, NULL, NULL, label, NULL);
+    Code *jumpi = createCode(JUMPI, NULL, NULL, NULL, NULL, label, NULL, NULL);
     return jumpi;
 }
 
@@ -253,13 +253,13 @@ Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, No
     sprintf(offsetEight, "%s", "8");
 
     Code *labelCode = generateLabelCode(labelReturn);
-    Code *loadCode1 = createCode(LOADAI, NULL, rfp, offsetZero, NULL, register1, NULL);
+    Code *loadCode1 = createCode(LOADAI, NULL, rfp, offsetZero, NULL, register1, NULL,NULL);
     loadCode1 = joinCodes(labelCode, loadCode1);
 
-    Code *loadCode2 = createCode(LOADAI, NULL, rfp, offsetFour, NULL, register2, NULL);
+    Code *loadCode2 = createCode(LOADAI, NULL, rfp, offsetFour, NULL, register2, NULL,NULL);
     loadCode2 = joinCodes(loadCode1, loadCode2);
 
-    Code *loadCode3 = createCode(LOADAI, NULL, rfp, offsetEight, NULL, register3, NULL);
+    Code *loadCode3 = createCode(LOADAI, NULL, rfp, offsetEight, NULL, register3, NULL, NULL);
     loadCode3 = joinCodes(loadCode2, loadCode3);
 
     Code *i2iCode = generateI2ICode(register2, rfp);
@@ -325,20 +325,20 @@ Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node 
 
 Code *generateJump(char *reg)
 {
-    return createCode(JUMP, NULL, NULL, NULL, NULL, reg, NULL);
+    return createCode(JUMP, NULL, NULL, NULL, NULL, reg, NULL, NULL);
 }
 
 Code *generateHaltCommand()
 {
 
-    Code *code = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL);
+    Code *code = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     return code;
 }
 
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel, Node *trueExpr)
 {
 
-    Code *cbr = createCode(CBR, NULL, r1, NULL, NULL, l1, l2);
+    Code *cbr = createCode(CBR, NULL, r1, NULL, NULL, l1, l2, NULL);
     if (followingLabel != NULL)
     {
         Code *labelCode1 = generateLabelCode(followingLabel);
@@ -355,7 +355,7 @@ Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLab
 
 Code *generateI2ICode(char *r1, char *r2)
 {
-    Code *code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL);
+    Code *code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL, NULL);
 }
 
 Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
@@ -466,7 +466,7 @@ Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initial
     sprintf(pointer, "%s", RSP);
     sprintf(offset, "%s", "4");
 
-    Code *updatesRSP = createCode(ADDI, pointer, pointer, offset, NULL, pointer, NULL);
+    Code *updatesRSP = createCode(ADDI, pointer, pointer, offset, NULL, pointer, NULL, NULL);
 
     if (initialized == 1)
     {
@@ -476,7 +476,7 @@ Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initial
         sprintf(pointer2, "%s", RFP);
         char *identifierOffset = malloc(10);
         sprintf(identifierOffset, "%d", identifierEntry->entryOffset);
-        Code *attribution = createCode(STOREAI, pointer2, init->code->res, NULL, NULL, pointer2, identifierOffset);
+        Code *attribution = createCode(STOREAI, pointer2, init->code->res, NULL, NULL, pointer2, identifierOffset, NULL);
         updatesRSP = joinCodes(updatesRSP, init->code);
         updatesRSP = joinCodes(updatesRSP, attribution);
         prev->code = updatesRSP;
@@ -495,7 +495,7 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
     char* result = generateRegisterName();
     Operation operation = getOperation(binaryOperator);
 
-    Code* code = createCode(operation,NULL,reg1,reg2,NULL,result,NULL);
+    Code* code = createCode(operation,NULL,reg1,reg2,NULL,result,NULL, NULL);
 
     if(operation!=AND && operation!=OR){
         child1->code = joinCodes(child1->code, child2->code);
@@ -503,10 +503,10 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
         return child1->code;
         }
      else if(operation==AND){
-        Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL);
+        Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL, NULL);
         char* jumpLabel = generateLabelName();
         char* dontJumpLabel=generateLabelName();
-        Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,dontJumpLabel,jumpLabel);
+        Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,dontJumpLabel,jumpLabel, NULL);
 
         cbrCode = joinCodes(i2iCode,cbrCode);
         Code* labelDontJump = generateLabelCode(dontJumpLabel);
@@ -524,10 +524,10 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
         return parent->code;
         }
      else if(operation == OR){
-         Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL);
+         Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL, NULL);
          char* jumpLabel = generateLabelName();
          char* dontJumpLabel=generateLabelName();
-         Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,jumpLabel,dontJumpLabel);
+         Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,jumpLabel,dontJumpLabel,NULL);
          cbrCode = joinCodes(i2iCode,cbrCode);
 
          Code* labelDontJump = generateLabelCode(dontJumpLabel);
@@ -548,7 +548,7 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
 
 Code *generateUnaryExpression(Operation operation, Code *operand)
 {
-    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL);
+    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     return joinCodes(code, operand);
 }
 
