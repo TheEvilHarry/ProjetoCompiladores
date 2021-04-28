@@ -348,7 +348,11 @@ Node *while_TK_PR_WHILE_openingParenthesis_expression_closingParenthesis_TK_PR_D
   addChild(node, expression);
   addChild(node, commandBlockEnd);
 
-  // addCodeToNode(node, generateWhileCode(expression, commandBlockEnd));
+  Code *code = generateWhileCode(expression, commandBlockEnd);
+
+  addCodeToNode(node, code);
+
+  addToGlobalNodeList(node);
 
   return node;
 }
