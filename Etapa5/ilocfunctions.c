@@ -219,7 +219,7 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
 
 Code *generateLabelCode(char *label)
 {
-    Code *code = createCode(NOP, NULL, label, NULL, NULL, NULL, NULL, NULL);
+    Code *code = createCode(NOP, NULL, NULL, NULL, NULL, NULL, NULL, label);
     return code;
 }
 
@@ -338,24 +338,6 @@ Code *generateHaltCommand()
     return code;
 }
 
-Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel, Node *trueExpr)
-{
-
-    Code *cbr = createCode(CBR, NULL, r1, NULL, NULL, l1, l2, NULL);
-    if (followingLabel != NULL)
-    {
-        Code *labelCode1 = generateLabelCode(followingLabel);
-        labelCode1 = joinCodes(cbr, labelCode1);
-        labelCode1 = joinCodes(expr->code, labelCode1);
-        labelCode1 = joinCodes(labelCode1, trueExpr->code);
-        return labelCode1;
-    }
-
-    cbr = joinCodes(expr->code, cbr);
-    cbr = joinCodes(cbr, trueExpr->code);
-    return cbr;
-}
-
 Code *generateI2ICode(char *r1, char *r2)
 {
     Code *code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL, NULL);
@@ -394,6 +376,24 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
     return cbr;
 }
 
+Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel, Node *trueExpr)
+{
+
+    Code *cbr = createCode(CBR, NULL, r1, NULL, NULL, l1, l2, NULL);
+    if (followingLabel != NULL)
+    {
+        Code *labelCode1 = generateLabelCode(followingLabel);
+        labelCode1 = joinCodes(cbr, labelCode1);
+        labelCode1 = joinCodes(expr->code, labelCode1);
+        labelCode1 = joinCodes(labelCode1, trueExpr->code);
+        return labelCode1;
+    }
+
+    cbr = joinCodes(expr->code, cbr);
+    cbr = joinCodes(cbr, trueExpr->code);
+    return cbr;
+}
+
 Code *generateWhileCode(Node *expr, Node *commands)
 {
     char *label1 = generateLabelName();
@@ -402,11 +402,13 @@ Code *generateWhileCode(Node *expr, Node *commands)
 
     //TODO:
     //Where are we getting the result of if expressions?
-    char *reg = expr->code->res;
-    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
 
     Code *labelCode = generateLabelCode(label1);
     labelCode = joinCodes(labelCode, expr->code);
+
+    char *reg = expr->code->res;
+    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
+    exprCode = joinCodes(labelCode, exprCode);
 
     Code *labelCode2 = generateLabelCode(label2);
     labelCode2 = joinCodes(exprCode, labelCode2);
