@@ -56,7 +56,7 @@ int setOffset(char *symbol, int *scope)
     return 0;
 }
 
-Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
+Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2, char* label)
 {
     if (DEBUG == 1)
     {
@@ -75,7 +75,11 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
     code->prev = NULL;
     code->res = (dest1 != NULL && dest2 == NULL) ? dest1 : NULL;
 
-    code->label = generateLabelName();
+    if(label!=NULL){
+       code->label = label;
+     }
+     else if(label==NULL){
+        code->label = generateLabelName();}
 
     return code;
 } //CHECK WITH PEDRO IF THIS IS RIGHT?!

@@ -463,7 +463,7 @@ Node *equalityExpression_equalityExpression_equalityOperator_comparisonExpressio
   addTypeToNode(equalityOperator, inferType(equalityExpression->type, comparisonExpression->type));
   addChild(equalityOperator, equalityExpression);
   addChild(equalityOperator, comparisonExpression);
-  Code *code = generateBinaryExpression(equalityOperator->data->value.valueString, equalityOperator,, equalityExpression, comparisonExpression);
+  Code *code = generateBinaryExpression(equalityOperator->data->value.valueString, equalityOperator, equalityExpression, comparisonExpression);
   return equalityOperator;
 }
 Node *equalityExpression_comparisonExpression(Node *comparisonExpression) { return comparisonExpression; }
