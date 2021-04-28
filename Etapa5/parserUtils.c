@@ -5,66 +5,18 @@
 
 Type currentFunctionReturn = TYPE_UNDEFINED;
 
-NodeList *globalNodeList = NULL;
-
-NodeList *addToGlobalNodeList(Node *node)
-{
-  NodeList *nodeList = createNodeList(node);
-
-  if (globalNodeList == NULL)
-  {
-    globalNodeList = nodeList;
-  }
-  else
-  {
-    NodeList *aux = globalNodeList;
-    while (aux->next != NULL)
-    {
-      aux = aux->next;
-    }
-
-    aux->next = nodeList;
-  }
-
-  return globalNodeList;
-}
-
-NodeList *createNodeList(Node *node)
-{
-  NodeList *newNodeList = (NodeList *)malloc(sizeof(NodeList));
-  newNodeList->node = node;
-  newNodeList->next = NULL;
-  newNodeList->previous = NULL;
-
-  return newNodeList;
-}
-
-void exportCodeFromNodeList(NodeList *nodeListElem)
-{
-  if (nodeListElem != NULL)
-  {
-    // Code *aux = nodeListElem while (m)
-    printf("%s\n", generateILOCFromCode(nodeListElem->node->code));
-    exportCodeFromNodeList(nodeListElem->next);
-  }
-}
-
 Node *program_globalVariable_program(Node *globalVariable, Node *program)
 {
-  // printf("program_globalVariable_program\n");
-  // exportCodeFromNodeList(globalNodeList);
   return program;
 }
 Node *program_functionDefinition_program(Node *functionDefinition, Node *program)
 {
-  // printf("program_functionDefinition_program\n");
   addNext(functionDefinition, program);
-  // exportCodeFromNodeList(globalNodeList);
   return functionDefinition;
 }
 Node *program_empty()
 {
-  exportCodeFromNodeList(globalNodeList);
+  exportCodeList(getGlobalCodeList());
   return NULL;
 }
 
@@ -130,6 +82,7 @@ Node *value_TK_LIT_INT(TokenData *p_TK_LIT_INT)
   // printf("Integer literal rule added code to node\n");
   addToGlobalNodeList(node);
   // printf("Integer literal rule end\n");
+  addToGlobalCodeList(code);
 
   return node;
 }

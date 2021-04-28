@@ -66,3 +66,20 @@ Code *generateReturnCode(Node *child, Node *parent, char *label);
 
 char *generateILOCFromCode(Code *code);
 char *getOperationName(Operation operation);
+
+typedef struct node_list_t
+{
+  Node *node;
+  struct node_list_t *previous;
+  struct node_list_t *next;
+} NodeList;
+
+NodeList *getGlobalNodeList();
+Code *getGlobalCodeList();
+NodeList *createNodeList(Node *node);
+void exportCodeFromNodeList(NodeList *node);
+NodeList *addToGlobalNodeList(Node *node);
+
+void exportCodeList(Code *code);
+
+Code *addToGlobalCodeList(Code *code);

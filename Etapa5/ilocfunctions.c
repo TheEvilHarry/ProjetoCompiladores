@@ -22,6 +22,9 @@ int RSPOffset = 0;
 int currentLabel = 1;
 int currentRegister = 0;
 
+NodeList *globalNodeList = NULL;
+Code *globalCodeList = NULL;
+
 char *generateLabelName()
 {
     char temp[32];
@@ -175,6 +178,8 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         }
         code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString);
     }
+
+    addToGlobalCodeList(code);
 
     return joinCodes(exp->code, code);
 }
@@ -648,4 +653,90 @@ char *generateILOCFromCode(Code *code)
     strcpy(instructionLine, tempInstructionLine);
 
     return instructionLine;
+}
+
+NodeList *addToGlobalNodeList(Node *node)
+{
+    NodeList *nodeList = createNodeList(node);
+
+    if (globalNodeList == NULL)
+    {
+        globalNodeList = nodeList;
+    }
+    else
+    {
+        NodeList *aux = globalNodeList;
+        while (aux->next != NULL)
+        {
+            aux = aux->next;
+        }
+
+        aux->next = nodeList;
+    }
+
+    return globalNodeList;
+}
+
+Code *addToGlobalCodeList(Code *code)
+{
+    if (globalCodeList == NULL)
+    {
+        globalCodeList = code;
+    }
+    else
+    {
+        Code *aux = globalCodeList;
+        while (aux->next != NULL)
+        {
+            aux = aux->next;
+        }
+
+        aux->next = code;
+    }
+
+    return globalCodeList;
+}
+
+NodeList *getGlobalNodeList()
+{
+    return globalNodeList;
+}
+
+Code *getGlobalCodeList()
+{
+    return globalCodeList;
+}
+
+NodeList *createNodeList(Node *node)
+{
+    NodeList *newNodeList = (NodeList *)malloc(sizeof(NodeList));
+    newNodeList->node = node;
+    newNodeList->next = NULL;
+    newNodeList->previous = NULL;
+
+    return newNodeList;
+}
+
+void exportCodeFromNodeList(NodeList *nodeListElem)
+{
+    if (nodeListElem != NULL)
+    {
+        Code *aux = nodeListElem->node->code;
+        printf("Code for node %s:\n", nodeListElem->node->data->label);
+        while (aux != NULL)
+        {
+            printf("%s\n", generateILOCFromCode(aux));
+            aux = aux->next;
+        }
+        exportCodeFromNodeList(nodeListElem->next);
+    }
+}
+
+void exportCodeList(Code *code)
+{
+    if (code != NULL)
+    {
+        printf("%s\n", generateILOCFromCode(code));
+        exportCodeList(code->next);
+    }
 }
