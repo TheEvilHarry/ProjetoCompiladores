@@ -84,6 +84,8 @@ Node *addTypeToNode(Node *node, Type type)
 Node *addCodeToNode(Node *node, Code *code)
 {
   node->code = code;
+
+  return node;
 }
 
 void exportAST(Node *node)

@@ -2,6 +2,16 @@
 
 extern int get_line_number(void);
 
+typedef struct node_list_t
+{
+    Node *node;
+    struct node_list_t *previous;
+    struct node_list_t *next;
+} NodeList;
+
+NodeList *createNodeList(Node *node);
+void exportCodeFromNodeList(NodeList *node);
+
 Node *program_globalVariable_program(Node *globalVariable, Node *program);
 Node *program_functionDefinition_program(Node *functionDefinition, Node *program);
 Node *program_empty();

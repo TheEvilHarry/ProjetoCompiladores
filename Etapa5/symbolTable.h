@@ -78,6 +78,8 @@ void addArgumentsToLastDefinedFunction();
 
 void initiateVariableListDeclaration();
 void endVariableListDeclaration(Type type);
+StringList *getVariableListDeclaration();
+void cleanVariableListDeclaration();
 void addVariableToListDeclaration(char *key);
 
 int getSizeFromType(Type type);

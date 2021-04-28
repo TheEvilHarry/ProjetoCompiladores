@@ -1,20 +1,70 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "parserUtils.h"
 
 Type currentFunctionReturn = TYPE_UNDEFINED;
 
+NodeList *globalNodeList = NULL;
+
+NodeList *addToGlobalNodeList(Node *node)
+{
+  NodeList *nodeList = createNodeList(node);
+
+  if (globalNodeList == NULL)
+  {
+    globalNodeList = nodeList;
+  }
+  else
+  {
+    NodeList *aux = globalNodeList;
+    while (aux->next != NULL)
+    {
+      aux = aux->next;
+    }
+
+    aux->next = nodeList;
+  }
+
+  return globalNodeList;
+}
+
+NodeList *createNodeList(Node *node)
+{
+  NodeList *newNodeList = (NodeList *)malloc(sizeof(NodeList));
+  newNodeList->node = node;
+  newNodeList->next = NULL;
+  newNodeList->previous = NULL;
+
+  return newNodeList;
+}
+
+void exportCodeFromNodeList(NodeList *nodeListElem)
+{
+  if (nodeListElem != NULL)
+  {
+    // Code *aux = nodeListElem while (m)
+    printf("%s\n", generateILOCFromCode(nodeListElem->node->code));
+    exportCodeFromNodeList(nodeListElem->next);
+  }
+}
+
 Node *program_globalVariable_program(Node *globalVariable, Node *program)
 {
+  // printf("program_globalVariable_program\n");
+  // exportCodeFromNodeList(globalNodeList);
   return program;
 }
 Node *program_functionDefinition_program(Node *functionDefinition, Node *program)
 {
+  // printf("program_functionDefinition_program\n");
   addNext(functionDefinition, program);
+  // exportCodeFromNodeList(globalNodeList);
   return functionDefinition;
 }
 Node *program_empty()
 {
+  exportCodeFromNodeList(globalNodeList);
   return NULL;
 }
 
@@ -66,7 +116,22 @@ Type type_TK_PR_STRING(void *p_TK_PR_STRING) { return TYPE_STRING; }
 Node *value_TK_LIT_INT(TokenData *p_TK_LIT_INT)
 {
   createLiteralTableEntry(get_line_number(), TYPE_INTEGER, p_TK_LIT_INT);
-  return createNode(p_TK_LIT_INT, TYPE_INTEGER);
+  // printf("Integer literal rule start\n");
+  Node *node = createNode(p_TK_LIT_INT, TYPE_INTEGER);
+  // printf("Integer literal rule created node\n");
+  char *literalRegister = generateRegisterName();
+  // printf("Integer literal rule created register\n");
+  char literalValue[16];
+  sprintf(literalValue, "%d", p_TK_LIT_INT->value.valueInt);
+  // printf("Integer literal rule created value\n");
+  Code *code = createCode(LOADI, literalRegister, literalValue, NULL, NULL, literalRegister, NULL);
+  // printf("Integer literal rule created code\n");
+  addCodeToNode(node, code);
+  // printf("Integer literal rule added code to node\n");
+  addToGlobalNodeList(node);
+  // printf("Integer literal rule end\n");
+
+  return node;
 }
 Node *value_TK_LIT_FLOAT(TokenData *p_TK_LIT_FLOAT)
 {
@@ -96,7 +161,8 @@ Node *value_TK_LIT_STRING(TokenData *p_TK_LIT_STRING)
 
 Node *functionDefinition_functionHeader_functionCommandBlockInit_commandBlockEnd(Node *functionHeader, void *functionCommandBlockInit, Node *commandBlockEnd)
 {
-  return addChild(functionHeader, commandBlockEnd);
+  Node *node = addChild(functionHeader, commandBlockEnd);
+  return node;
 }
 
 Node *functionHeader_functionName_headerParametersBlockInit_headerParametersBlockEnd(Node *functionName, void *headerParametersBlockInit, void *headerParametersBlockEnd)
@@ -108,15 +174,15 @@ Node *functionHeader_functionName_headerParametersBlockInit_headerParametersBloc
 Node *functionName_optionalStatic_type_TK_IDENTIFICADOR(Node *optionalStatic, Type type, TokenData *p_TK_IDENTIFICADOR)
 {
   currentFunctionReturn = type;
+  Node *node = createNode(p_TK_IDENTIFICADOR, type);
   createFunctionTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), type, p_TK_IDENTIFICADOR);
-  return createNode(p_TK_IDENTIFICADOR, type);
+  return node;
 }
 
 void headerParametersBlockInit() { stackScope(); }
 
 Node *headerParameters_optionalConst_type_TK_IDENTIFICADOR_headerParametersList(Node *optionalConst, Type type, TokenData *p_TK_IDENTIFICADOR, Node *headerParametersList)
 {
-  printf("headerParameters rule for parameter %s with type %s\n", p_TK_IDENTIFICADOR->value.valueString, getTypeName(type));
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), type, NULL);
   freeToken(p_TK_IDENTIFICADOR);
   return NULL;
@@ -125,7 +191,6 @@ Node *headerParameters_empty() { return NULL; }
 
 Node *headerParametersList_comma_optionalConst_type_TK_IDENTIFICADOR_headerParametersList(void *comma, Node *optionalConst, Type type, TokenData *p_TK_IDENTIFICADOR, Node *headerParametersList)
 {
-  printf("headerParametersList rule for parameter %s with type %s\n", p_TK_IDENTIFICADOR->value.valueString, getTypeName(type));
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), type, NULL);
   freeToken(p_TK_IDENTIFICADOR);
   return NULL;
@@ -184,10 +249,9 @@ Node *attribution_TK_IDENTIFICADOR_equalSign_expression(TokenData *p_TK_IDENTIFI
 
   Node *node = createCustomLabelNode("=", get_line_number(), inferType(identifierType, expression->type));
 
-  addChild(node, expression);
   addChild(node, createNode(p_TK_IDENTIFICADOR, identifierType));
-  Code *attrCode = generateAttributionCode(p_TK_IDENTIFICADOR, expression);
-  node->code = attrCode;
+  addChild(node, expression);
+  addToGlobalNodeList(addCodeToNode(node, generateAttributionCode(p_TK_IDENTIFICADOR, expression)));
   return node;
 }
 Node *attribution_vectorIdentifier_equalSign_expression(Node *vectorIdentifier, void *equalSign, Node *expression)
@@ -258,7 +322,11 @@ Node *executionControl_TK_PR_RETURN_expression(TokenData *p_TK_PR_RETURN, Node *
     throwReturnError(get_line_number());
   }
 
-  return addChild(createCustomLabelNode("return", get_line_number(), expression->type), expression);
+  Node *node = addChild(createCustomLabelNode("return", get_line_number(), expression->type), expression);
+
+  // addToGlobalNodeList(addCodeToNode(node, generateReturnCode(node->children[0], node, "L0")));
+
+  return node;
 }
 Node *executionControl_TK_PR_BREAK(TokenData *p_TK_PR_BREAK) { return createCustomLabelNode("break", get_line_number(), TYPE_UNDEFINED); }
 Node *executionControl_TK_PR_CONTINUE(TokenData *p_TK_PR_CONTINUE) { return createCustomLabelNode("continue", get_line_number(), TYPE_UNDEFINED); }
@@ -292,8 +360,7 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
   addChild(node, commandBlockEnd);
   addChild(node, p_else);
 
-  Code *ifCode = generateIfCode(expression, commandBlockEnd, p_else);
-  node->code = ifCode;
+  // addCodeToNode(node, generateIfCode(expression, commandBlockEnd, p_else));
 
   return node;
 }
@@ -327,8 +394,9 @@ Node *while_TK_PR_WHILE_openingParenthesis_expression_closingParenthesis_TK_PR_D
 
   addChild(node, expression);
   addChild(node, commandBlockEnd);
-  Code *whileCode = generateWhileCode(expression, commandBlockEnd);
-  node->code = whileCode;
+
+  // addCodeToNode(node, generateWhileCode(expression, commandBlockEnd));
+
   return node;
 }
 
@@ -385,7 +453,7 @@ Node *expression_orLogicalExpression_questionMark_expression_colon_expression(
   addChild(node, firstExpression);
   addChild(node, secondExpression);
 
-  addCodeToNode(node, generateTernaryCode(orLogicalExpression, firstExpression, secondExpression));
+  // addCodeToNode(node, generateTernaryCode(orLogicalExpression, firstExpression, secondExpression));
 
   return node;
 }
@@ -397,7 +465,7 @@ Node *orLogicalExpression_orLogicalExpression_orLogicalOperator_andLogicalExpres
   addChild(orLogicalOperator, orLogicalExpression);
   addChild(orLogicalOperator, andLogicalExpression);
 
-  addCodeToNode(orLogicalOperator, generateBinaryExpression(OR, orLogicalExpression, andLogicalExpression, generateRegisterName()));
+  // addCodeToNode(orLogicalOperator, generateBinaryExpression(OR, orLogicalExpression, andLogicalExpression, generateRegisterName()));
 
   return orLogicalOperator;
 }
@@ -409,7 +477,7 @@ Node *andLogicalExpression_andLogicalExpression_andLogicalOperator_bitwiseOrExpr
   addChild(andLogicalOperator, andLogicalExpression);
   addChild(andLogicalOperator, bitwiseOrExpression);
 
-  addCodeToNode(andLogicalOperator, generateBinaryExpression(AND, andLogicalExpression, bitwiseOrExpression, generateRegisterName()));
+  // addCodeToNode(andLogicalOperator, generateBinaryExpression(AND, andLogicalExpression, bitwiseOrExpression, generateRegisterName()));
 
   return andLogicalOperator;
 }
@@ -530,6 +598,7 @@ Node *variableDeclaration_optionalStatic_optionalConst_type_variable_variableDec
     Node *variableDeclarationList)
 {
   endVariableListDeclaration(type);
+  cleanVariableListDeclaration();
   if (variable == NULL)
   {
     return variableDeclarationList;
@@ -544,6 +613,7 @@ Node *variableDeclaration_optionalStatic_optionalConst_type_variable_variableDec
 Node *variable_TK_IDENTIFICADOR(TokenData *p_TK_IDENTIFICADOR)
 {
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), TYPE_UNDEFINED, NULL);
+  // addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 0);
   return NULL;
 }
 Node *variable_TK_IDENTIFICADOR_TK_OC_LE_value(TokenData *p_TK_IDENTIFICADOR, TokenData *p_TK_OC_LE, Node *value)
@@ -555,8 +625,11 @@ Node *variable_TK_IDENTIFICADOR_TK_OC_LE_value(TokenData *p_TK_IDENTIFICADOR, To
   }
 
   Node *node = createNode(p_TK_OC_LE, TYPE_UNDEFINED); // Verificar inferencia
-  addChild(node, createNode(p_TK_IDENTIFICADOR, TYPE_UNDEFINED));
+  Node *identifierNode = createNode(p_TK_IDENTIFICADOR, TYPE_UNDEFINED);
+  addChild(node, identifierNode);
   addChild(node, value);
+
+  // addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 1));
 
   return node;
 }

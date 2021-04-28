@@ -4,7 +4,7 @@
 #include "symbolTable.h"
 #include "errors.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 // Variaveis globais
 SymbolTableStack *stack = NULL;
@@ -119,7 +119,7 @@ void addEntryToTopScopeTable(SymbolTableEntry *entry)
     aux->nextEntry = entry;
   }
 
-  stack->tableOffset = stack->tableOffset + entry->size; // Increment table offset by entry size
+  stack->tableOffset = stack->tableOffset + 4; //entry->size; // Increment table offset by entry size
   if (DEBUG == 1)
   {
     if (entry->key != NULL)
@@ -326,11 +326,11 @@ void endVariableListDeclaration(Type type)
       else
       {
         currentEntry->type = type;
-        currentEntry->entryOffset = getGlobalStack()->tableOffset;
+        // currentEntry->entryOffset = getGlobalStack()->tableOffset;
         if (type != TYPE_STRING)
         {
           currentEntry->size = getSizeFromType(type);
-          getGlobalStack()->tableOffset = getGlobalStack()->tableOffset + currentEntry->size;
+          // getGlobalStack()->tableOffset = getGlobalStack()->tableOffset + currentEntry->size;
         }
       }
     }
@@ -341,10 +341,18 @@ void endVariableListDeclaration(Type type)
 
     currentKey = currentKey->next;
   }
+}
 
+void cleanVariableListDeclaration()
+{
   freeStringList(variableListDeclarationKeys);
   variableListDeclarationKeys = NULL;
   declaringVariableList = 0;
+}
+
+StringList *getVariableListDeclaration()
+{
+  return variableListDeclarationKeys;
 }
 
 void addVariableToListDeclaration(char *key)
