@@ -446,11 +446,64 @@ Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initial
     return updatesRSP;
 }
 
-Code *generateBinaryExpression(Operation op, Node *child1, Node *child2, char *dest)
+Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1, Node *child2, char *dest)
 {
-    Code *code = createCode(op, NULL, child1->code->label, child2->code->label, NULL, dest, NULL);
-    return joinCodes(joinCodes(child1->code, child2->code), code);
+    char* reg1 = child1->code->res;
+    char* reg2 = child2->code->res;
+    char* result = generateRegisterName();
+    Operation operation = getOperation(binaryOperator);
+
+    Code* code = createCode(operation,NULL,reg1,reg2,NULL,result,NULL);
+
+    if(operation!=AND && operation!=OR){
+        child1->code = joinCodes(child1->code, child2->code);
+        child1->code = joinCodes(child1->code,code);
+        return child1->code;
+        }
+     else if(operation==AND){
+        Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL);
+        char* jumpLabel = generateLabelName();
+        char* dontJumpLabel=generateLabelName();
+        Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,dontJumpLabel,jumpLabel);
+
+        cbrCode = joinCodes(i2iCode,cbrCode);
+        Code* labelDontJump = generateLabelCode(dontJumpLabel);
+
+
+        labelDontJump= joinCodes(cbrCode, labelDontJump);
+
+        Code * labelJump = generateLabelName();
+
+
+        parent->code = joinCodes(child1->code, labelDontJump);
+        parent->code = joinCodes(parent->code,child2->code);
+        parent->code= joinCodes(parent->code, code);
+        parent->code = joinCodes(parent->code,labelJump);
+        return parent->code;
+        }
+     else if(operation == OR){
+         Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL);
+         char* jumpLabel = generateLabelName();
+         char* dontJumpLabel=generateLabelName();
+         Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,jumpLabel,dontJumpLabel);
+         cbrCode = joinCodes(i2iCode,cbrCode);
+
+         Code* labelDontJump = generateLabelCode(dontJumpLabel);
+         labelDontJump= joinCodes(cbrCode, labelDontJump);
+         Code * labelJump = generateLabelName();
+
+         parent->code = joinCodes(child1->code,labelDontJump);
+         parent->code = joinCodes(parent->code, child2->code);
+         parent->code = joinCodes(parent->code,code);
+         parent->code=joinCodes(parent->code,labelJump);
+         return parent->code;
+
+        }
+
+
 }
+
+
 
 Code *generateUnaryExpression(Operation operation, Code *operand)
 {
