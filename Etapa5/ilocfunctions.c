@@ -415,6 +415,12 @@ Code *generateWhileCode(Node *expr, Node *commands)
     Code *labelCode3 = generateLabelCode(label3);
     labelCode3 = joinCodes(jumpCode, labelCode3);
 
+    // printf("Adding to global code list\n");
+
+    // addToGlobalCodeList(labelCode3);
+
+    // exportCodeList(getGlobalCodeList());
+
     return labelCode3;
 }
 
