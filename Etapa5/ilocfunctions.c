@@ -526,7 +526,6 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
         parent->code = joinCodes(parent->code,child2->code);
         parent->code= joinCodes(parent->code, code);
         parent->code = joinCodes(parent->code,labelJump);
-        return parent->code;
         }
      else if(operation == OR){
          Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL, NULL);
@@ -543,8 +542,10 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
          parent->code = joinCodes(parent->code, child2->code);
          parent->code = joinCodes(parent->code,code);
          parent->code=joinCodes(parent->code,labelJump);
-         return parent->code;
         }
+
+        parent->code->res = resultReg;
+        return parent->code;
 
 
 }
