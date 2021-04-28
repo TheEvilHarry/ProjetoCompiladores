@@ -6,10 +6,10 @@ int main() {
 	int b;
 	a = 1;
 	b = 6;
-	while (6) do {
+	while (6 || 7) do {
 		a = 1;
 	}
 	int c;
-	// c = foo();
+	//c = foo();
 	return 0;
 }
