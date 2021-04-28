@@ -478,7 +478,7 @@ Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initial
     return updatesRSP;
 }
 
-Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1, Node *child2, char *dest)
+Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1, Node *child2)
 {
     char* reg1 = child1->code->res;
     char* reg2 = child2->code->res;
@@ -529,7 +529,6 @@ Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1,
          parent->code = joinCodes(parent->code,code);
          parent->code=joinCodes(parent->code,labelJump);
          return parent->code;
-
         }
 
 

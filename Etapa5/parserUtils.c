@@ -418,7 +418,8 @@ Node *orLogicalExpression_orLogicalExpression_orLogicalOperator_andLogicalExpres
   addChild(orLogicalOperator, orLogicalExpression);
   addChild(orLogicalOperator, andLogicalExpression);
 
-  // addCodeToNode(orLogicalOperator, generateBinaryExpression(OR, orLogicalExpression, andLogicalExpression, generateRegisterName()));
+  Code *code = generateBinaryExpression(orLogicalOperator->data->value.valueString,orLogicalOperator,orLogicalExpression, andLogicalExpression);
+  orLogicalOperator->code = code;
 
   return orLogicalOperator;
 }
@@ -430,7 +431,8 @@ Node *andLogicalExpression_andLogicalExpression_andLogicalOperator_bitwiseOrExpr
   addChild(andLogicalOperator, andLogicalExpression);
   addChild(andLogicalOperator, bitwiseOrExpression);
 
-  // addCodeToNode(andLogicalOperator, generateBinaryExpression(AND, andLogicalExpression, bitwiseOrExpression, generateRegisterName()));
+  Code *code = generateBinaryExpression(andLogicalOperator->data->value.valueString,andLogicalOperator,andLogicalExpression, bitwiseOrExpression);
+  andLogicalOperator->code = code;
 
   return andLogicalOperator;
 }
@@ -461,6 +463,7 @@ Node *equalityExpression_equalityExpression_equalityOperator_comparisonExpressio
   addTypeToNode(equalityOperator, inferType(equalityExpression->type, comparisonExpression->type));
   addChild(equalityOperator, equalityExpression);
   addChild(equalityOperator, comparisonExpression);
+  Code *code = generateBinaryExpression(equalityOperator->data->value.valueString, equalityOperator,, equalityExpression, comparisonExpression);
   return equalityOperator;
 }
 Node *equalityExpression_comparisonExpression(Node *comparisonExpression) { return comparisonExpression; }
@@ -470,6 +473,8 @@ Node *comparisonExpression_comparisonExpression_comparisonOperator_sumExpression
   addTypeToNode(comparisonOperator, inferType(comparisonExpression->type, sumExpression->type));
   addChild(comparisonOperator, comparisonExpression);
   addChild(comparisonOperator, sumExpression);
+  Code *code = generateBinaryExpression(comparisonOperator->data->value.valueString, comparisonOperator, comparisonExpression, sumExpression);
+  comparisonOperator->code = code;
   return comparisonOperator;
 }
 Node *comparisonExpression_sumExpression(Node *sumExpression) { return sumExpression; }
@@ -479,6 +484,8 @@ Node *sumExpression_sumExpression_sumOperator_multiplicationExpression(Node *sum
   addTypeToNode(sumOperator, inferType(sumExpression->type, multiplicationExpression->type));
   addChild(sumOperator, sumExpression);
   addChild(sumOperator, multiplicationExpression);
+  Code *code = generateBinaryExpression(sumOperator->data->value.valueString, sumOperator, sumExpression,multiplicationExpression);
+  sumOperator->code = code;
   return sumOperator;
 }
 Node *sumExpression_multiplicationExpression(Node *multiplicationExpression) { return multiplicationExpression; }
@@ -488,6 +495,8 @@ Node *multiplicationExpression_multiplicationExpression_multiplicationOperator_p
   addTypeToNode(multiplicationOperator, inferType(multiplicationExpression->type, powerExpression->type));
   addChild(multiplicationOperator, multiplicationExpression);
   addChild(multiplicationOperator, powerExpression);
+  Code *code = generateBinaryExpression(multiplicationOperator->data->value.valueString, multiplicationOperator, multiplicationExpression ,powerExpression);
+  multiplicationOperator->code = code;
   return multiplicationOperator;
 }
 Node *multiplicationExpression_powerExpression(Node *powerExpression) { return powerExpression; }
