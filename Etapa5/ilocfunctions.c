@@ -399,13 +399,16 @@ Code *generateWhileCode(Node *expr, Node *commands)
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
+
     //TODO:
     //Where are we getting the result of if expressions?
-    char *reg = expr->code->res;
-    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
 
     Code *labelCode = generateLabelCode(label1);
     labelCode = joinCodes(labelCode, expr->code);
+
+    char *reg = expr->code->res;
+    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
+    exprCode = joinCodes(labelCode, exprCode);
 
     Code *labelCode2 = generateLabelCode(label2);
     labelCode2 = joinCodes(exprCode, labelCode2);
