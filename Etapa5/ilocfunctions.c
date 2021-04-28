@@ -13,6 +13,8 @@
 
 #include "ilocfunctions.h"
 
+#define DEBUG 1
+
 int RBSSOffset = 0;
 int RFPOffset = 0;
 int RSPOffset = 0;
@@ -20,10 +22,15 @@ int RSPOffset = 0;
 int currentLabel = 1;
 int currentRegister = 0;
 
+NodeList *globalNodeList = NULL;
+Code *globalCodeList = NULL;
+
 char *generateLabelName()
 {
-    char *newLabel;
-    sprintf(newLabel, "L%d", currentLabel);
+    char temp[32];
+    sprintf(temp, "L%d", currentLabel);
+    char *newLabel = malloc(strlen(temp) + 1);
+    strcpy(newLabel, temp);
 
     currentLabel++;
 
@@ -32,8 +39,10 @@ char *generateLabelName()
 
 char *generateRegisterName()
 {
-    char *newRegister;
-    sprintf(newRegister, "r%d", currentRegister);
+    char temp[32];
+    sprintf(temp, "r%d", currentRegister);
+    char *newRegister = malloc(strlen(temp) + 1);
+    strcpy(newRegister, temp);
 
     currentRegister++;
 
@@ -49,19 +58,22 @@ int setOffset(char *symbol, int *scope)
 
 Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2)
 {
-    printf("Creating code for operation %d\n", op);
+    if (DEBUG == 1)
+    {
+        printf("Creating code for operation %s: %s %s => %s %s\n", getOperationName(op), arg1, arg2, dest1, dest2);
+    }
 
     Code *code = (Code *)malloc(sizeof(Code));
     code->opCode = op;
-    code->arg1 = arg1;
-    code->arg2 = arg2;
-    code->arg3 = arg3;
-    code->dest1 = dest1;
-    code->dest2 = dest2;
+    code->arg1 = arg1 != NULL ? strdup(arg1) : NULL;
+    code->arg2 = arg2 != NULL ? strdup(arg2) : NULL;
+    code->arg3 = arg3 != NULL ? strdup(arg3) : NULL;
+    code->dest1 = dest1 != NULL ? strdup(dest1) : NULL;
+    code->dest2 = dest2 != NULL ? strdup(dest2) : NULL;
     code->pointer = pointer;
     code->next = NULL;
     code->prev = NULL;
-    code->res = NULL;
+    code->res = (dest1 != NULL && dest2 == NULL) ? dest1 : NULL;
 
     code->label = generateLabelName();
 
@@ -132,14 +144,20 @@ Code *generateInitialInstructions()
 
 Code *generateAttributionCode(TokenData *identifier, Node *exp)
 {
-    printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
+    if (DEBUG == 1)
+    {
+        printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
+    }
     Code *code;
     SymbolTableStack *scope = getGlobalStack(); //CHECK THISSSSSSSS <================
     SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), identifier->value.valueString);
 
     if (scope->isGlobal == 1)
     {
-        printf("Scope is global\n");
+        if (DEBUG == 1)
+        {
+            // printf("Scope is global\n");
+        }
         char pointer[4] = RBSS;
         char *entryOffsetAsString = malloc(4);
         sprintf(entryOffsetAsString, "%d", entry->entryOffset);
@@ -147,13 +165,21 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
     }
     else
     {
-        printf("Scope is not global\n");
+        if (DEBUG == 1)
+        {
+            // printf("Scope is not global\n");
+        }
         char pointer[4] = RFP;
         char *entryOffsetAsString = malloc(4);
         sprintf(entryOffsetAsString, "%d", entry->entryOffset);
-        printf("Before function call\n");
+        if (DEBUG == 1)
+        {
+            // printf("Before function call\n");
+        }
         code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString);
     }
+
+    addToGlobalCodeList(code);
 
     return joinCodes(exp->code, code);
 }
@@ -417,8 +443,14 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     return labelCode3;
 }
 
+//void ILOC_add_local_var(node_t *parent, node_t *ident, node_t *initializer, char *type, STACK *stack){
+
 Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized)
 {
+    if (DEBUG == 1)
+    {
+        printf("Generating local var code for %s\n", identifier->data->label);
+    }
     char *pointer = malloc(10);
     char *offset = malloc(3);
     sprintf(pointer, "%s", RSP);
@@ -511,154 +543,253 @@ Code *generateUnaryExpression(Operation operation, Code *operand)
     return joinCodes(code, operand);
 }
 
-char *generate(Node *node)
+char *getOperationName(Operation operation)
 {
-    if (node == NULL)
+    switch (operation)
     {
-        return NULL;
+    case NOP:
+        return "nop";
+        break;
+    case HALT:
+        return "hlt";
+        break;
+    case ADD:
+        return "add";
+        break;
+    case SUB:
+        return "sub";
+        break;
+    case MULT:
+        return "mult";
+        break;
+    case DIV:
+        return "div";
+        break;
+    case ADDI:
+        return "addI";
+        break;
+    case SUBI:
+        return "subI";
+        break;
+    case RSUBI:
+        return "rsubI";
+        break;
+    case MULTI:
+        return "multI";
+        break;
+    case DIVI:
+        return "divI";
+        break;
+    case AND:
+        return "and";
+        break;
+    case ANDI:
+        return "andI";
+        break;
+    case OR:
+        return "or";
+        break;
+    case ORI:
+        return "orI";
+        break;
+    case LOAD:
+        return "load";
+        break;
+    case LOADI:
+        return "loadI";
+        break;
+    case LOADAI:
+        return "loadAI";
+        break;
+    case LOAD0:
+        return "loadA0";
+        break;
+    case CLOAD:
+        return "cload";
+        break;
+    case CLOADAI:
+        return "cloadAI";
+        break;
+    case CLOADA0:
+        return "cloadA0";
+        break;
+    case STORE:
+        return "store";
+        break;
+    case STOREAI:
+        return "storeAI";
+        break;
+    case STOREA0:
+        return "storeA0";
+        break;
+    case CSTORE:
+        return "cstore";
+        break;
+    case CSTOREAI:
+        return "cstoreAI";
+        break;
+    case CSTOREA0:
+        return "cstoreA0";
+        break;
+    case I2I:
+        return "i2i";
+        break;
+    case C2C:
+        return "c2c";
+        break;
+    case C2I:
+        return "c2i";
+        break;
+    case I2C:
+        return "i2c";
+        break;
+    case JUMPI:
+        return "jumpI";
+        break;
+    case JUMP:
+        return "jump";
+        break;
+    case CBR:
+        return "cbr";
+        break;
+    case CMP_LT:
+        return "cmp_LT";
+        break;
+    case CMP_LE:
+        return "cmp_LE";
+        break;
+    case CMP_EQ:
+        return "cmp_EQ";
+        break;
+    case CMP_GE:
+        return "cmp_GE";
+        break;
+    case CMP_GT:
+        return "cmp_GT";
+        break;
+    case CMP_NE:
+        return "cmp_NE";
+        break;
+    default:
+        return "";
+        break;
+    }
+}
+
+char *generateILOCFromCode(Code *code)
+{
+    char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
+    if (code->arg1 != NULL)
+    {
+        sprintf(arg1, "%s", code->arg1);
+    }
+    if (code->arg2 != NULL)
+    {
+        sprintf(arg2, ", %s", code->arg2);
+    }
+    if (code->dest1 != NULL)
+    {
+        sprintf(dest1, "%s", code->dest1);
+    }
+    if (code->dest2 != NULL)
+    {
+        sprintf(dest2, ", %s", code->dest2);
+    }
+    if (code->label != NULL)
+    {
+        sprintf(label, "%s: ", code->label);
+    }
+    char tempInstructionLine[128];
+    sprintf(tempInstructionLine, "%s%s %s%s => %s%s", label, getOperationName(code->opCode), arg1, arg2, dest1, dest2);
+
+    char *instructionLine = malloc(strlen(tempInstructionLine) + 1);
+    strcpy(instructionLine, tempInstructionLine);
+
+    return instructionLine;
+}
+
+NodeList *addToGlobalNodeList(Node *node)
+{
+    NodeList *nodeList = createNodeList(node);
+
+    if (globalNodeList == NULL)
+    {
+        globalNodeList = nodeList;
+    }
+    else
+    {
+        NodeList *aux = globalNodeList;
+        while (aux->next != NULL)
+        {
+            aux = aux->next;
+        }
+
+        aux->next = nodeList;
     }
 
-    char *children[MAX_CHILDREN];
-    for (int i = 0; i < node->numberOfChildren; i++)
+    return globalNodeList;
+}
+
+Code *addToGlobalCodeList(Code *code)
+{
+    if (globalCodeList == NULL)
     {
-        children[i] = generate(node->children[i]);
+        globalCodeList = code;
+    }
+    else
+    {
+        Code *aux = globalCodeList;
+        while (aux->next != NULL)
+        {
+            aux = aux->next;
+        }
+
+        aux->next = code;
     }
 
-    char *next;
-    next = generate(node->next);
+    return globalCodeList;
+}
 
-    // Code *finalCode;
-    // OperationType nodeOperation = getOperationFromTokenData(node->data);
+NodeList *getGlobalNodeList()
+{
+    return globalNodeList;
+}
 
-    // SymbolTableEntry *nodeEntry = findEntryInStack(getGlobalStack(), node->data->label);
+Code *getGlobalCodeList()
+{
+    return globalCodeList;
+}
 
-    // if (nodeEntry == NULL)
-    // {
-    //     printf("Entry %s not found\n", node->data->label);
-    //     nodeEntry = findLiteralEntryInStack(getGlobalStack(), node->data->label);
+NodeList *createNodeList(Node *node)
+{
+    NodeList *newNodeList = (NodeList *)malloc(sizeof(NodeList));
+    newNodeList->node = node;
+    newNodeList->next = NULL;
+    newNodeList->previous = NULL;
 
-    //     if (nodeEntry == NULL)
-    //     {
-    //         printf("Entry %s STILL not found\n", node->data->label);
-    //     }
-    // }
+    return newNodeList;
+}
 
-    printf("Generating code for %s::%s::%s\n", node->data->label, getTypeName(node->type), "sal");
+void exportCodeFromNodeList(NodeList *nodeListElem)
+{
+    if (nodeListElem != NULL)
+    {
+        Code *aux = nodeListElem->node->code;
+        printf("Code for node %s:\n", nodeListElem->node->data->label);
+        while (aux != NULL)
+        {
+            printf("%s\n", generateILOCFromCode(aux));
+            aux = aux->next;
+        }
+        exportCodeFromNodeList(nodeListElem->next);
+    }
+}
 
-    printTable(getGlobalStack()->top);
-
-    // for (int i = 0; i < node->numberOfChildren; i++)
-    // {
-    //     printf("%d: %s\n", i, children[i]);
-    // }
-
-    // switch (nodeOperation)
-    // {
-    // case OPERATION_TYPE_ADD:
-    //     printf("OPERATION_TYPE_ADD\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_SUB:
-    //     printf("OPERATION_TYPE_SUB\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_MULT:
-    //     printf("OPERATION_TYPE_MULT\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_DIV:
-    //     printf("OPERATION_TYPE_DIV\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_LESS_THAN:
-    //     printf("OPERATION_TYPE_LESS_THAN\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_GREATER_THAN:
-    //     printf("OPERATION_TYPE_GREATER_THAN\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_LESS_EQUAL:
-    //     printf("OPERATION_TYPE_LESS_EQUAL\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_GREATER_EQUAL:
-    //     printf("OPERATION_TYPE_GREATER_EQUAL\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_VAR_ACCESS:
-    //     printf("OPERATION_TYPE_VAR_ACCESS\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_VECTOR_ACCESS:
-    //     printf("OPERATION_TYPE_VECTOR_ACCESS\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_FUNCTION_DECLARATION:
-    //     printf("OPERATION_TYPE_FUNCTION_DECLARATION\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_FUNCTION_CALL:
-    //     printf("OPERATION_TYPE_FUNCTION_CALL\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_OR:
-    //     printf("OPERATION_TYPE_OR\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_AND:
-    //     printf("OPERATION_TYPE_AND\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_NOT:
-    //     printf("OPERATION_TYPE_NOT\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_NEGATIVE:
-    //     printf("OPERATION_TYPE_NEGATIVE\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_ATTRIBUTION:
-    //     printf("OPERATION_TYPE_ATTRIBUTION\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_ATTRIBUTION_VECTOR:
-    //     printf("OPERATION_TYPE_ATTRIBUTION_VECTOR\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_RETURN:
-    //     printf("OPERATION_TYPE_RETURN\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_IF:
-    //     printf("OPERATION_TYPE_IF\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_IF_ELSE:
-    //     printf("OPERATION_TYPE_IF_ELSE\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_TERNARY:
-    //     printf("OPERATION_TYPE_TERNARY\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_WHILE:
-    //     printf("OPERATION_TYPE_WHILE\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_FOR:
-    //     printf("OPERATION_TYPE_FOR\n");
-    //     finalCode = NULL;
-    //     break;
-    // case OPERATION_TYPE_NOP:
-    //     printf("OPERATION_TYPE_NOP\n");
-    //     finalCode = NULL;
-    //     break;
-    // default:
-    //     printf("Unrecognized operation\n");
-    //     finalCode = NULL;
-    //     break;
-    // }
-
-    return node->data->label;
+void exportCodeList(Code *code)
+{
+    if (code != NULL)
+    {
+        printf("%s\n", generateILOCFromCode(code));
+        exportCodeList(code->next);
+    }
 }

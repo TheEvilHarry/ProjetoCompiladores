@@ -41,12 +41,12 @@ char *generateLabelName();
 char *generateRegisterName();
 int setOffset(char *symbol, int *scope);
 
-Code *createCode(Operation op, char *local, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2);
+Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2);
 Code *generateEmptyCode(char *local);
 Code *joinCodes(Code *code1, Code *code2);
 
 Code *generateInitialInstructions();
-Code *generateAttributionCode( TokenData *identifier, Node *exp);
+Code *generateAttributionCode(TokenData *identifier, Node *exp);
 Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr);
 Code *generateLabelCode(char *label);
 Code *generateTrueConditionalJump(char *label);
@@ -58,13 +58,29 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands);
 Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1, Node *child2, char *dest);
 Code *generateUnaryExpression(Operation operation, Code *op);
 Code *generateHaltCommand();
+Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateJump(char *reg);
+Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized);
+Code *generateReturnCode(Node *child, Node *parent, char *label);
 
-Code *handleFunctionDeclaration(SymbolTableStack *stack, TokenData *identifier, Node *node, int staticFunc, Node *functionParameters, Node *parent);
-Code *addFunctionCode(Node *header, Node *block, Code *code, SymbolTableStack *stack, char *returnLabel);
-Code *handleFunctionCall(SymbolTableStack *stack, Node *node, Node *args);
-Code *handleFunctionReturn(SymbolTableStack *stack, Node *node, Type functionType, char *returnLabel, Node *parent);
+char *generateILOCFromCode(Code *code);
+char *getOperationName(Operation operation);
 
-char *generate(Node *node);
+typedef struct node_list_t
+{
+  Node *node;
+  struct node_list_t *previous;
+  struct node_list_t *next;
+} NodeList;
+
+NodeList *getGlobalNodeList();
+Code *getGlobalCodeList();
+NodeList *createNodeList(Node *node);
+void exportCodeFromNodeList(NodeList *node);
+NodeList *addToGlobalNodeList(Node *node);
+
+void exportCodeList(Code *code);
+
+Code *addToGlobalCodeList(Code *code);
