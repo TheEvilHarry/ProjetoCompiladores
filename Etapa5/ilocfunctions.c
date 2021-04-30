@@ -446,12 +446,12 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     conditionCode = joinCodes(labelCode, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
-    labelCode = joinCodes(conditionCode, labelCode2);
-    labelCode = joinCodes(labelCode2, commands->code);
-    labelCode = joinCodes(labelCode2, incr->code);
+    labelCode2 = joinCodes(conditionCode, labelCode2);
+    labelCode2 = joinCodes(labelCode2, commands->code);
+    labelCode2 = joinCodes(labelCode2, incr->code);
 
     Code *jumpCode = generateTrueConditionalJump(label1);
-    labelCode = joinCodes(labelCode2, jumpCode);
+    jumpCode = joinCodes(labelCode2, jumpCode);
 
     Code *labelCode3 = generateLabelCode(label3);
     labelCode3 = joinCodes(jumpCode, labelCode3);
