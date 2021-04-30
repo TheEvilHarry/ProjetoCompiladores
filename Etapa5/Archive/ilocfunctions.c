@@ -525,30 +525,35 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         Code *labelJump = generateLabelCode(jumpLabel);
 
         parent->code = joinCodes(child1->code, labelDontJump);
+        parent->code = joinCodes(parent->code, child2->code);
+        parent->code = joinCodes(parent->code, code);
+        parent->code = joinCodes(parent->code, labelJump);
 
-        parent->code = joinCodes(parent->code,child2->code);
-        parent->code= joinCodes(parent->code, code);
-        parent->code = joinCodes(parent->code,labelJump);
-        }
-     else if(operation == OR){
-         Code *i2iCode = createCode(I2I,NULL, reg1,NULL,NULL,result,NULL, NULL);
-         char* jumpLabel = generateLabelName();
-         char* dontJumpLabel=generateLabelName();
-         Code *cbrCode = createCode(CBR, NULL, result,NULL,NULL,jumpLabel,dontJumpLabel,NULL);
-         cbrCode = joinCodes(i2iCode,cbrCode);
+        addToGlobalCodeList(parent->code);
 
-         Code* labelDontJump = generateLabelCode(dontJumpLabel);
-         labelDontJump= joinCodes(cbrCode, labelDontJump);
-         Code * labelJump = generateLabelName();
+    }
+    else if (operation == OR)
+    {
+        Code *i2iCode = createCode(I2I, NULL, reg1, NULL, NULL, result, NULL, NULL);
+        char *jumpLabel = generateLabelName();
+        char *dontJumpLabel = generateLabelName();
+        Code *cbrCode = createCode(CBR, NULL, result, NULL, NULL, jumpLabel, dontJumpLabel, NULL);
+        cbrCode = joinCodes(i2iCode, cbrCode);
 
-         parent->code = joinCodes(child1->code,labelDontJump);
-         parent->code = joinCodes(parent->code, child2->code);
-         parent->code = joinCodes(parent->code,code);
-         parent->code=joinCodes(parent->code,labelJump);
-        }
+        Code *labelDontJump = generateLabelCode(dontJumpLabel);
+        labelDontJump = joinCodes(cbrCode, labelDontJump);
+        Code *labelJump = generateLabelCode(jumpLabel);
 
-        parent->code->res = resultReg;
-        return parent->code;
+        parent->code = joinCodes(child1->code, labelDontJump);
+        parent->code = joinCodes(parent->code, child2->code);
+        parent->code = joinCodes(parent->code, code);
+        parent->code = joinCodes(parent->code, labelJump);
+
+        addToGlobalCodeList(parent->code);
+
+    }
+    parent->code->res = result;
+    return parent->code;
 
 }
 
