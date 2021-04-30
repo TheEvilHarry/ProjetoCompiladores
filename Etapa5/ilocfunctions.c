@@ -442,7 +442,7 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = expr->code->res;
-    Code *conditionCode = createCBRCode(expr, reg, label2, NULL, label3, NULL);
+    Code *conditionCode = createCode(CBR, NULL, reg, NULL, NULL, label2, label3);
     conditionCode = joinCodes(labelCode, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
@@ -508,7 +508,7 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         child1->code = joinCodes(child1->code, code);
 
         addToGlobalCodeList(child1->code);
-        return child1->code;
+
     }
     else if (operation == AND)
     {
