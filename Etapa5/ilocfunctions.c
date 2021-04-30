@@ -407,7 +407,7 @@ Code *generateWhileCode(Node *expr, Node *commands)
     labelCode = joinCodes(labelCode, expr->code);
 
     char *reg = expr->code->res;
-    Code *exprCode = createCBRCode(expr, reg, label2, label3, NULL, commands);
+    Code *exprCode = createCode(CBR, NULL, reg, NULL, NULL, label2, label3, NULL);
     exprCode = joinCodes(labelCode, exprCode);
 
     Code *labelCode2 = generateLabelCode(label2);
