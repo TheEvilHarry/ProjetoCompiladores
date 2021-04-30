@@ -352,7 +352,11 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
     char *reg1 = generateRegisterName();
 
     char *result = expr->code->res; // <===this has to be changed
-    Code *cbr = createCBRCode(expr, result, label1, label2, label1, exprTrue);
+    Code *cbr = createCode(CBR,NULL, result,NULL, NULL,label1, label, label2, NULL);
+    Code *labelCode1 = generateLabelCode(label1);
+    labelCode1 = joinCodes(cbr,labelCode1);
+    labelCode1=joinCodes(expr->code,labelCode1);
+    labelCode1=joinCodes(labelCode1,exprTrue->code);
 
     char *resultTrue = exprTrue->code->res; // <===this has to be changed
     Code *i2iCode = generateI2ICode(resultTrue, reg1);
@@ -362,18 +366,18 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
     Code *labelCode2 = generateLabelCode(label2);
     labelCode2 = joinCodes(jumpCode, labelCode2);
 
-    cbr = joinCodes(cbr, labelCode2);
-    cbr = joinCodes(cbr, exprFalse->code);
+    labelCode1 = joinCodes(labelCode1, labelCode2);
+    labelCode1 = joinCodes(labelCode1, exprFalse->code);
 
     char *resultFalse = exprFalse->code->res; // <===this has to be changed
     Code *i2iCode2 = generateI2ICode(resultFalse, reg1);
 
     Code *labelCode3 = generateLabelCode(label3);
     labelCode3 = joinCodes(i2iCode, labelCode3);
-    cbr = joinCodes(cbr, labelCode3);
+    labelCode1 = joinCodes(labelCode1, labelCode3);
 
-    cbr->res = reg1;
-    return cbr;
+    labelCode1->res = reg1;
+    return labelCode1;
 }
 
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel, Node *trueExpr)
