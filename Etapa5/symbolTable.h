@@ -21,6 +21,8 @@ typedef struct symbolTableEntry
     TokenData *data;
     int entryOffset;
 
+    char *ILOCLabel;
+
     struct symbolTableEntry *nextEntry;
 } SymbolTableEntry;
 

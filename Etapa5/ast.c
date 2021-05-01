@@ -3,6 +3,8 @@
 #include <string.h>
 #include "ast.h"
 
+extern void handleRootCodeExport(Node *root);
+
 Node *createNode(TokenData *data, Type type)
 {
   Node *node = malloc(sizeof(Node));
@@ -119,6 +121,11 @@ void exportAST(Node *node)
 void exporta(void *arvore)
 {
   exportAST((Node *)arvore);
+}
+
+void generate(void *arvore)
+{
+  handleRootCodeExport((Node *)arvore);
 }
 
 void freeAST(Node *node)

@@ -4,6 +4,8 @@
 #include "symbolTable.h"
 #include "errors.h"
 
+extern char *generateLabelName();
+
 #define DEBUG 0
 
 // Variaveis globais
@@ -83,6 +85,10 @@ SymbolTableEntry *createTableEntry(char *key, int line, Nature nature, Type type
   entry->data = data;
   entry->nextEntry = NULL;
   entry->entryOffset = getGlobalStack()->tableOffset;
+
+  entry->ILOCLabel = nature == NATURE_function ? generateLabelName() : NULL;
+
+  return entry;
 };
 
 // void addEntryToTable(SymbolTableEntry *table, SymbolTableEntry *entry)
@@ -336,7 +342,10 @@ void endVariableListDeclaration(Type type)
     }
     else
     {
-      printf("[WARNING] Key %s from variable list declaration is not in current scope. Could not add type.", currentKey->value);
+      if (DEBUG == 1)
+      {
+        printf("[WARNING] Key %s from variable list declaration is not in current scope. Could not add type.", currentKey->value);
+      }
     }
 
     currentKey = currentKey->next;

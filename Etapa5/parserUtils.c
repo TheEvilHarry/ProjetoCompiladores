@@ -12,12 +12,23 @@ Node *program_globalVariable_program(Node *globalVariable, Node *program)
 Node *program_functionDefinition_program(Node *functionDefinition, Node *program)
 {
   addNext(functionDefinition, program);
+  // printf("program function definition after adding next\n");
+  // printf("Function definition is %s.\n", functionDefinition->data->label);
+  // if (program == NULL)
+  // {
+  //   printf("program is NULL");
+  // }
+  // Code *joined = joinCodes(functionDefinition->code, program->code);
+  // printf("program function definition after join\n");
+  // addCodeToNode(functionDefinition, joined);
+  // printf("program function definition end\n");
+
   return functionDefinition;
 }
-Node *program_empty()
+Node *program_empty(Node *tree)
 {
-  exportCodeList(getGlobalCodeList());
-  return NULL;
+  // exportCodeList(tree->code);
+  return tree;
 }
 
 Node *optionalStatic_TK_PR_STATIC(TokenData *p_TK_PR_STATIC)
@@ -68,21 +79,14 @@ Type type_TK_PR_STRING(void *p_TK_PR_STRING) { return TYPE_STRING; }
 Node *value_TK_LIT_INT(TokenData *p_TK_LIT_INT)
 {
   createLiteralTableEntry(get_line_number(), TYPE_INTEGER, p_TK_LIT_INT);
-  // printf("Integer literal rule start\n");
   Node *node = createNode(p_TK_LIT_INT, TYPE_INTEGER);
-  // printf("Integer literal rule created node\n");
   char *literalRegister = generateRegisterName();
-  // printf("Integer literal rule created register\n");
   char literalValue[16];
   sprintf(literalValue, "%d", p_TK_LIT_INT->value.valueInt);
-  // printf("Integer literal rule created value\n");
   Code *code = createCode(LOADI, literalRegister, literalValue, NULL, NULL, literalRegister, NULL, NULL);
-  // printf("Integer literal rule created code\n");
   addCodeToNode(node, code);
-  // printf("Integer literal rule added code to node\n");
   addToGlobalNodeList(node);
-  // printf("Integer literal rule end\n");
-  addToGlobalCodeList(code);
+  // addToGlobalCodeList(code);
 
   return node;
 }
@@ -115,6 +119,10 @@ Node *value_TK_LIT_STRING(TokenData *p_TK_LIT_STRING)
 Node *functionDefinition_functionHeader_functionCommandBlockInit_commandBlockEnd(Node *functionHeader, void *functionCommandBlockInit, Node *commandBlockEnd)
 {
   Node *node = addChild(functionHeader, commandBlockEnd);
+  addCodeToNode(node, generateFunctionCode(functionHeader, functionHeader->data->value.valueString, commandBlockEnd));
+  // printf("Function definition rule code is:\n");
+  // exportCodeList(node->code);
+  addToGlobalNodeList(node);
   return node;
 }
 
@@ -277,7 +285,7 @@ Node *executionControl_TK_PR_RETURN_expression(TokenData *p_TK_PR_RETURN, Node *
 
   Node *node = addChild(createCustomLabelNode("return", get_line_number(), expression->type), expression);
 
-  // addToGlobalNodeList(addCodeToNode(node, generateReturnCode(node->children[0], node, "L0")));
+  addToGlobalNodeList(addCodeToNode(node, generateReturnCode(node->children[0], node, "L0")));
 
   return node;
 }
@@ -313,7 +321,7 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
   addChild(node, commandBlockEnd);
   addChild(node, p_else);
 
-  // addCodeToNode(node, generateIfCode(expression, commandBlockEnd, p_else));
+  addCodeToNode(node, generateIfCode(expression, commandBlockEnd, p_else));
 
   return node;
 }
@@ -422,8 +430,8 @@ Node *orLogicalExpression_orLogicalExpression_orLogicalOperator_andLogicalExpres
   addChild(orLogicalOperator, orLogicalExpression);
   addChild(orLogicalOperator, andLogicalExpression);
 
-  Code *code = generateBinaryExpression(orLogicalOperator->data->value.valueString,orLogicalOperator,orLogicalExpression, andLogicalExpression);
-  orLogicalOperator->code = code;
+  Code *code = generateBinaryExpression(orLogicalOperator->data->value.valueString, orLogicalOperator, orLogicalExpression, andLogicalExpression);
+  addCodeToNode(orLogicalOperator, code);
 
   return orLogicalOperator;
 }
@@ -435,8 +443,8 @@ Node *andLogicalExpression_andLogicalExpression_andLogicalOperator_bitwiseOrExpr
   addChild(andLogicalOperator, andLogicalExpression);
   addChild(andLogicalOperator, bitwiseOrExpression);
 
-  Code *code = generateBinaryExpression(andLogicalOperator->data->value.valueString,andLogicalOperator,andLogicalExpression, bitwiseOrExpression);
-  andLogicalOperator->code = code;
+  Code *code = generateBinaryExpression(andLogicalOperator->data->value.valueString, andLogicalOperator, andLogicalExpression, bitwiseOrExpression);
+  addCodeToNode(andLogicalOperator, code);
 
   return andLogicalOperator;
 }
@@ -467,7 +475,10 @@ Node *equalityExpression_equalityExpression_equalityOperator_comparisonExpressio
   addTypeToNode(equalityOperator, inferType(equalityExpression->type, comparisonExpression->type));
   addChild(equalityOperator, equalityExpression);
   addChild(equalityOperator, comparisonExpression);
+
   Code *code = generateBinaryExpression(equalityOperator->data->value.valueString, equalityOperator, equalityExpression, comparisonExpression);
+  addCodeToNode(equalityOperator, code);
+
   return equalityOperator;
 }
 Node *equalityExpression_comparisonExpression(Node *comparisonExpression) { return comparisonExpression; }
@@ -477,8 +488,10 @@ Node *comparisonExpression_comparisonExpression_comparisonOperator_sumExpression
   addTypeToNode(comparisonOperator, inferType(comparisonExpression->type, sumExpression->type));
   addChild(comparisonOperator, comparisonExpression);
   addChild(comparisonOperator, sumExpression);
+
   Code *code = generateBinaryExpression(comparisonOperator->data->value.valueString, comparisonOperator, comparisonExpression, sumExpression);
-  comparisonOperator->code = code;
+  addCodeToNode(comparisonOperator, code);
+
   return comparisonOperator;
 }
 Node *comparisonExpression_sumExpression(Node *sumExpression) { return sumExpression; }
@@ -488,8 +501,10 @@ Node *sumExpression_sumExpression_sumOperator_multiplicationExpression(Node *sum
   addTypeToNode(sumOperator, inferType(sumExpression->type, multiplicationExpression->type));
   addChild(sumOperator, sumExpression);
   addChild(sumOperator, multiplicationExpression);
-  Code *code = generateBinaryExpression(sumOperator->data->value.valueString, sumOperator, sumExpression,multiplicationExpression);
-  sumOperator->code = code;
+
+  Code *code = generateBinaryExpression(sumOperator->data->value.valueString, sumOperator, sumExpression, multiplicationExpression);
+  addCodeToNode(sumOperator, code);
+
   return sumOperator;
 }
 Node *sumExpression_multiplicationExpression(Node *multiplicationExpression) { return multiplicationExpression; }
@@ -499,8 +514,10 @@ Node *multiplicationExpression_multiplicationExpression_multiplicationOperator_p
   addTypeToNode(multiplicationOperator, inferType(multiplicationExpression->type, powerExpression->type));
   addChild(multiplicationOperator, multiplicationExpression);
   addChild(multiplicationOperator, powerExpression);
-  Code *code = generateBinaryExpression(multiplicationOperator->data->value.valueString, multiplicationOperator, multiplicationExpression ,powerExpression);
-  multiplicationOperator->code = code;
+
+  Code *code = generateBinaryExpression(multiplicationOperator->data->value.valueString, multiplicationOperator, multiplicationExpression, powerExpression);
+  addCodeToNode(multiplicationOperator, code);
+
   return multiplicationOperator;
 }
 Node *multiplicationExpression_powerExpression(Node *powerExpression) { return powerExpression; }
@@ -510,6 +527,7 @@ Node *powerExpression_powerExpression_powerOperator_unaryExpression(Node *powerE
   addTypeToNode(powerOperator, inferType(powerExpression->type, unaryExpression->type));
   addChild(powerOperator, powerExpression);
   addChild(powerOperator, unaryExpression);
+
   return powerOperator;
 }
 Node *powerExpression_unaryExpression(Node *unaryExpression) { return unaryExpression; }
@@ -519,6 +537,7 @@ Node *unaryExpression_unaryOperator_unaryExpression(Node *unaryOperator, Node *u
   verifyUnaryOperatorType(unaryOperator->data->label, unaryExpression->type);
   addTypeToNode(unaryOperator, unaryExpression->type);
   addChild(unaryOperator, unaryExpression);
+
   return unaryOperator;
 }
 Node *unaryExpression_operand(Node *operand) { return operand; }
@@ -579,7 +598,9 @@ Node *variableDeclaration_optionalStatic_optionalConst_type_variable_variableDec
 Node *variable_TK_IDENTIFICADOR(TokenData *p_TK_IDENTIFICADOR)
 {
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), TYPE_UNDEFINED, NULL);
+
   // addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 0);
+
   return NULL;
 }
 Node *variable_TK_IDENTIFICADOR_TK_OC_LE_value(TokenData *p_TK_IDENTIFICADOR, TokenData *p_TK_OC_LE, Node *value)
@@ -595,7 +616,7 @@ Node *variable_TK_IDENTIFICADOR_TK_OC_LE_value(TokenData *p_TK_IDENTIFICADOR, To
   addChild(node, identifierNode);
   addChild(node, value);
 
-  // addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 1));
+  addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 1));
 
   return node;
 }

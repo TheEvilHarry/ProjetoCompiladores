@@ -157,8 +157,8 @@ int yyerror (char const *s);
 %%
 
 program: globalVariable program { $$ = program_globalVariable_program($1, $2); arvore = $$; }
-        | functionDefinition program {$$=program_functionDefinition_program($1, $2); arvore=$$; }
-        | {$$=program_empty();};
+        | functionDefinition program {$$ = program_functionDefinition_program($1, $2); arvore = $$; }
+        | {$$=program_empty(arvore);};
 
 optionalStatic: TK_PR_STATIC  { $$ = optionalStatic_TK_PR_STATIC(NULL); }
         |  { $$ = optionalStatic_empty(); };

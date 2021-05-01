@@ -13,7 +13,7 @@
 
 #include "ilocfunctions.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 int RBSSOffset = 0;
 int RFPOffset = 0;
@@ -49,6 +49,32 @@ char *generateRegisterName()
     return newRegister;
 }
 
+Code *getFirstCode(Code *code)
+{
+    Code *aux = code;
+
+    while (aux->prev != NULL)
+    {
+        aux = aux->prev;
+    }
+
+    return aux;
+}
+
+int getNumberOfInstructions(Code *code)
+{
+    Code *currentInstruction = getFirstCode(code);
+    int i = 0;
+
+    while (currentInstruction != NULL)
+    {
+        currentInstruction = currentInstruction->next;
+        i++;
+    }
+
+    return i;
+}
+
 int setOffset(char *symbol, int *scope)
 {
     //TODO;
@@ -58,11 +84,6 @@ int setOffset(char *symbol, int *scope)
 
 Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2, char *label)
 {
-    if (DEBUG == 1)
-    {
-        printf("Creating code for operation %s: %s %s => %s %s\n", getOperationName(op), arg1, arg2, dest1, dest2);
-    }
-
     Code *code = (Code *)malloc(sizeof(Code));
     code->opCode = op;
     code->arg1 = arg1 != NULL ? strdup(arg1) : NULL;
@@ -74,14 +95,11 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
     code->next = NULL;
     code->prev = NULL;
     code->res = (dest1 != NULL && dest2 == NULL) ? dest1 : NULL;
+    code->label = label != NULL ? label : generateLabelName();
 
-    if (label != NULL)
+    if (DEBUG == 1)
     {
-        code->label = label;
-    }
-    else if (label == NULL)
-    {
-        code->label = generateLabelName();
+        printf("Creating code for operation %s\n", generateILOCFromCode(code));
     }
 
     return code;
@@ -105,23 +123,28 @@ Code *generateEmptyCode(char *pointer)
 }
 
 Code *joinCodes(Code *code1, Code *code2)
-
 {
     if (code1 == NULL)
         return code2;
     else if (code2 == NULL)
         return code1;
 
-    Code *point = code2;
-    while (point->prev)
+    if (DEBUG == 1)
     {
-        point = point->prev;
+        // printf("Joining %s with %s\n", generateILOCFromCode(code1), generateILOCFromCode(code2));
     }
 
-    code1->next = point;
-    point->prev = code1;
+    Code *aux = code1;
+    while (aux->next != NULL)
+    {
+        aux = aux->next;
+    }
 
-    return code2;
+    Code *firstOfCode2 = getFirstCode(code2);
+    aux->next = firstOfCode2;
+    firstOfCode2->prev = aux;
+
+    return getFirstCode(code1);
 }
 
 Code *generateReturnCode(Node *child, Node *parent, char *label)
@@ -138,15 +161,20 @@ Code *generateReturnCode(Node *child, Node *parent, char *label)
     return parent->code;
 }
 
-Code *generateInitialInstructions()
+Code *generateInitialInstructions(Code *code)
 {
-    // Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main"), NULL);
-    // jump->next = createCode(HALT, "L0", NULL, NULL, NULL, NULL, NULL);
-    // Code *RBSSDefault = createCode(LOADI, NULL, getNumberOfInstructions(), NULL, NULL, RBSS, NULL);
-    // RBSSDefault->next = jump;
-    // Code *RFPDefault = createCode(LOADI, NULL, "1024", NULL, NULL, RFP, NULL);
-    // RFPDefault->next = RBSSDefault;
-    // return RFPDefault;
+    Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main")->ILOCLabel, NULL, NULL);
+    jump->next = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL, "L0");
+    char numberOfInstructions[16];
+    sprintf(numberOfInstructions, "%d", getNumberOfInstructions(code) + 4);
+    Code *RBSSDefault = createCode(LOADI, NULL, numberOfInstructions, NULL, NULL, RBSS, NULL, NULL);
+    RBSSDefault->next = jump;
+    Code *RSPDefault = createCode(LOADI, NULL, "1024", NULL, NULL, RSP, NULL, NULL);
+    RSPDefault->next = RBSSDefault;
+    Code *RFPDefault = createCode(LOADI, NULL, "1024", NULL, NULL, RFP, NULL, NULL);
+    RFPDefault->next = RSPDefault;
+
+    return RFPDefault;
 }
 
 Code *generateAttributionCode(TokenData *identifier, Node *exp)
@@ -165,10 +193,9 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         {
             // printf("Scope is global\n");
         }
-        char pointer[4] = RBSS;
         char *entryOffsetAsString = malloc(4);
         sprintf(entryOffsetAsString, "%d", entry->entryOffset);
-        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString, NULL);
+        code = createCode(STOREAI, RBSS, exp->code->res, NULL, NULL, RBSS, entryOffsetAsString, NULL);
     }
     else
     {
@@ -176,17 +203,16 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         {
             // printf("Scope is not global\n");
         }
-        char pointer[4] = RFP;
         char *entryOffsetAsString = malloc(4);
         sprintf(entryOffsetAsString, "%d", entry->entryOffset);
         if (DEBUG == 1)
         {
             // printf("Before function call\n");
         }
-        code = createCode(STOREAI, pointer, exp->code->res, NULL, NULL, pointer, entryOffsetAsString, NULL);
+        code = createCode(STOREAI, RFP, exp->code->res, NULL, NULL, RFP, entryOffsetAsString, NULL);
     }
 
-    addToGlobalCodeList(code);
+    // addToGlobalCodeList(code);
 
     return joinCodes(exp->code, code);
 }
@@ -231,14 +257,46 @@ Code *generateTrueConditionalJump(char *label)
 
 //identifier = the label of the header's node
 
-Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
+Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
 {
+    SymbolTableEntry *functionEntry = findEntryInStack(getGlobalStack(), identifier);
+    char functionEntryOffset[16];
+    sprintf(functionEntryOffset, "%d", functionEntry->entryOffset);
+    Code *updateRFP = createCode(I2I, NULL, RSP, NULL, NULL, RFP, NULL, functionEntry->ILOCLabel);
+    Code *updateRSP = createCode(ADDI, NULL, RSP, functionEntryOffset, NULL, RSP, NULL, NULL);
+
+    Code *functionReturn;
 
     if (strcmp(identifier, "main") == 0)
     {
-        return generateMainFunctionCode(header, identifier, code, commands, labelReturn);
+        functionReturn = createCode(JUMPI, NULL, NULL, NULL, NULL, "0", NULL, NULL);
     }
-    return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
+    else
+    {
+        char *returnRegister = generateRegisterName();
+        Code *jump = createCode(JUMP, NULL, NULL, NULL, NULL, returnRegister, NULL, NULL);
+        Code *saveRFP = createCode(LOADAI, NULL, RFP, "8", NULL, RFP, NULL, NULL);
+        Code *saveRSP = createCode(LOADAI, NULL, RFP, "12", NULL, RSP, NULL, NULL);
+        Code *returnAddress = createCode(LOADAI, NULL, RFP, "0", NULL, returnRegister, NULL, NULL);
+
+        functionReturn = joinCodes(jump, joinCodes(saveRFP, joinCodes(saveRSP, returnAddress)));
+    }
+
+    joinCodes(updateRFP, joinCodes(updateRSP, joinCodes(commands->code, functionReturn)));
+
+    if (DEBUG == 1)
+    {
+        // printf("Final code generated for function %s:\n", identifier);
+        // exportCodeList(getFirstCode(updateRFP));
+    }
+
+    return getFirstCode(updateRFP);
+
+    // if (strcmp(identifier, "main") == 0)
+    // {
+    //     return generateMainFunctionCode(header, identifier, code, commands, labelReturn);
+    // }
+    // return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
 }
 
 Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
@@ -400,6 +458,8 @@ Code *generateWhileCode(Node *expr, Node *commands)
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
+    printf("generating while code with expression %s and commands staring with %s\n", expr->data->label, commands->data->label);
+
     //TODO:
     //Where are we getting the result of if expressions?
 
@@ -500,15 +560,25 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
     char *result = generateRegisterName();
     Operation operation = getOperation(binaryOperator);
 
+    if (DEBUG == 1)
+    {
+        printf("Generating binary expression for operator %s and nodes %s and %s\n", binaryOperator, child1->code->res, child2->code->res);
+    }
+
     Code *code = createCode(operation, NULL, reg1, reg2, NULL, result, NULL, NULL);
 
     if (operation != AND && operation != OR)
     {
-        child1->code = joinCodes(child1->code, child2->code);
-        child1->code = joinCodes(child1->code, code);
+        Code *joined = joinCodes(child1->code, joinCodes(child2->code, code));
 
-        addToGlobalCodeList(child1->code);
-        return child1->code;
+        if (DEBUG == 1)
+        {
+            printf("Code generated for binary expression %s: \n", binaryOperator);
+            exportCodeList(joined);
+            printf("\n\n");
+        }
+
+        return joined;
     }
     else if (operation == AND)
     {
@@ -529,7 +599,13 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         parent->code = joinCodes(parent->code, code);
         parent->code = joinCodes(parent->code, labelJump);
 
-        addToGlobalCodeList(parent->code);
+        if (DEBUG == 1)
+        {
+            printf("Code generated for binary expression %s: \n", binaryOperator);
+            exportCodeList(parent->code);
+            printf("\n\n");
+        }
+
         return parent->code;
     }
     else if (operation == OR)
@@ -540,16 +616,22 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         Code *cbrCode = createCode(CBR, NULL, result, NULL, NULL, jumpLabel, dontJumpLabel, NULL);
         cbrCode = joinCodes(i2iCode, cbrCode);
 
-        Code *labelDontJump = generateLabelCode(dontJumpLabel);
-        labelDontJump = joinCodes(cbrCode, labelDontJump);
-        Code *labelJump = generateLabelCode(jumpLabel);
+        Code *dontJumpLabelCode = generateLabelCode(dontJumpLabel);
+        dontJumpLabelCode = joinCodes(cbrCode, dontJumpLabelCode);
+        Code *jumpLabelCode = generateLabelCode(jumpLabel);
 
-        parent->code = joinCodes(child1->code, labelDontJump);
+        parent->code = joinCodes(child1->code, dontJumpLabelCode);
         parent->code = joinCodes(parent->code, child2->code);
         parent->code = joinCodes(parent->code, code);
-        parent->code = joinCodes(parent->code, labelJump);
+        parent->code = joinCodes(parent->code, jumpLabelCode);
 
-        addToGlobalCodeList(parent->code);
+        if (DEBUG == 1)
+        {
+            printf("Code generated for binary expression %s: \n", binaryOperator);
+            exportCodeList(parent->code);
+            printf("\n\n");
+        }
+
         return parent->code;
     }
 }
@@ -568,7 +650,7 @@ char *getOperationName(Operation operation)
         return "nop";
         break;
     case HALT:
-        return "hlt";
+        return "halt";
         break;
     case ADD:
         return "add";
@@ -695,6 +777,10 @@ char *getOperationName(Operation operation)
 
 char *generateILOCFromCode(Code *code)
 {
+    if (code == NULL)
+    {
+        return NULL;
+    }
     char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
     if (code->arg1 != NULL)
     {
@@ -809,4 +895,10 @@ void exportCodeList(Code *code)
         printf("%s\n", generateILOCFromCode(code));
         exportCodeList(code->next);
     }
+}
+
+void handleRootCodeExport(Node *root)
+{
+    Code *code = getFirstCode(root->code);
+    exportCodeList(addCodeToNode(root, getFirstCode(joinCodes(generateInitialInstructions(code), code)))->code);
 }

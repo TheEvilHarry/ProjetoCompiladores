@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "ast.h"
 
-
 #define MAXLABELSIZE 15
 #define MAXREGISTERSIZE 15
 #define RBSS "rbss" //register for global variables
@@ -39,9 +38,10 @@ typedef enum
 
 char *generateLabelName();
 char *generateRegisterName();
+Code *getFirstCode(Code *code);
 int setOffset(char *symbol, int *scope);
 
-Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2, char* label);
+Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2, char *label);
 Code *generateEmptyCode(char *local);
 Code *joinCodes(Code *code1, Code *code2);
 
@@ -55,10 +55,10 @@ Code *generateI2ICode(char *r1, char *r2);
 Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse);
 Code *generateWhileCode(Node *expr, Node *commands);
 Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands);
-Code *generateBinaryExpression(char *binaryOperator, Node* parent, Node *child1, Node *child2);
+Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1, Node *child2);
 Code *generateUnaryExpression(Operation operation, Code *op);
 Code *generateHaltCommand();
-Code *generateFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
+Code *generateFunctionCode(Node *header, char *identifier, Node *commands);
 Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateJump(char *reg);
@@ -67,6 +67,7 @@ Code *generateReturnCode(Node *child, Node *parent, char *label);
 
 char *generateILOCFromCode(Code *code);
 char *getOperationName(Operation operation);
+int getNumberOfInstructions(Code *code);
 
 typedef struct node_list_t
 {
@@ -84,3 +85,5 @@ NodeList *addToGlobalNodeList(Node *node);
 void exportCodeList(Code *code);
 
 Code *addToGlobalCodeList(Code *code);
+
+void handleRootCodeExport(Node *root);

@@ -4,7 +4,7 @@ extern int get_line_number(void);
 
 Node *program_globalVariable_program(Node *globalVariable, Node *program);
 Node *program_functionDefinition_program(Node *functionDefinition, Node *program);
-Node *program_empty();
+Node *program_empty(Node *tree);
 
 Node *optionalStatic_TK_PR_STATIC(TokenData *p_TK_PR_STATIC);
 Node *optionalStatic_empty();

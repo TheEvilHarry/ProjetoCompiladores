@@ -1,0 +1,14 @@
+L27: loadI 1024 => rfp
+L26: loadI 1024 => rsp
+L25: loadI 13 => rbss
+L24: jumpI  => L10
+L0: halt  => 
+L1: i2i rsp => rfp
+L5: addI rsp, 12 => rsp
+L2: loadI 2 => r0
+L3: storeAI r0 => , 
+L4: jumpI  => L0
+L6: jump  => r1
+L7: loadAI rfp, 8 => rfp
+L8: loadAI rfp, 12 => rsp
+L9: loadAI rfp, 0 => r1
