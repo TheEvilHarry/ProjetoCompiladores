@@ -13,7 +13,7 @@
 
 #include "ilocfunctions.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 int RBSSOffset = 0;
 int RFPOffset = 0;
@@ -24,6 +24,18 @@ int currentRegister = 0;
 
 NodeList *globalNodeList = NULL;
 Code *globalCodeList = NULL;
+
+char *currentFunction;
+
+void updateCurrentFunction(char *function)
+{
+    currentFunction = strdup(function);
+}
+
+char *getCurrentFunction()
+{
+    return currentFunction;
+}
 
 char *generateLabelName()
 {
@@ -97,8 +109,6 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
     code->res = (dest1 != NULL && dest2 == NULL) ? dest1 : NULL;
     code->label = label != NULL ? label : generateLabelName();
 
-    printf("Creating OP %s : %s => %s \n", getOperationName(op),arg1, dest1);
-
     if (DEBUG == 1)
     {
         printf("Creating code for operation %s\n", generateILOCFromCode(code));
@@ -149,18 +159,18 @@ Code *joinCodes(Code *code1, Code *code2)
     return getFirstCode(code1);
 }
 
-Code *generateReturnCode(Node *child, Node *parent, char *label)
+Code *generateReturnCode(Node *child)
 {
+    SymbolTableEntry *currentFunctionEntry = findEntryInStack(getGlobalStack(), currentFunction);
 
-    char *rfp = malloc(4);
-    char *offset = malloc(4);
+    char rfp[4];
+    char offset[4];
     sprintf(rfp, "%s", RFP);
-    sprintf(rfp, "%s", offset);
-    Code *returnCode = createCode(STOREAI, rfp, child->code->res, NULL, NULL, rfp, offset, NULL);
-    Code *jumpCode = generateTrueConditionalJump(label);
+    sprintf(offset, "%d", 4);
+    Code *returnCode = createCode(STOREAI, RFP, child->code->res, NULL, NULL, RFP, offset, NULL);
+    Code *jumpCode = generateTrueConditionalJump(currentFunctionEntry->ILOCLabel);
     jumpCode = joinCodes(returnCode, jumpCode);
-    parent->code = joinCodes(child->code, jumpCode);
-    return parent->code;
+    return joinCodes(child->code, jumpCode);
 }
 
 Code *generateInitialInstructions(Code *code)
@@ -187,7 +197,7 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
     }
     Code *code;
-    SymbolTableStack *scope = getGlobalStack(); //CHECK THISSSSSSSS <================
+    SymbolTableStack *scope = findEntryTable(getGlobalStack(), identifier->value.valueString); //CHECK THISSSSSSSS <================
     SymbolTableEntry *entry = findEntryInStack(getGlobalStack(), identifier->value.valueString);
 
     if (scope->isGlobal == 1)
@@ -273,7 +283,7 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
 
     if (strcmp(identifier, "main") == 0)
     {
-        functionReturn = createCode(JUMPI, NULL, NULL, NULL, NULL, "0", NULL, NULL);
+        functionReturn = createCode(JUMPI, NULL, NULL, NULL, NULL, "L0", NULL, NULL);
     }
     else
     {
@@ -594,45 +604,39 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
     }
     else if (operation == AND)
     {
-
-        printf("caiu AND %s \n", getOperationName(operation));
-
         char *jumpLabel = generateLabelName();
         char *dontJumpLabel = generateLabelName();
 
         Code *i2iCode = createCode(I2I, NULL, reg1, NULL, NULL, result, NULL, NULL);
         Code *cbrCode = createCode(CBR, NULL, result, NULL, NULL, dontJumpLabel, jumpLabel, NULL);
         Code *labelDontJumpCode = generateLabelCode(dontJumpLabel);
-        Code *labelJumpCode= generateLabelCode(jumpLabel);
+        Code *labelJumpCode = generateLabelCode(jumpLabel);
 
         i2iCode = joinCodes(i2iCode, cbrCode);
-        i2iCode = joinCodes(i2iCode,labelDontJumpCode);
+        i2iCode = joinCodes(i2iCode, labelDontJumpCode);
 
-        parent->code = joinCodes(child1->code,i2iCode);
-        parent->code = joinCodes(parent->code,child2->code);
+        parent->code = joinCodes(child1->code, i2iCode);
+        parent->code = joinCodes(parent->code, child2->code);
         parent->code = joinCodes(parent->code, code);
         parent->code = joinCodes(parent->code, labelJumpCode);
 
+        //       Code *labelDontJumpCode = generateLabelCode(dontJumpLabel);
 
+        //        labelDontJumpCode = joinCodes(cbrCode, labelDontJumpCode);
+        //
+        //        Code *labelJump = generateLabelCode(jumpLabel);
+        //
+        //        parent->code = joinCodes(child1->code, labelDontJumpCode);
+        //
+        //        if (DEBUG == 1)
+        //        {
+        //            printf("Code generated for binary expression %s: \n", binaryOperator);
+        //            exportCodeList(parent->code);
+        //            printf("\n\n");
+        //        }
+        //
 
-//       Code *labelDontJumpCode = generateLabelCode(dontJumpLabel);
-
-
-//        labelDontJumpCode = joinCodes(cbrCode, labelDontJumpCode);
-//
-//        Code *labelJump = generateLabelCode(jumpLabel);
-//
-//        parent->code = joinCodes(child1->code, labelDontJumpCode);
-//
-//        if (DEBUG == 1)
-//        {
-//            printf("Code generated for binary expression %s: \n", binaryOperator);
-//            exportCodeList(parent->code);
-//            printf("\n\n");
-//        }
-//
-
-//            return joinCodes(child1->code, joinCodes(child2->code, code));
+        //            return joinCodes(child1->code, joinCodes(child2->code, code));
     }
     else if (operation == OR)
     {
@@ -657,11 +661,9 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
             exportCodeList(parent->code);
             printf("\n\n");
         }
-
-
     }
-     parent->code->res = result;
-     return parent->code;
+    parent->code->res = result;
+    return parent->code;
 }
 
 Code *generateUnaryExpression(Operation operation, Code *operand)
@@ -810,34 +812,38 @@ char *generateILOCFromCode(Code *code)
     {
         return NULL;
     }
-    char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
-    if(code->opCode == NOP && code->label != NULL)
-    {
-        sprintf(label, "%s: ", code->label);
-        return label;
-    }
-    if (code->arg1 != NULL)
-    {
-        sprintf(arg1, "%s", code->arg1);
-    }
-    if (code->arg2 != NULL)
-    {
-        sprintf(arg2, ", %s", code->arg2);
-    }
-    if (code->dest1 != NULL)
-    {
-        sprintf(dest1, "%s", code->dest1);
-    }
-    if (code->dest2 != NULL)
-    {
-        sprintf(dest2, ", %s", code->dest2);
-    }
-    if (code->label != NULL)
-    {
-        sprintf(label, "%s: ", code->label);
-    }
     char tempInstructionLine[128];
-    sprintf(tempInstructionLine, "%s%s %s%s => %s%s", label, getOperationName(code->opCode), arg1, arg2, dest1, dest2);
+    char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
+    if (code->opCode == NOP && code->label != NULL)
+    {
+        sprintf(label, "%s: ", code->label);
+        sprintf(tempInstructionLine, "%s", label);
+    }
+    else
+    {
+        if (code->arg1 != NULL)
+        {
+            sprintf(arg1, "%s", code->arg1);
+        }
+        if (code->arg2 != NULL)
+        {
+            sprintf(arg2, ", %s", code->arg2);
+        }
+        if (code->dest1 != NULL)
+        {
+            sprintf(dest1, "%s", code->dest1);
+        }
+        if (code->dest2 != NULL)
+        {
+            sprintf(dest2, ", %s", code->dest2);
+        }
+        if (code->label != NULL)
+        {
+            sprintf(label, "%s: ", code->label);
+        }
+
+        sprintf(tempInstructionLine, "%s%s %s%s => %s%s", label, getOperationName(code->opCode), arg1, arg2, dest1, dest2);
+    }
 
     char *instructionLine = malloc(strlen(tempInstructionLine) + 1);
     strcpy(instructionLine, tempInstructionLine);

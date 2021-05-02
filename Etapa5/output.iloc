@@ -1,0 +1,18 @@
+commandBlockEnd
+functionDefinition
+L20: loadI 1024 => rfp
+L19: loadI 1024 => rsp
+L18: loadI 15 => rbss
+L17: jumpI  => L1
+L0: halt  => 
+L1: i2i rsp => rfp
+L15: addI rsp, 0 => rsp
+L2: loadI 1 => r0
+L7: i2i r0 => r2
+L8: cbr r2 => L6, L5
+L6: 
+L3: loadI 0 => r1
+L4: and r0, r1 => r2
+L5: 
+L11: storeAI r2 => rfp, 0
+L16: jumpI  => L0

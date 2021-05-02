@@ -12,22 +12,11 @@ Node *program_globalVariable_program(Node *globalVariable, Node *program)
 Node *program_functionDefinition_program(Node *functionDefinition, Node *program)
 {
   addNext(functionDefinition, program);
-  // printf("program function definition after adding next\n");
-  // printf("Function definition is %s.\n", functionDefinition->data->label);
-  // if (program == NULL)
-  // {
-  //   printf("program is NULL");
-  // }
-  // Code *joined = joinCodes(functionDefinition->code, program->code);
-  // printf("program function definition after join\n");
-  // addCodeToNode(functionDefinition, joined);
-  // printf("program function definition end\n");
 
   return functionDefinition;
 }
 Node *program_empty(Node *tree)
 {
-  // exportCodeList(tree->code);
   return tree;
 }
 
@@ -120,8 +109,6 @@ Node *functionDefinition_functionHeader_functionCommandBlockInit_commandBlockEnd
 {
   Node *node = addChild(functionHeader, commandBlockEnd);
   addCodeToNode(node, generateFunctionCode(functionHeader, functionHeader->data->value.valueString, commandBlockEnd));
-  // printf("Function definition rule code is:\n");
-  // exportCodeList(node->code);
   addToGlobalNodeList(node);
   return node;
 }
@@ -137,6 +124,7 @@ Node *functionName_optionalStatic_type_TK_IDENTIFICADOR(Node *optionalStatic, Ty
   currentFunctionReturn = type;
   Node *node = createNode(p_TK_IDENTIFICADOR, type);
   createFunctionTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), type, p_TK_IDENTIFICADOR);
+  updateCurrentFunction(p_TK_IDENTIFICADOR->value.valueString);
   return node;
 }
 
@@ -158,7 +146,10 @@ Node *headerParametersList_comma_optionalConst_type_TK_IDENTIFICADOR_headerParam
 }
 Node *headerParametersList_empty() { return NULL; }
 
-void commandBlockInit() { stackScope(); }
+void commandBlockInit()
+{
+  stackScope();
+}
 
 Node *commandBlockEnd_commandList_closingCurlyBracket(Node *commandList, void *closingCurlyBracket)
 {
@@ -285,7 +276,7 @@ Node *executionControl_TK_PR_RETURN_expression(TokenData *p_TK_PR_RETURN, Node *
 
   Node *node = addChild(createCustomLabelNode("return", get_line_number(), expression->type), expression);
 
-  addToGlobalNodeList(addCodeToNode(node, generateReturnCode(node->children[0], node, "L0")));
+  addToGlobalNodeList(addCodeToNode(node, generateReturnCode(node->children[0])));
 
   return node;
 }

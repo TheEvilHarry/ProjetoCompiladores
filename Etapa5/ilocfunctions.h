@@ -63,7 +63,7 @@ Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node 
 Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateJump(char *reg);
 Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized);
-Code *generateReturnCode(Node *child, Node *parent, char *label);
+Code *generateReturnCode(Node *child);
 
 char *generateILOCFromCode(Code *code);
 char *getOperationName(Operation operation);
@@ -87,3 +87,6 @@ void exportCodeList(Code *code);
 Code *addToGlobalCodeList(Code *code);
 
 void handleRootCodeExport(Node *root);
+
+void updateCurrentFunction(char *function);
+char *getCurrentFunction();
