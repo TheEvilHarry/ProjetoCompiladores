@@ -163,7 +163,8 @@ Code *generateReturnCode(Node *child, Node *parent, char *label)
 
 Code *generateInitialInstructions(Code *code)
 {
-    Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, findEntryInStack(getGlobalStack(), "main")->ILOCLabel, NULL, NULL);
+    SymbolTableEntry *mainFunctionEntry = findEntryInStack(getGlobalStack(), "main");
+    Code *jump = createCode(JUMPI, NULL, NULL, NULL, NULL, (mainFunctionEntry != NULL) ? mainFunctionEntry->ILOCLabel : "L0", NULL, NULL);
     jump->next = createCode(HALT, NULL, NULL, NULL, NULL, NULL, NULL, "L0");
     char numberOfInstructions[16];
     sprintf(numberOfInstructions, "%d", getNumberOfInstructions(code) + 4);
@@ -410,7 +411,7 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
     char *reg1 = generateRegisterName();
 
     char *result = expr->code->res; // <===this has to be changed
-    Code *cbr = createCode(CBR, NULL, result, NULL, NULL, label1, label, label2, NULL);
+    Code *cbr = createCode(CBR, NULL, result, NULL, NULL, label1, label2, NULL);
     Code *labelCode1 = generateLabelCode(label1);
     labelCode1 = joinCodes(cbr, labelCode1);
     labelCode1 = joinCodes(expr->code, labelCode1);
@@ -506,7 +507,7 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = expr->code->res;
-    Code *conditionCode = createCode(CBR, NULL, reg, NULL, NULL, label2, label3);
+    Code *conditionCode = createCode(CBR, NULL, reg, NULL, NULL, label2, label3, NULL);
     conditionCode = joinCodes(labelCode, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
@@ -635,270 +636,271 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
 
         return parent->code;
     }
+}
 
-    Code *generateUnaryExpression(Operation operation, Code * operand)
+Code *generateUnaryExpression(Operation operation, Code *operand)
+{
+    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    return joinCodes(code, operand);
+}
+
+char *getOperationName(Operation operation)
+{
+    switch (operation)
     {
-        Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-        return joinCodes(code, operand);
+    case NOP:
+        return "nop";
+        break;
+    case HALT:
+        return "halt";
+        break;
+    case ADD:
+        return "add";
+        break;
+    case SUB:
+        return "sub";
+        break;
+    case MULT:
+        return "mult";
+        break;
+    case DIV:
+        return "div";
+        break;
+    case ADDI:
+        return "addI";
+        break;
+    case SUBI:
+        return "subI";
+        break;
+    case RSUBI:
+        return "rsubI";
+        break;
+    case MULTI:
+        return "multI";
+        break;
+    case DIVI:
+        return "divI";
+        break;
+    case AND:
+        return "and";
+        break;
+    case ANDI:
+        return "andI";
+        break;
+    case OR:
+        return "or";
+        break;
+    case ORI:
+        return "orI";
+        break;
+    case LOAD:
+        return "load";
+        break;
+    case LOADI:
+        return "loadI";
+        break;
+    case LOADAI:
+        return "loadAI";
+        break;
+    case LOAD0:
+        return "loadA0";
+        break;
+    case CLOAD:
+        return "cload";
+        break;
+    case CLOADAI:
+        return "cloadAI";
+        break;
+    case CLOADA0:
+        return "cloadA0";
+        break;
+    case STORE:
+        return "store";
+        break;
+    case STOREAI:
+        return "storeAI";
+        break;
+    case STOREA0:
+        return "storeA0";
+        break;
+    case CSTORE:
+        return "cstore";
+        break;
+    case CSTOREAI:
+        return "cstoreAI";
+        break;
+    case CSTOREA0:
+        return "cstoreA0";
+        break;
+    case I2I:
+        return "i2i";
+        break;
+    case C2C:
+        return "c2c";
+        break;
+    case C2I:
+        return "c2i";
+        break;
+    case I2C:
+        return "i2c";
+        break;
+    case JUMPI:
+        return "jumpI";
+        break;
+    case JUMP:
+        return "jump";
+        break;
+    case CBR:
+        return "cbr";
+        break;
+    case CMP_LT:
+        return "cmp_LT";
+        break;
+    case CMP_LE:
+        return "cmp_LE";
+        break;
+    case CMP_EQ:
+        return "cmp_EQ";
+        break;
+    case CMP_GE:
+        return "cmp_GE";
+        break;
+    case CMP_GT:
+        return "cmp_GT";
+        break;
+    case CMP_NE:
+        return "cmp_NE";
+        break;
+    default:
+        return "";
+        break;
+    }
+}
+
+char *generateILOCFromCode(Code *code)
+{
+    if (code == NULL)
+    {
+        return NULL;
+    }
+    char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
+    if (code->arg1 != NULL)
+    {
+        sprintf(arg1, "%s", code->arg1);
+    }
+    if (code->arg2 != NULL)
+    {
+        sprintf(arg2, ", %s", code->arg2);
+    }
+    if (code->dest1 != NULL)
+    {
+        sprintf(dest1, "%s", code->dest1);
+    }
+    if (code->dest2 != NULL)
+    {
+        sprintf(dest2, ", %s", code->dest2);
+    }
+    if (code->label != NULL)
+    {
+        sprintf(label, "%s: ", code->label);
+    }
+    char tempInstructionLine[128];
+    sprintf(tempInstructionLine, "%s%s %s%s => %s%s", label, getOperationName(code->opCode), arg1, arg2, dest1, dest2);
+
+    char *instructionLine = malloc(strlen(tempInstructionLine) + 1);
+    strcpy(instructionLine, tempInstructionLine);
+
+    return instructionLine;
+}
+
+NodeList *addToGlobalNodeList(Node *node)
+{
+    NodeList *nodeList = createNodeList(node);
+
+    if (globalNodeList == NULL)
+    {
+        globalNodeList = nodeList;
+    }
+    else
+    {
+        NodeList *aux = globalNodeList;
+        while (aux->next != NULL)
+        {
+            aux = aux->next;
+        }
+
+        aux->next = nodeList;
     }
 
-    char *getOperationName(Operation operation)
+    return globalNodeList;
+}
+
+Code *addToGlobalCodeList(Code *code)
+{
+    if (globalCodeList == NULL)
     {
-        switch (operation)
+        globalCodeList = code;
+    }
+    else
+    {
+        Code *aux = globalCodeList;
+        while (aux->next != NULL)
         {
-        case NOP:
-            return "nop";
-            break;
-        case HALT:
-            return "halt";
-            break;
-        case ADD:
-            return "add";
-            break;
-        case SUB:
-            return "sub";
-            break;
-        case MULT:
-            return "mult";
-            break;
-        case DIV:
-            return "div";
-            break;
-        case ADDI:
-            return "addI";
-            break;
-        case SUBI:
-            return "subI";
-            break;
-        case RSUBI:
-            return "rsubI";
-            break;
-        case MULTI:
-            return "multI";
-            break;
-        case DIVI:
-            return "divI";
-            break;
-        case AND:
-            return "and";
-            break;
-        case ANDI:
-            return "andI";
-            break;
-        case OR:
-            return "or";
-            break;
-        case ORI:
-            return "orI";
-            break;
-        case LOAD:
-            return "load";
-            break;
-        case LOADI:
-            return "loadI";
-            break;
-        case LOADAI:
-            return "loadAI";
-            break;
-        case LOAD0:
-            return "loadA0";
-            break;
-        case CLOAD:
-            return "cload";
-            break;
-        case CLOADAI:
-            return "cloadAI";
-            break;
-        case CLOADA0:
-            return "cloadA0";
-            break;
-        case STORE:
-            return "store";
-            break;
-        case STOREAI:
-            return "storeAI";
-            break;
-        case STOREA0:
-            return "storeA0";
-            break;
-        case CSTORE:
-            return "cstore";
-            break;
-        case CSTOREAI:
-            return "cstoreAI";
-            break;
-        case CSTOREA0:
-            return "cstoreA0";
-            break;
-        case I2I:
-            return "i2i";
-            break;
-        case C2C:
-            return "c2c";
-            break;
-        case C2I:
-            return "c2i";
-            break;
-        case I2C:
-            return "i2c";
-            break;
-        case JUMPI:
-            return "jumpI";
-            break;
-        case JUMP:
-            return "jump";
-            break;
-        case CBR:
-            return "cbr";
-            break;
-        case CMP_LT:
-            return "cmp_LT";
-            break;
-        case CMP_LE:
-            return "cmp_LE";
-            break;
-        case CMP_EQ:
-            return "cmp_EQ";
-            break;
-        case CMP_GE:
-            return "cmp_GE";
-            break;
-        case CMP_GT:
-            return "cmp_GT";
-            break;
-        case CMP_NE:
-            return "cmp_NE";
-            break;
-        default:
-            return "";
-            break;
+            aux = aux->next;
         }
+
+        aux->next = code;
     }
 
-    char *generateILOCFromCode(Code * code)
+    return globalCodeList;
+}
+
+NodeList *getGlobalNodeList()
+{
+    return globalNodeList;
+}
+
+Code *getGlobalCodeList()
+{
+    return globalCodeList;
+}
+
+NodeList *createNodeList(Node *node)
+{
+    NodeList *newNodeList = (NodeList *)malloc(sizeof(NodeList));
+    newNodeList->node = node;
+    newNodeList->next = NULL;
+    newNodeList->previous = NULL;
+
+    return newNodeList;
+}
+
+void exportCodeFromNodeList(NodeList *nodeListElem)
+{
+    if (nodeListElem != NULL)
     {
-        if (code == NULL)
+        Code *aux = nodeListElem->node->code;
+        printf("Code for node %s:\n", nodeListElem->node->data->label);
+        while (aux != NULL)
         {
-            return NULL;
+            printf("%s\n", generateILOCFromCode(aux));
+            aux = aux->next;
         }
-        char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
-        if (code->arg1 != NULL)
-        {
-            sprintf(arg1, "%s", code->arg1);
-        }
-        if (code->arg2 != NULL)
-        {
-            sprintf(arg2, ", %s", code->arg2);
-        }
-        if (code->dest1 != NULL)
-        {
-            sprintf(dest1, "%s", code->dest1);
-        }
-        if (code->dest2 != NULL)
-        {
-            sprintf(dest2, ", %s", code->dest2);
-        }
-        if (code->label != NULL)
-        {
-            sprintf(label, "%s: ", code->label);
-        }
-        char tempInstructionLine[128];
-        sprintf(tempInstructionLine, "%s%s %s%s => %s%s", label, getOperationName(code->opCode), arg1, arg2, dest1, dest2);
-
-        char *instructionLine = malloc(strlen(tempInstructionLine) + 1);
-        strcpy(instructionLine, tempInstructionLine);
-
-        return instructionLine;
+        exportCodeFromNodeList(nodeListElem->next);
     }
+}
 
-    NodeList *addToGlobalNodeList(Node * node)
+void exportCodeList(Code *code)
+{
+    if (code != NULL)
     {
-        NodeList *nodeList = createNodeList(node);
-
-        if (globalNodeList == NULL)
-        {
-            globalNodeList = nodeList;
-        }
-        else
-        {
-            NodeList *aux = globalNodeList;
-            while (aux->next != NULL)
-            {
-                aux = aux->next;
-            }
-
-            aux->next = nodeList;
-        }
-
-        return globalNodeList;
+        printf("%s\n", generateILOCFromCode(code));
+        exportCodeList(code->next);
     }
+}
 
-    Code *addToGlobalCodeList(Code * code)
-    {
-        if (globalCodeList == NULL)
-        {
-            globalCodeList = code;
-        }
-        else
-        {
-            Code *aux = globalCodeList;
-            while (aux->next != NULL)
-            {
-                aux = aux->next;
-            }
-
-            aux->next = code;
-        }
-
-        return globalCodeList;
-    }
-
-    NodeList *getGlobalNodeList()
-    {
-        return globalNodeList;
-    }
-
-    Code *getGlobalCodeList()
-    {
-        return globalCodeList;
-    }
-
-    NodeList *createNodeList(Node * node)
-    {
-        NodeList *newNodeList = (NodeList *)malloc(sizeof(NodeList));
-        newNodeList->node = node;
-        newNodeList->next = NULL;
-        newNodeList->previous = NULL;
-
-        return newNodeList;
-    }
-
-    void exportCodeFromNodeList(NodeList * nodeListElem)
-    {
-        if (nodeListElem != NULL)
-        {
-            Code *aux = nodeListElem->node->code;
-            printf("Code for node %s:\n", nodeListElem->node->data->label);
-            while (aux != NULL)
-            {
-                printf("%s\n", generateILOCFromCode(aux));
-                aux = aux->next;
-            }
-            exportCodeFromNodeList(nodeListElem->next);
-        }
-    }
-
-    void exportCodeList(Code * code)
-    {
-        if (code != NULL)
-        {
-            printf("%s\n", generateILOCFromCode(code));
-            exportCodeList(code->next);
-        }
-    }
-
-    void handleRootCodeExport(Node * root)
-    {
-        Code *code = getFirstCode(root->code);
-        exportCodeList(addCodeToNode(root, getFirstCode(joinCodes(generateInitialInstructions(code), code)))->code);
-    }
+void handleRootCodeExport(Node *root)
+{
+    Code *code = getFirstCode(root->code);
+    exportCodeList(addCodeToNode(root, getFirstCode(joinCodes(generateInitialInstructions(code), code)))->code);
+}
