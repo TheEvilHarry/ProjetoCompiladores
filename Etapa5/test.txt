@@ -1,18 +1,4 @@
-int x, y, z;
-
-int foo(){
-	return 2;
-}
 int main() {
-	int a;
-	int b;
-	a = 1;
-	b = 6;
-	// while (6 || 7) do {
-	//	a = 1;
-	//}
 	int c;
-	c = 6 + 7;
-	//c = foo();
-	return 0;
+	c = 1 && 1;
 }

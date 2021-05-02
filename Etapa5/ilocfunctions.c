@@ -97,6 +97,8 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
     code->res = (dest1 != NULL && dest2 == NULL) ? dest1 : NULL;
     code->label = label != NULL ? label : generateLabelName();
 
+    printf("Creating OP %s : %s => %s \n", getOperationName(op),arg1, dest1);
+
     if (DEBUG == 1)
     {
         printf("Creating code for operation %s\n", generateILOCFromCode(code));
@@ -246,7 +248,8 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
 
 Code *generateLabelCode(char *label)
 {
-    Code *code = createCode(NOP, NULL, NULL, NULL, NULL, NULL, NULL, label);
+    Code *code = createCode(NOP, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    code->label = label;
     return code;
 }
 
@@ -349,6 +352,7 @@ Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, No
 
 Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
 {
+    printf("BEGG MAIN CODE \n");
     Code *jumpICode = generateTrueConditionalJump(identifier);
     Code *ending = code;
     Code *haltCode = generateHaltCommand();
@@ -382,6 +386,7 @@ Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node 
     }
 
     Code *function = joinCodes(header->code, body);
+    printf("END MAIN CODE \n");
     return joinCodes(code, function);
 }
 
@@ -570,6 +575,8 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         printf("Generating binary expression for operator %s and nodes %s and %s\n", binaryOperator, child1->code->res, child2->code->res);
     }
 
+    char test[20] = " This should be it";
+    //Code *code = createCode(operation, NULL, strcat(reg1, test), reg2, NULL, result, NULL, NULL);
     Code *code = createCode(operation, NULL, reg1, reg2, NULL, result, NULL, NULL);
 
     if (operation != AND && operation != OR)
@@ -587,28 +594,45 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
     }
     else if (operation == AND)
     {
-        Code *i2iCode = createCode(I2I, NULL, reg1, NULL, NULL, result, NULL, NULL);
+
+        printf("caiu AND %s \n", getOperationName(operation));
+
         char *jumpLabel = generateLabelName();
         char *dontJumpLabel = generateLabelName();
+
+        Code *i2iCode = createCode(I2I, NULL, reg1, NULL, NULL, result, NULL, NULL);
         Code *cbrCode = createCode(CBR, NULL, result, NULL, NULL, dontJumpLabel, jumpLabel, NULL);
+        Code *labelDontJumpCode = generateLabelCode(dontJumpLabel);
+        Code *labelJumpCode= generateLabelCode(jumpLabel);
 
-        cbrCode = joinCodes(i2iCode, cbrCode);
-        Code *labelDontJump = generateLabelCode(dontJumpLabel);
+        i2iCode = joinCodes(i2iCode, cbrCode);
+        i2iCode = joinCodes(i2iCode,labelDontJumpCode);
 
-        labelDontJump = joinCodes(cbrCode, labelDontJump);
+        parent->code = joinCodes(child1->code,i2iCode);
+        parent->code = joinCodes(parent->code,child2->code);
+        parent->code = joinCodes(parent->code, code);
+        parent->code = joinCodes(parent->code, labelJumpCode);
 
-        Code *labelJump = generateLabelCode(jumpLabel);
 
-        parent->code = joinCodes(child1->code, labelDontJump);
 
-        if (DEBUG == 1)
-        {
-            printf("Code generated for binary expression %s: \n", binaryOperator);
-            exportCodeList(parent->code);
-            printf("\n\n");
-        }
+//       Code *labelDontJumpCode = generateLabelCode(dontJumpLabel);
 
-        return parent->code;
+
+//        labelDontJumpCode = joinCodes(cbrCode, labelDontJumpCode);
+//
+//        Code *labelJump = generateLabelCode(jumpLabel);
+//
+//        parent->code = joinCodes(child1->code, labelDontJumpCode);
+//
+//        if (DEBUG == 1)
+//        {
+//            printf("Code generated for binary expression %s: \n", binaryOperator);
+//            exportCodeList(parent->code);
+//            printf("\n\n");
+//        }
+//
+
+//            return joinCodes(child1->code, joinCodes(child2->code, code));
     }
     else if (operation == OR)
     {
@@ -634,8 +658,10 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
             printf("\n\n");
         }
 
-        return parent->code;
+
     }
+     parent->code->res = result;
+     return parent->code;
 }
 
 Code *generateUnaryExpression(Operation operation, Code *operand)
@@ -779,11 +805,17 @@ char *getOperationName(Operation operation)
 
 char *generateILOCFromCode(Code *code)
 {
+
     if (code == NULL)
     {
         return NULL;
     }
     char arg1[16] = "", arg2[16] = "", dest1[16] = "", dest2[16] = "", label[16] = "";
+    if(code->opCode == NOP && code->label != NULL)
+    {
+        sprintf(label, "%s: ", code->label);
+        return label;
+    }
     if (code->arg1 != NULL)
     {
         sprintf(arg1, "%s", code->arg1);
