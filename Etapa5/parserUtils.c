@@ -166,6 +166,8 @@ Node *commandList_command_commandList(Node *command, Node *commandList)
   else
   {
     addNext(command, commandList);
+    if(commandList!=NULL)
+        command->code = joinCodes(command->code, commandList->code);
     return command;
   }
 }

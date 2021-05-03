@@ -13,7 +13,8 @@
 
 #include "ilocfunctions.h"
 
-#define DEBUG 1
+#define DEBUG 0
+int commandCount= 0;
 
 int RBSSOffset = 0;
 int RFPOffset = 0;
@@ -111,7 +112,8 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
 
     if (DEBUG == 1)
     {
-        printf("Creating code for operation %s\n", generateILOCFromCode(code));
+    commandCount++;
+        printf("%d Creating code for operation %s        %s\n",commandCount ,generateILOCFromCode(code), getOperationName(op));
     }
 
     return code;
@@ -165,6 +167,7 @@ Code *generateReturnCode(Node *child)
 
     char rfp[4];
     char offset[4];
+    printf("CREATING A RETURN CODE MTFCKR\n");
     sprintf(rfp, "%s", RFP);
     sprintf(offset, "%d", 4);
     Code *returnCode = createCode(STOREAI, RFP, child->code->res, NULL, NULL, RFP, offset, NULL);
@@ -258,8 +261,7 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
 
 Code *generateLabelCode(char *label)
 {
-    Code *code = createCode(NOP, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    code->label = label;
+    Code *code = createCode(NOP, NULL, NULL, NULL, NULL, NULL, NULL, label);
     return code;
 }
 
@@ -295,8 +297,9 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
 
         functionReturn = joinCodes(jump, joinCodes(saveRFP, joinCodes(saveRSP, returnAddress)));
     }
-
-    joinCodes(updateRFP, joinCodes(updateRSP, joinCodes(commands->code, functionReturn)));
+    commands->code = joinCodes(commands->code, functionReturn);
+    updateRSP = joinCodes(updateRSP, commands->code);
+    joinCodes(updateRFP, updateRSP);
 
     if (DEBUG == 1)
     {
@@ -308,7 +311,7 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
 
     // if (strcmp(identifier, "main") == 0)
     // {
-    //     return generateMainFunctionCode(header, identifier, code, commands, labelReturn);
+    //     return  g(header, identifier, code, commands, labelReturn);
     // }
     // return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
 }
@@ -591,16 +594,19 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
 
     if (operation != AND && operation != OR)
     {
-        Code *joined = joinCodes(child1->code, joinCodes(child2->code, code));
+        parent->code = joinCodes(child1->code,child2->code);
+        parent->code = joinCodes(parent->code, code);
+
+        //Code *joined = joinCodes(child1->code, joinCodes(child2->code, code));
 
         if (DEBUG == 1)
         {
             printf("Code generated for binary expression %s: \n", binaryOperator);
-            exportCodeList(joined);
+           // exportCodeList(joined);
             printf("\n\n");
         }
 
-        return joined;
+       // return joined;
     }
     else if (operation == AND)
     {

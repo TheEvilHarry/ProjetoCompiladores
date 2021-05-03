@@ -209,7 +209,7 @@ commandBlockEnd: commandList '}' { $$=commandBlockEnd_commandList_closingCurlyBr
 
 functionCommandBlockInit: '{';
 
-commandList: command commandList { $$=commandList_command_commandList($1, $2); }
+commandList: command commandList { $$=commandList_command_commandList($1, $2);		          }
         | {$$=commandList_empty();};
 
 command: variableDeclaration ';' { $$ = command_variableDeclaration_semicolon($1, NULL); }
