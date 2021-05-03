@@ -1,12 +1,10 @@
-commandBlockEnd
-functionDefinition
-L20: loadI 1024 => rfp
-L19: loadI 1024 => rsp
-L18: loadI 15 => rbss
-L17: jumpI  => L1
+L36: loadI 1024 => rfp
+L35: loadI 1024 => rsp
+L34: loadI 36 => rbss
+L33: jumpI  => L1
 L0: halt  => 
 L1: i2i rsp => rfp
-L15: addI rsp, 0 => rsp
+L31: addI rsp, 8 => rsp
 L2: loadI 1 => r0
 L7: i2i r0 => r2
 L8: cbr r2 => L6, L5
@@ -14,5 +12,26 @@ L6:
 L3: loadI 0 => r1
 L4: and r0, r1 => r2
 L5: 
-L11: storeAI r2 => rfp, 0
-L16: jumpI  => L0
+L9: storeAI r2 => rfp, 0
+L10: loadI 1 => r3
+L13: i2i r3 => r5
+L16: cbr r5 => L14, L15
+L15: 
+L11: loadI 2 => r4
+L12: or r3, r4 => r5
+L14: 
+L17: storeAI r5 => rfp, 0
+L18: loadI 1 => r6
+L19: loadI 2 => r7
+L20: add r6, r7 => r8
+L21: storeAI r8 => rfp, 0
+L22: loadI 9 => r9
+L23: storeAI r9 => rbss, 0
+L24: loadAI rbss, 0 => r10
+L25: loadAI rfp, 0 => r11
+L26: sub r10, r11 => r12
+L27: storeAI r12 => rbss, 4
+L28: loadAI rbss, 4 => r13
+L29: storeAI r13 => rfp, 4
+L30: jumpI  => L0
+L32: jumpI  => L0

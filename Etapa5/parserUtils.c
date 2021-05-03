@@ -166,8 +166,8 @@ Node *commandList_command_commandList(Node *command, Node *commandList)
   else
   {
     addNext(command, commandList);
-    if(commandList!=NULL)
-        command->code = joinCodes(command->code, commandList->code);
+    if (commandList != NULL)
+      command->code = joinCodes(command->code, commandList->code);
     return command;
   }
 }
@@ -663,7 +663,12 @@ Node *functionParameters_empty() { return NULL; }
 Node *functionParametersList_comma_expression_functionParametersList(void *comma, Node *expression, Node *functionParametersList) { return addNext(expression, functionParametersList); }
 Node *functionParametersList_empty() { return NULL; }
 
-Node *operand_TK_IDENTIFICADOR(TokenData *p_TK_IDENTIFICADOR) { return createNode(p_TK_IDENTIFICADOR, getEntryTypeFromKey(p_TK_IDENTIFICADOR->value.valueString)); }
+Node *operand_TK_IDENTIFICADOR(TokenData *p_TK_IDENTIFICADOR)
+{
+  Node *node = createNode(p_TK_IDENTIFICADOR, getEntryTypeFromKey(p_TK_IDENTIFICADOR->value.valueString));
+
+  return addCodeToNode(node, generateLoadVariableCode(node));
+}
 Node *operand_vectorIdentifier(Node *vectorIdentifier) { return vectorIdentifier; }
 Node *operand_value(Node *value) { return value; }
 Node *operand_functionCall(Node *functionCall) { return functionCall; }

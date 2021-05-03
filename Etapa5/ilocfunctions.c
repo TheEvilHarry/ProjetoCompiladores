@@ -14,7 +14,7 @@
 #include "ilocfunctions.h"
 
 #define DEBUG 0
-int commandCount= 0;
+int commandCount = 0;
 
 int RBSSOffset = 0;
 int RFPOffset = 0;
@@ -112,8 +112,8 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
 
     if (DEBUG == 1)
     {
-    commandCount++;
-        printf("%d Creating code for operation %s        %s\n",commandCount ,generateILOCFromCode(code), getOperationName(op));
+        commandCount++;
+        printf("%d Creating code for operation %s        %s\n", commandCount, generateILOCFromCode(code), getOperationName(op));
     }
 
     return code;
@@ -161,19 +161,38 @@ Code *joinCodes(Code *code1, Code *code2)
     return getFirstCode(code1);
 }
 
+Code *generateLoadVariableCode(Node *variableNode)
+{
+    SymbolTableEntry *variableEntry = findEntryInStack(getGlobalStack(), variableNode->data->label);
+    SymbolTableStack *variableTable = findEntryTable(getGlobalStack(), variableNode->data->label);
+
+    char entryOffsetAsString[16];
+    sprintf(entryOffsetAsString, "%d", variableEntry->entryOffset);
+
+    char *destinationRegister = generateRegisterName();
+
+    Code *code = createCode(LOADAI, NULL, variableTable->isGlobal == 1 ? RBSS : RFP, entryOffsetAsString, NULL, destinationRegister, NULL, NULL);
+
+    return code;
+}
+
 Code *generateReturnCode(Node *child)
 {
     SymbolTableEntry *currentFunctionEntry = findEntryInStack(getGlobalStack(), currentFunction);
 
+    if (DEBUG == 1)
+    {
+        printf("Return code for child %s with code %s\n", child->data->label, child->code == NULL ? "NULL" : generateILOCFromCode(child->code));
+    }
+
     char rfp[4];
     char offset[4];
-    printf("CREATING A RETURN CODE MTFCKR\n");
     sprintf(rfp, "%s", RFP);
     sprintf(offset, "%d", 4);
     Code *returnCode = createCode(STOREAI, RFP, child->code->res, NULL, NULL, RFP, offset, NULL);
-    Code *jumpCode = generateTrueConditionalJump(currentFunctionEntry->ILOCLabel);
-    jumpCode = joinCodes(returnCode, jumpCode);
-    return joinCodes(child->code, jumpCode);
+    Code *jumpCode = generateTrueConditionalJump(strcmp(currentFunction, "main") == 0 ? "L0" : currentFunctionEntry->ILOCLabel);
+
+    return joinCodes(child->code, joinCodes(returnCode, jumpCode));
 }
 
 Code *generateInitialInstructions(Code *code)
@@ -594,7 +613,7 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
 
     if (operation != AND && operation != OR)
     {
-        parent->code = joinCodes(child1->code,child2->code);
+        parent->code = joinCodes(child1->code, child2->code);
         parent->code = joinCodes(parent->code, code);
 
         //Code *joined = joinCodes(child1->code, joinCodes(child2->code, code));
@@ -602,11 +621,11 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         if (DEBUG == 1)
         {
             printf("Code generated for binary expression %s: \n", binaryOperator);
-           // exportCodeList(joined);
+            // exportCodeList(joined);
             printf("\n\n");
         }
 
-       // return joined;
+        // return joined;
     }
     else if (operation == AND)
     {

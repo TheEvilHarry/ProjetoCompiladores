@@ -64,6 +64,7 @@ Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, No
 Code *generateJump(char *reg);
 Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized);
 Code *generateReturnCode(Node *child);
+Code *generateLoadVariableCode(Node *variableNode);
 
 char *generateILOCFromCode(Code *code);
 char *getOperationName(Operation operation);

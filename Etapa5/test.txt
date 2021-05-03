@@ -2,8 +2,10 @@ int x, y, c;
 
 int main() {
 	c = 1 && 0;
-	c = 1 + 2;
 	c = 1 || 2;
+	c = 1 + 2;
+	x = 9;
+	y = x - c;
 
-	return 7;
+	return y;
 }
