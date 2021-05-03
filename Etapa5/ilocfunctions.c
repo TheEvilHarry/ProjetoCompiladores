@@ -14,6 +14,7 @@
 #include "ilocfunctions.h"
 
 #define DEBUG 0
+
 int commandCount = 0;
 
 int RBSSOffset = 0;
@@ -560,38 +561,24 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     return labelCode3;
 }
 
-//void ILOC_add_local_var(node_t *parent, node_t *ident, node_t *initializer, char *type, STACK *stack){
-
-Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized)
+Code *generateLocalVarCode(Node *identifier, Node *init, int initialized)
 {
     if (DEBUG == 1)
     {
         printf("Generating local var code for %s\n", identifier->data->label);
     }
-    char *pointer = malloc(10);
-    char *offset = malloc(3);
-    sprintf(pointer, "%s", RSP);
-    sprintf(offset, "%s", "4");
-
-    Code *updatesRSP = createCode(ADDI, pointer, pointer, offset, NULL, pointer, NULL, NULL);
+    Code *updatesRSP = createCode(ADDI, NULL, RSP, "4", NULL, RSP, NULL, NULL);
 
     if (initialized == 1)
     {
         SymbolTableEntry *identifierEntry = findEntryInStack(getGlobalStack(), identifier->data->value.valueString);
 
-        char *pointer2 = malloc(10);
-        sprintf(pointer2, "%s", RFP);
-        char *identifierOffset = malloc(10);
+        char identifierOffset[16];
         sprintf(identifierOffset, "%d", identifierEntry->entryOffset);
-        Code *attribution = createCode(STOREAI, pointer2, init->code->res, NULL, NULL, pointer2, identifierOffset, NULL);
-        updatesRSP = joinCodes(updatesRSP, init->code);
-        updatesRSP = joinCodes(updatesRSP, attribution);
-        prev->code = updatesRSP;
+        Code *attribution = createCode(STOREAI, RFP, init->code->res, NULL, NULL, RFP, identifierOffset, NULL);
+        updatesRSP = joinCodes(updatesRSP, joinCodes(init->code, attribution));
     }
-    else if (initialized == 0)
-    {
-        prev->code = updatesRSP;
-    }
+
     return updatesRSP;
 }
 

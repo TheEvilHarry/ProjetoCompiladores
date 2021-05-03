@@ -591,8 +591,9 @@ Node *variableDeclaration_optionalStatic_optionalConst_type_variable_variableDec
 Node *variable_TK_IDENTIFICADOR(TokenData *p_TK_IDENTIFICADOR)
 {
   createVariableTableEntry(p_TK_IDENTIFICADOR->value.valueString, get_line_number(), TYPE_UNDEFINED, NULL);
+  Node *identifierNode = createNode(p_TK_IDENTIFICADOR, TYPE_UNDEFINED);
 
-  // addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 0);
+  addCodeToNode(identifierNode, generateLocalVarCode(identifierNode, NULL, 0));
 
   return NULL;
 }
@@ -609,7 +610,7 @@ Node *variable_TK_IDENTIFICADOR_TK_OC_LE_value(TokenData *p_TK_IDENTIFICADOR, To
   addChild(node, identifierNode);
   addChild(node, value);
 
-  addCodeToNode(node, generateLocalVarCode(identifierNode, NULL, value, 1));
+  addCodeToNode(node, generateLocalVarCode(identifierNode, value, 1));
 
   return node;
 }
@@ -619,9 +620,15 @@ Node *variable_TK_IDENTIFICADOR_TK_OC_LE_TK_IDENTIFICADOR(TokenData *first_TK_ID
   Type identifierType = getEntryTypeFromKey(first_TK_IDENTIFICADOR->value.valueString);
 
   Node *node = createNode(p_TK_OC_LE, identifierType);
+  Node *identifierNode = createNode(first_TK_IDENTIFICADOR, identifierType);
+  Node *initializerNode = createNode(second_TK_IDENTIFICADOR, getEntryTypeFromKey(second_TK_IDENTIFICADOR->value.valueString));
 
-  addChild(node, createNode(first_TK_IDENTIFICADOR, identifierType));
-  addChild(node, createNode(second_TK_IDENTIFICADOR, getEntryTypeFromKey(second_TK_IDENTIFICADOR->value.valueString)));
+  addCodeToNode(initializerNode, generateLoadVariableCode(initializerNode));
+
+  addChild(node, identifierNode);
+  addChild(node, initializerNode);
+
+  addCodeToNode(node, generateLocalVarCode(identifierNode, initializerNode, 1));
 
   return node;
 }

@@ -2,41 +2,50 @@ Change of rfp ignored (strict mode)
 Change of rsp ignored (strict mode)
 Change of rbss ignored (strict mode)
 count	instruction
-    9	loadI
-    6	storeAI
+   12	loadI
+    9	storeAI
+    5	loadAI
     3	i2i
-    3	loadAI
+    3	addI
+    3	sub
     2	jumpI
     2	cbr
-    1	addI
     1	and
     1	add
-    1	sub
     1	halt
 
-instructions executed:   30
-register         read:   27 write:   46
-memory           read:    3 write:    6
+instructions executed:   42
+register         read:   41 write:   67
+memory           read:    5 write:    9
 
   register    value
-        r0        1
+        r0       87
         r1        0
-       r10        9
+       r10        3
        r11        9
-       r12        0
+       r12       98
        r13        0
-        r2        0
-        r3        1
+       r14        9
+       r15       -9
+       r16        3
+       r17      -12
+       r18       98
+       r19     -110
+        r2        1
+       r20     -110
+        r3        0
+        r4        0
         r5        1
-        r6        1
-        r7        2
-        r8        3
-        r9        9
+        r7        1
+        r8        1
+        r9        2
       rbss        0
        rfp        0
        rpc        4
-       rsp        8
+       rsp       16
 
     memory    value
 00000000        9
-00000004        0
+00000004     -110
+00000008        0
+00000032       98

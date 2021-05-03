@@ -62,7 +62,7 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands);
 Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
 Code *generateJump(char *reg);
-Code *generateLocalVarCode(Node *identifier, Node *prev, Node *init, int initialized);
+Code *generateLocalVarCode(Node *identifier, Node *init, int initialized);
 Code *generateReturnCode(Node *child);
 Code *generateLoadVariableCode(Node *variableNode);
 

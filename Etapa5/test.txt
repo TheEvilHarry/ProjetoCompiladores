@@ -1,11 +1,18 @@
-int x, y, c;
+int x, y;
 
 int main() {
+	int c <= 87;
+	int u;
+	u = 0;
+
 	c = 1 && 0;
 	c = 1 || 2;
 	c = 1 + 2;
 	x = 9;
-	y = x - c;
+
+	int w <= 88;
+
+	y = u - x - c - w;
 
 	return y;
 }
