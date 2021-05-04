@@ -2,14 +2,14 @@ int x, y, a, b;
 
 int main() {
 
-        int z,k;
+        int z;
 
 		if(x > 6) {
     		z = 9;
     	}
     	else {
-            int h;
-             }
+            z = 1 ;
+    	      }
 
 	    return 3;
 }

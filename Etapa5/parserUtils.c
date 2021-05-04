@@ -13,6 +13,11 @@ Node *program_functionDefinition_program(Node *functionDefinition, Node *program
 {
   addNext(functionDefinition, program);
 
+  if (program != NULL)
+  {
+    addCodeToNode(functionDefinition, joinCodes(functionDefinition->code, program->code));
+  }
+
   return functionDefinition;
 }
 Node *program_empty(Node *tree)
@@ -676,7 +681,9 @@ Node *functionCall_TK_IDENTIFICADOR_openingParenthesis_functionParameters_closin
 
   strcat(str, p_TK_IDENTIFICADOR->label);
 
-  return addChild(createCustomLabelNode(str, get_line_number(), identifierType), functionParameters);
+  return addCodeToNode(
+      addChild(createCustomLabelNode(str, get_line_number(), identifierType), functionParameters),
+      generateFunctionCallCode(p_TK_IDENTIFICADOR->value.valueString, functionParameters));
 }
 
 Node *functionParameters_expression_functionParametersList(Node *expression, Node *functionParametersList) { return addNext(expression, functionParametersList); }

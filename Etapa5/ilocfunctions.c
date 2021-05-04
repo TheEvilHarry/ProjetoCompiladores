@@ -292,8 +292,6 @@ Code *generateTrueConditionalJump(char *label)
     return jumpi;
 }
 
-//identifier = the label of the header's node
-
 Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
 {
     SymbolTableEntry *functionEntry = findEntryInStack(getGlobalStack(), identifier);
@@ -335,6 +333,43 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
     //     return  g(header, identifier, code, commands, labelReturn);
     // }
     // return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
+}
+
+Code *generateFunctionCallCode(char *functionName, Node *params)
+{
+    Code *storeRSP = createCode(STOREAI, NULL, RSP, NULL, NULL, RSP, "12", NULL);
+    Code *storeRFP = createCode(STOREAI, NULL, RFP, NULL, NULL, RFP, "8", NULL);
+
+    Node *auxParam = params;
+    int rspOffset = 16;
+    char rspOffsetAsString[16];
+    Code *storeFunctionParams = NULL;
+    while (auxParam != NULL)
+    {
+        Code *currentParamCode = auxParam->code;
+        sprintf(rspOffsetAsString, "%d", rspOffset);
+        printf("Current param code res is %s\n", currentParamCode->res);
+        storeFunctionParams = joinCodes(storeFunctionParams, joinCodes(currentParamCode, createCode(STOREAI, NULL, currentParamCode->res, NULL, NULL, RSP, rspOffsetAsString, NULL)));
+        auxParam = auxParam->next;
+        rspOffset += 4;
+    }
+
+    SymbolTableEntry *functionEntry = findEntryInStack(getGlobalStack(), functionName);
+
+    char *functionCallRegister = generateRegisterName();
+    char *returnPositionRegister = generateRegisterName();
+
+    Code *returnPosition = createCode(ADDI, NULL, RPC, "3", NULL, returnPositionRegister, NULL, NULL);
+    Code *storeReturnPosition = createCode(STOREAI, NULL, returnPositionRegister, NULL, NULL, RSP, "0", NULL);
+    Code *jumpToFunction = createCode(JUMPI, NULL, NULL, NULL, NULL, functionEntry->ILOCLabel, NULL, NULL);
+    Code *loadReturnValue = createCode(LOADAI, NULL, RSP, "4", NULL, functionCallRegister, NULL, NULL);
+
+    return joinCodes(storeRSP,
+                     joinCodes(storeRFP,
+                               joinCodes(storeFunctionParams,
+                                         joinCodes(returnPosition,
+                                                   joinCodes(storeReturnPosition,
+                                                             joinCodes(jumpToFunction, loadReturnValue))))));
 }
 
 Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
