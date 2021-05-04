@@ -501,7 +501,10 @@ Code *generateWhileCode(Node *expr, Node *commands)
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
-    printf("generating while code with expression %s and commands staring with %s\n", expr->data->label, commands->data->label);
+    if (DEBUG == 1)
+    {
+        printf("generating while code with expression %s and commands staring with %s\n", expr->data->label, commands->data->label);
+    }
 
     //TODO:
     //Where are we getting the result of if expressions?
