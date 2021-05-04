@@ -347,6 +347,7 @@ Code *generateFunctionCallCode(char *functionName, Node *params)
     {
         Code *currentParamCode = auxParam->code;
         sprintf(rspOffsetAsString, "%d", rspOffset);
+        printf("Current param code res is %s\n", currentParamCode->res);
         storeFunctionParams = joinCodes(storeFunctionParams, joinCodes(currentParamCode, createCode(STOREAI, NULL, currentParamCode->res, NULL, NULL, RSP, rspOffsetAsString, NULL)));
         auxParam = auxParam->next;
         rspOffset += 4;

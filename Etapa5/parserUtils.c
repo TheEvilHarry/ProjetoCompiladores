@@ -13,6 +13,11 @@ Node *program_functionDefinition_program(Node *functionDefinition, Node *program
 {
   addNext(functionDefinition, program);
 
+  if (program != NULL)
+  {
+    addCodeToNode(functionDefinition, joinCodes(functionDefinition->code, program->code));
+  }
+
   return functionDefinition;
 }
 Node *program_empty(Node *tree)
