@@ -206,7 +206,7 @@ Node *operand_vectorIdentifier(Node *vectorIdentifier);
 Node *operand_value(Node *value);
 Node *operand_functionCall(Node *functionCall);
 Node *operand_openingParenthesis_expression_closingParenthesis(void *openingParenthesis, Node *expression, void *closingParenthesis);
-
+void printDebug();
 Node *vectorIdentifier_TK_IDENTIFICADOR_openingBracket_expression_closingBracket(TokenData *p_TK_IDENTIFICADOR, void *openingBracket, Node *expression, void *closingBracket);
 
 Node *identifier_TK_IDENTIFICADOR(TokenData *p_TK_IDENTIFICADOR);

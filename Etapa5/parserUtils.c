@@ -148,12 +148,14 @@ Node *headerParametersList_empty() { return NULL; }
 
 void commandBlockInit()
 {
+    printf("STARTING BLOCK\n");
   stackScope();
 }
 
 Node *commandBlockEnd_commandList_closingCurlyBracket(Node *commandList, void *closingCurlyBracket)
 {
   popScope();
+  printf("reached end of block \n");
   return commandList;
 }
 
@@ -298,7 +300,7 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
     Node *commandBlockEnd,
     Node *p_else)
 {
-
+  printDebug();
   if (expression->type == TYPE_STRING)
   {
     throwStringToXError(NULL);
@@ -313,15 +315,28 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
   addChild(node, expression);
   addChild(node, commandBlockEnd);
   addChild(node, p_else);
-
   addCodeToNode(node, generateIfCode(expression, commandBlockEnd, p_else));
 
   return node;
 }
 
+void printDebug(){
+    printf("I HATE MY LIFE ######################\n"); }
+
 Node *else_TK_PR_ELSE_commandBlockInit_commandBlockEnd(TokenData *p_TK_PR_ELSE, Node *commandBlockInit, Node *commandBlockEnd)
 {
-  return addChild(createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED), commandBlockInit);
+  if(commandBlockEnd== NULL)
+    printf("AQUI TA DANDO RUIIMMMM\n");
+
+  Node * elseNode = createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED);
+  elseNode = addChild(elseNode, commandBlockEnd);
+
+  elseNode->code = NULL;
+
+  if(commandBlockEnd!=NULL)
+    elseNode->code = joinCodes(elseNode->code, commandBlockEnd->code);
+
+  return elseNode;
 }
 Node *else_empty() { return NULL; }
 

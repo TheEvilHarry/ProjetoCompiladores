@@ -9,7 +9,7 @@ if [ "$1" = "debug" ]; then
 else
   ./etapa5 <test.txt >output.iloc
   echo "Running output code with ilocsim..."
-  timeout 3 python3 ./ilocsim.py -s -x <output.iloc >ilocsim_output.txt
+
 fi
 echo "Finished!"
 make clean

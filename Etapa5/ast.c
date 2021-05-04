@@ -24,6 +24,7 @@ Node *createCustomLabelNode(char *label, int line, Type type)
 {
   TokenData *data = createNonLiteralToken(line, SPECIAL_TYPE, label);
   Node *node = malloc(sizeof(Node));
+  printf("CREATING NODE FOR %s \n", label);
 
   node->data = data;
   node->numberOfChildren = 0;

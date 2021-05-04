@@ -215,6 +215,7 @@ Code *generateInitialInstructions(Code *code)
 
 Code *generateAttributionCode(TokenData *identifier, Node *exp)
 {
+     printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
     if (DEBUG == 1)
     {
         printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);

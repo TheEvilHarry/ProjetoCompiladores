@@ -251,7 +251,7 @@ fluxControl: conditional { $$=fluxControl_conditional($1); }
 conditional: TK_PR_IF '(' expression ')' commandBlockInit commandBlockEnd else {
         $$=conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_commandBlockInit_commandBlockEnd_else($1, NULL, $3, NULL, $5, $6, $7); };
 
-else: TK_PR_ELSE commandBlockInit commandBlockEnd { $$=else_TK_PR_ELSE_commandBlockInit_commandBlockEnd($1, $2, $3); }
+else: TK_PR_ELSE commandBlockInit commandBlockEnd { $$=else_TK_PR_ELSE_commandBlockInit_commandBlockEnd($1, $2, $3);}
         | { $$=else_empty(); };
 
 while: TK_PR_WHILE '(' expression ')' TK_PR_DO commandBlockInit commandBlockEnd { 
