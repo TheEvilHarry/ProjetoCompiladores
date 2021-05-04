@@ -1,52 +1,60 @@
 int x, y, a, b, k;
 
-int foo()
-{
-	return 77;
-}
+//int foo()
+//{
+//	return 77;
+//}
 
 int main()
 {
-	int c <= 87;
-	int u;
-	u = 0;
+//	int c <= 87;
+//	int u;
+//	u = 0;
+//
+//	c = 1 && 0;
+//	c = 1 || 2;
+//	c = 1 + 2;
+//	x = 9;
+//
+//	int w <= 88;
+//
+//	y = u - x - c - w;
+//
+//	a = 0;
+//	a = a - 1;
+//
+//	x = 0;
+//	b = 0;
+//	int i;
 
-	c = 1 && 0;
-	c = 1 || 2;
-	c = 1 + 2;
-	x = 9;
-
-	int w <= 88;
-
-	y = u - x - c - w;
-
-	a = 0;
-	a = a - 1;
-
+	k = 66;
 	x = 0;
-	b = 0;
-	int i;
 
 	if (x > 6)
 	{
-		a = 9;
+		k = 9;
+	}else{
+		int z <= 76;
+		k = 98;
 	}
 
-	while (a < 5)
-		do
-		{
-			a = a + 1;
-			x = x + 2 * a;
-			i = 0;
-			while (i < 6)
-				do
-				{
-					i = i + 1;
-					b = b + 1;
-				}
-		}
+	//z = 6;
 
-	k = foo();
+	//	while (a < 5)
+	//	do
+	//	{
+	//		a = a + 1;
+	//		x = x + 2 * a;
+	//		i = 0;
+	//		while (i < 6)
+	//			do
+	//			{
+	//				i = i + 1;
+	//				b = b + 1;
+	//			}
+	//	}
 
-	return y;
+	//k = foo();
+
+	return 99;
 }
