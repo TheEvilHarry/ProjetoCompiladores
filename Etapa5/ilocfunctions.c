@@ -274,6 +274,7 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     if (falseExpr != NULL)
     {
         labelCode3 = joinCodes(falseExpr->code, labelCode3);
+        // printf("else code is %s\n", generateILOCFromCode(falseExpr->code));
     }
 
     return joinCodes(ifCode, labelCode3);

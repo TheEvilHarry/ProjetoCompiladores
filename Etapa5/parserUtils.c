@@ -326,7 +326,7 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
 
 Node *else_TK_PR_ELSE_commandBlockInit_commandBlockEnd(TokenData *p_TK_PR_ELSE, Node *commandBlockInit, Node *commandBlockEnd)
 {
-  return addChild(createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED), commandBlockEnd);
+  return addCodeToNode(addChild(createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED), commandBlockEnd), commandBlockEnd->code);
 }
 Node *else_empty() { return NULL; }
 

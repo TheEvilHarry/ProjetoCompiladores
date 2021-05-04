@@ -28,11 +28,12 @@ int main()
 //	int i;
 
 	k = 66;
-	x = 0;
+	x = 10;
 
 	if (x > 6)
 	{
 		k = 9;
+		x = 54;
 	}else{
 		int z <= 76;
 		k = 98;
