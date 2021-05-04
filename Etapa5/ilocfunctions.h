@@ -6,6 +6,7 @@
 #define RBSS "rbss" //register for global variables
 #define RFP "rfp"   //register for local variables]
 #define RSP "rsp"   //register for stack
+#define RPC "rpc"   //register for program counter
 
 typedef enum
 {
@@ -65,6 +66,7 @@ Code *generateJump(char *reg);
 Code *generateLocalVarCode(Node *identifier, Node *init, int initialized);
 Code *generateReturnCode(Node *child);
 Code *generateLoadVariableCode(Node *variableNode);
+Code *generateFunctionCallCode(char *functionName, Node *params);
 
 char *generateILOCFromCode(Code *code);
 char *getOperationName(Operation operation);

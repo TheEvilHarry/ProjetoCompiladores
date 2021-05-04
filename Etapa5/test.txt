@@ -1,5 +1,9 @@
 int x, y, a, b;
 
+//int foo() {
+//	return 77;
+//}
+
 int main() {
 	int c <= 87;
 	int u;
@@ -21,6 +25,12 @@ int main() {
 	b = 0;
 	int i;
 
+	if (x > 6) {
+		a = 9;
+	}else{
+		a = 8;
+	}
+
 	while (a < 5) do {
 		a = a + 1;
 		x = x + 2 * a;
@@ -30,6 +40,8 @@ int main() {
 			b = b + 1;
 		}
 	}
+
+	//k = foo();
 
 	return y;
 }
