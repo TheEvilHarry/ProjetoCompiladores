@@ -574,31 +574,32 @@ Code *generateWhileCode(Node *expr, Node *commands)
 
 Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
 {
+
     char *label1 = generateLabelName();
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
     Code *labelCode = generateLabelCode(label1);
-    labelCode = joinCodes(start->code, labelCode);
-    labelCode = joinCodes(labelCode, expr->code);
+    start->code = joinCodes(start->code, labelCode);
+    start->code = joinCodes(start->code, expr->code);
 
     //TODO:
     //Where are we getting the result of if expressions?
     char *reg = expr->code->res;
     Code *conditionCode = createCode(CBR, NULL, reg, NULL, NULL, label2, label3, NULL);
-    conditionCode = joinCodes(labelCode, conditionCode);
+    start->code = joinCodes(start->code, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
-    labelCode2 = joinCodes(conditionCode, labelCode2);
-    labelCode2 = joinCodes(labelCode2, commands->code);
-    labelCode2 = joinCodes(labelCode2, incr->code);
+    start->code  = joinCodes(start->code , labelCode2);
+    start->code  = joinCodes(start->code , commands->code);
+    start->code  = joinCodes(start->code , incr->code);
 
     Code *jumpCode = generateTrueConditionalJump(label1);
-    jumpCode = joinCodes(labelCode2, jumpCode);
+    start->code  = joinCodes(start->code , jumpCode);
 
     Code *labelCode3 = generateLabelCode(label3);
-    labelCode3 = joinCodes(jumpCode, labelCode3);
-    return labelCode3;
+    start->code  = joinCodes(start->code , labelCode3);
+    return start->code ;
 }
 
 Code *generateLocalVarCode(Node *identifier, Node *init, int initialized)

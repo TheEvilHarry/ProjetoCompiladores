@@ -153,14 +153,14 @@ Node *headerParametersList_empty() { return NULL; }
 
 void commandBlockInit()
 {
-    printf("STARTING BLOCK\n");
+
   stackScope();
 }
 
 Node *commandBlockEnd_commandList_closingCurlyBracket(Node *commandList, void *closingCurlyBracket)
 {
   popScope();
-  printf("reached end of block \n");
+
   return commandList;
 }
 
@@ -325,9 +325,6 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
   return node;
 }
 
-void printDebug(){
-    printf("I HATE MY LIFE ######################\n"); }
-
 Node *else_TK_PR_ELSE_commandBlockInit_commandBlockEnd(TokenData *p_TK_PR_ELSE, Node *commandBlockInit, Node *commandBlockEnd)
 {
   return addCodeToNode(addChild(createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED), commandBlockEnd), commandBlockEnd->code);
@@ -396,6 +393,8 @@ Node *for_TK_PR_FOR_openingParenthesis_attribution_colon_expression_colon_attrib
   addChild(node, expression);
   addChild(node, secondAttribution);
   addChild(node, commandBlockEnd);
+  Code * code = generateForCode(firstAttribution,expression,secondAttribution, commandBlockEnd);
+  node->code = code;
 
   return node;
 }
