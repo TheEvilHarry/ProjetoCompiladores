@@ -698,10 +698,28 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
     return parent->code;
 }
 
-Code *generateUnaryExpression(Operation operation, Code *operand)
+Code *generateUnaryExpression(Node *expression)
 {
-    Code *code = createCode(operation, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    return joinCodes(code, operand);
+    if (DEBUG == 1)
+    {
+        printf("Generating unary expression for %c\n", expression->data->value.valueChar);
+    }
+    if (expression->data->value.valueChar == '+')
+    {
+        return expression->children[0]->code;
+    }
+    else if (expression->data->value.valueChar == '-')
+    {
+        char *subRegister = generateRegisterName();
+        char *zeroRegister = generateRegisterName();
+
+        Code *zeroCode = createCode(LOADI, NULL, "0", NULL, NULL, zeroRegister, NULL, NULL);
+        Code *subCode = joinCodes(zeroCode, createCode(SUB, NULL, zeroRegister, expression->children[0]->code->res, NULL, subRegister, NULL, NULL));
+        expression->children[0]->code->res = subRegister;
+        return joinCodes(expression->children[0]->code, subCode);
+    } //else if (expression->data->value.valueChar == '!') {
+
+    //}
 }
 
 char *getOperationName(Operation operation)

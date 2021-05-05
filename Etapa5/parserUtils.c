@@ -539,6 +539,8 @@ Node *unaryExpression_unaryOperator_unaryExpression(Node *unaryOperator, Node *u
   addTypeToNode(unaryOperator, unaryExpression->type);
   addChild(unaryOperator, unaryExpression);
 
+  addCodeToNode(unaryOperator, generateUnaryExpression(unaryOperator));
+
   return unaryOperator;
 }
 Node *unaryExpression_operand(Node *operand) { return operand; }

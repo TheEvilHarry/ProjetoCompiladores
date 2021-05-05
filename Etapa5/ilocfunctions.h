@@ -57,7 +57,7 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse);
 Code *generateWhileCode(Node *expr, Node *commands);
 Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands);
 Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1, Node *child2);
-Code *generateUnaryExpression(Operation operation, Code *op);
+Code *generateUnaryExpression(Node *expression);
 Code *generateHaltCommand();
 Code *generateFunctionCode(Node *header, char *identifier, Node *commands);
 Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn);
