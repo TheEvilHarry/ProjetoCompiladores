@@ -454,43 +454,46 @@ Code *generateHaltCommand()
 Code *generateI2ICode(char *r1, char *r2)
 {
     Code *code = createCode(I2I, NULL, r1, NULL, NULL, r2, NULL, NULL);
+    return code;
 }
 
 Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
 {
+
 
     char *label1 = generateLabelName();
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
     char *reg1 = generateRegisterName();
 
-    char *result = expr->code->res; // <===this has to be changed
+    char *result = expr->code->res;
     Code *cbr = createCode(CBR, NULL, result, NULL, NULL, label1, label2, NULL);
     Code *labelCode1 = generateLabelCode(label1);
-    labelCode1 = joinCodes(cbr, labelCode1);
-    labelCode1 = joinCodes(expr->code, labelCode1);
-    labelCode1 = joinCodes(labelCode1, exprTrue->code);
+    cbr = joinCodes(cbr, labelCode1);
+    cbr = joinCodes(expr->code, cbr);
+    cbr = joinCodes(cbr, exprTrue->code);
 
-    char *resultTrue = exprTrue->code->res; // <===this has to be changed
+    char *resultTrue = exprTrue->code->res;
     Code *i2iCode = generateI2ICode(resultTrue, reg1);
 
     Code *jumpCode = generateTrueConditionalJump(label3);
-    jumpCode = joinCodes(i2iCode, jumpCode);
     Code *labelCode2 = generateLabelCode(label2);
-    labelCode2 = joinCodes(jumpCode, labelCode2);
 
-    labelCode1 = joinCodes(labelCode1, labelCode2);
-    labelCode1 = joinCodes(labelCode1, exprFalse->code);
 
-    char *resultFalse = exprFalse->code->res; // <===this has to be changed
+    i2iCode = joinCodes(i2iCode,jumpCode);
+    i2iCode = joinCodes(i2iCode,labelCode2);
+
+    cbr = joinCodes(cbr, i2iCode);
+    cbr = joinCodes(cbr, exprFalse->code);
+
+    char *resultFalse = exprFalse->code->res;
     Code *i2iCode2 = generateI2ICode(resultFalse, reg1);
 
     Code *labelCode3 = generateLabelCode(label3);
-    labelCode3 = joinCodes(i2iCode, labelCode3);
-    labelCode1 = joinCodes(labelCode1, labelCode3);
-
-    labelCode1->res = reg1;
-    return labelCode1;
+    i2iCode2 = joinCodes(i2iCode2, labelCode3);
+    cbr = joinCodes(cbr, i2iCode2);
+    cbr->res = reg1;
+    return cbr;
 }
 
 Code *createCBRCode(Node *expr, char *r1, char *l1, char *l2, char *followingLabel, Node *trueExpr)
