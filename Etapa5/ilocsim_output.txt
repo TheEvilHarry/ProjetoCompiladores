@@ -1,1 +1,36 @@
-Erro sintático na linha 23 com a instrução ( storeAI  => rbss, 16 )
+Change of rfp ignored (strict mode)
+Change of rsp ignored (strict mode)
+Change of rbss ignored (strict mode)
+count	instruction
+    9	loadI
+    5	storeAI
+    3	jumpI
+    1	i2i
+    1	addI
+    1	loadAI
+    1	cmp_GT
+    1	cbr
+    1	halt
+
+instructions executed:   23
+register         read:   16 write:   33
+memory           read:    1 write:    5
+
+  register    value
+        r0       66
+        r1       10
+        r2       10
+        r3        6
+        r4        1
+        r5        9
+        r6       54
+        r9       99
+      rbss        0
+       rfp        0
+       rpc        4
+       rsp       20
+
+    memory    value
+00000000       54
+00000004       99
+00000016        9

@@ -330,19 +330,9 @@ void printDebug(){
 
 Node *else_TK_PR_ELSE_commandBlockInit_commandBlockEnd(TokenData *p_TK_PR_ELSE, Node *commandBlockInit, Node *commandBlockEnd)
 {
-  if(commandBlockEnd== NULL)
-    printf("AQUI TA DANDO RUIIMMMM\n");
-
-  Node * elseNode = createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED);
-  elseNode = addChild(elseNode, commandBlockEnd);
-
-  elseNode->code = NULL;
-
-  if(commandBlockEnd!=NULL)
-    elseNode->code = joinCodes(elseNode->code, commandBlockEnd->code);
-
-  return elseNode;
+  return addCodeToNode(addChild(createCustomLabelNode("else", get_line_number(), TYPE_UNDEFINED), commandBlockEnd), commandBlockEnd->code);
 }
+
 Node *else_empty() { return NULL; }
 
 Node *while_TK_PR_WHILE_openingParenthesis_expression_closingParenthesis_TK_PR_DO_commandBlockInit_commandBlockEnd(
