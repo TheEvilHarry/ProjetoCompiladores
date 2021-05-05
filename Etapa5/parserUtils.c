@@ -305,7 +305,6 @@ Node *conditional_TK_PR_IF_openingParenthesis_expression_closingParenthesis_comm
     Node *commandBlockEnd,
     Node *p_else)
 {
-  printDebug();
   if (expression->type == TYPE_STRING)
   {
     throwStringToXError(NULL);
@@ -393,7 +392,7 @@ Node *for_TK_PR_FOR_openingParenthesis_attribution_colon_expression_colon_attrib
   addChild(node, expression);
   addChild(node, secondAttribution);
   addChild(node, commandBlockEnd);
-  Code * code = generateForCode(firstAttribution,expression,secondAttribution, commandBlockEnd);
+  Code *code = generateForCode(firstAttribution, expression, secondAttribution, commandBlockEnd);
   node->code = code;
 
   return node;

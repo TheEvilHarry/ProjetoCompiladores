@@ -146,7 +146,7 @@ Code *joinCodes(Code *code1, Code *code2)
 
     if (DEBUG == 1)
     {
-        // printf("Joining %s with %s\n", generateILOCFromCode(code1), generateILOCFromCode(code2));
+        printf("Joining %s with %s\n", generateILOCFromCode(code1), generateILOCFromCode(code2));
     }
 
     Code *aux = code1;
@@ -179,21 +179,30 @@ Code *generateLoadVariableCode(Node *variableNode)
 
 Code *generateReturnCode(Node *child)
 {
-    SymbolTableEntry *currentFunctionEntry = findEntryInStack(getGlobalStack(), currentFunction);
-
     if (DEBUG == 1)
     {
         printf("Return code for child %s with code %s\n", child->data->label, child->code == NULL ? "NULL" : generateILOCFromCode(child->code));
     }
 
-    char rfp[4];
-    char offset[4];
-    sprintf(rfp, "%s", RFP);
-    sprintf(offset, "%d", 4);
-    Code *returnCode = createCode(STOREAI, RFP, child->code->res, NULL, NULL, RFP, offset, NULL);
-    Code *jumpCode = generateTrueConditionalJump(strcmp(currentFunction, "main") == 0 ? "L0" : currentFunctionEntry->ILOCLabel);
+    Code *saveReturnValue = createCode(STOREAI, NULL, child->code->res, NULL, NULL, RFP, "4", NULL);
 
-    return joinCodes(child->code, joinCodes(returnCode, jumpCode));
+    if (strcmp(currentFunction, "main") == 0)
+    {
+        return joinCodes(child->code, joinCodes(saveReturnValue, createCode(JUMPI, NULL, NULL, NULL, NULL, "L0", NULL, NULL)));
+    }
+
+    char *returnRegister = generateRegisterName();
+
+    Code *getReturnAddress = createCode(LOADAI, NULL, RFP, "0", NULL, returnRegister, NULL, NULL);
+    Code *saveRSP = createCode(LOADAI, NULL, RFP, "12", NULL, RSP, NULL, NULL);
+    Code *saveRFP = createCode(LOADAI, NULL, RFP, "8", NULL, RFP, NULL, NULL);
+    Code *jump = createCode(JUMP, NULL, NULL, NULL, NULL, returnRegister, NULL, NULL);
+
+    return joinCodes(child->code,
+                     joinCodes(saveReturnValue,
+                               joinCodes(getReturnAddress,
+                                         joinCodes(saveRSP,
+                                                   joinCodes(saveRFP, jump)))));
 }
 
 Code *generateInitialInstructions(Code *code)
@@ -215,7 +224,6 @@ Code *generateInitialInstructions(Code *code)
 
 Code *generateAttributionCode(TokenData *identifier, Node *exp)
 {
-     printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
     if (DEBUG == 1)
     {
         printf("Generating attribution code for identifier %s and node %s\n", identifier->value.valueString, exp->data->label);
@@ -248,8 +256,6 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
         }
         code = createCode(STOREAI, RFP, exp->code->res, NULL, NULL, RFP, entryOffsetAsString, NULL);
     }
-
-    // addToGlobalCodeList(code);
 
     return joinCodes(exp->code, code);
 }
@@ -301,39 +307,13 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
     Code *updateRFP = createCode(I2I, NULL, RSP, NULL, NULL, RFP, NULL, functionEntry->ILOCLabel);
     Code *updateRSP = createCode(ADDI, NULL, RSP, functionEntryOffset, NULL, RSP, NULL, NULL);
 
-    Code *functionReturn;
-
-    if (strcmp(identifier, "main") == 0)
-    {
-        functionReturn = createCode(JUMPI, NULL, NULL, NULL, NULL, "L0", NULL, NULL);
-    }
-    else
-    {
-        char *returnRegister = generateRegisterName();
-        Code *jump = createCode(JUMP, NULL, NULL, NULL, NULL, returnRegister, NULL, NULL);
-        Code *saveRFP = createCode(LOADAI, NULL, RFP, "8", NULL, RFP, NULL, NULL);
-        Code *saveRSP = createCode(LOADAI, NULL, RFP, "12", NULL, RSP, NULL, NULL);
-        Code *returnAddress = createCode(LOADAI, NULL, RFP, "0", NULL, returnRegister, NULL, NULL);
-
-        functionReturn = joinCodes(jump, joinCodes(saveRFP, joinCodes(saveRSP, returnAddress)));
-    }
-    commands->code = joinCodes(commands->code, functionReturn);
-    updateRSP = joinCodes(updateRSP, commands->code);
-    joinCodes(updateRFP, updateRSP);
-
     if (DEBUG == 1)
     {
         // printf("Final code generated for function %s:\n", identifier);
         // exportCodeList(getFirstCode(updateRFP));
     }
 
-    return getFirstCode(updateRFP);
-
-    // if (strcmp(identifier, "main") == 0)
-    // {
-    //     return  g(header, identifier, code, commands, labelReturn);
-    // }
-    // return generateRegularFunctionCode(header, identifier, code, commands, labelReturn);
+    return joinCodes(updateRFP, joinCodes(updateRSP, commands->code));
 }
 
 Code *generateFunctionCallCode(char *functionName, Node *params)
@@ -349,7 +329,6 @@ Code *generateFunctionCallCode(char *functionName, Node *params)
     {
         Code *currentParamCode = auxParam->code;
         sprintf(rspOffsetAsString, "%d", rspOffset);
-        printf("Current param code res is %s\n", currentParamCode->res);
         storeFunctionParams = joinCodes(storeFunctionParams, joinCodes(currentParamCode, createCode(STOREAI, NULL, currentParamCode->res, NULL, NULL, RSP, rspOffsetAsString, NULL)));
         auxParam = auxParam->next;
         rspOffset += 4;
@@ -364,6 +343,8 @@ Code *generateFunctionCallCode(char *functionName, Node *params)
     Code *storeReturnPosition = createCode(STOREAI, NULL, returnPositionRegister, NULL, NULL, RSP, "0", NULL);
     Code *jumpToFunction = createCode(JUMPI, NULL, NULL, NULL, NULL, functionEntry->ILOCLabel, NULL, NULL);
     Code *loadReturnValue = createCode(LOADAI, NULL, RSP, "4", NULL, functionCallRegister, NULL, NULL);
+
+    storeRSP->res = functionCallRegister;
 
     return joinCodes(storeRSP,
                      joinCodes(storeRFP,
@@ -422,7 +403,6 @@ Code *generateRegularFunctionCode(Node *header, char *identifier, Code *code, No
 
 Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node *commands, char *labelReturn)
 {
-    printf("BEGG MAIN CODE \n");
     Code *jumpICode = generateTrueConditionalJump(identifier);
     Code *ending = code;
     Code *haltCode = generateHaltCommand();
@@ -456,7 +436,6 @@ Code *generateMainFunctionCode(Node *header, char *identifier, Code *code, Node 
     }
 
     Code *function = joinCodes(header->code, body);
-    printf("END MAIN CODE \n");
     return joinCodes(code, function);
 }
 
@@ -590,16 +569,16 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     start->code = joinCodes(start->code, conditionCode);
 
     Code *labelCode2 = generateLabelCode(label2);
-    start->code  = joinCodes(start->code , labelCode2);
-    start->code  = joinCodes(start->code , commands->code);
-    start->code  = joinCodes(start->code , incr->code);
+    start->code = joinCodes(start->code, labelCode2);
+    start->code = joinCodes(start->code, commands->code);
+    start->code = joinCodes(start->code, incr->code);
 
     Code *jumpCode = generateTrueConditionalJump(label1);
-    start->code  = joinCodes(start->code , jumpCode);
+    start->code = joinCodes(start->code, jumpCode);
 
     Code *labelCode3 = generateLabelCode(label3);
-    start->code  = joinCodes(start->code , labelCode3);
-    return start->code ;
+    start->code = joinCodes(start->code, labelCode3);
+    return start->code;
 }
 
 Code *generateLocalVarCode(Node *identifier, Node *init, int initialized)
