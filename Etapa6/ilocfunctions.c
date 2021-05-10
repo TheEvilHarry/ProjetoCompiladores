@@ -110,6 +110,7 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
     code->prev = NULL;
     code->res = (dest1 != NULL && dest2 == NULL) ? dest1 : NULL;
     code->label = label != NULL ? label : generateLabelName();
+    code->type = normal_code;
 
     if (DEBUG == 1)
     {
@@ -185,15 +186,19 @@ Code *generateReturnCode(Node *child)
     }
 
     Code *saveReturnValue = createCode(STOREAI, NULL, child->code->res, NULL, NULL, RFP, "4", NULL);
+    savedReturnValue->type = function_return_code;
 
     if (strcmp(currentFunction, "main") == 0)
     {
-        return joinCodes(child->code, joinCodes(saveReturnValue, createCode(JUMPI, NULL, NULL, NULL, NULL, "L0", NULL, NULL)));
+        Code *mainReturnCode = createCode(JUMPI, NULL, NULL, NULL, NULL, "L0", NULL, NULL);
+        mainReturnCode->type =main_function_exit_code;
+        return joinCodes(child->code, joinCodes(saveReturnValue, mainReturnCode));
     }
 
     char *returnRegister = generateRegisterName();
 
     Code *getReturnAddress = createCode(LOADAI, NULL, RFP, "0", NULL, returnRegister, NULL, NULL);
+    getReturnAddress->type = function_exit_code;
     Code *saveRSP = createCode(LOADAI, NULL, RFP, "12", NULL, RSP, NULL, NULL);
     Code *saveRFP = createCode(LOADAI, NULL, RFP, "8", NULL, RFP, NULL, NULL);
     Code *jump = createCode(JUMP, NULL, NULL, NULL, NULL, returnRegister, NULL, NULL);
@@ -319,6 +324,7 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
 Code *generateFunctionCallCode(char *functionName, Node *params)
 {
     Code *storeRSP = createCode(STOREAI, NULL, RSP, NULL, NULL, RSP, "12", NULL);
+    storeRSP->type = function_call_preparation_code;
     Code *storeRFP = createCode(STOREAI, NULL, RFP, NULL, NULL, RFP, "8", NULL);
 
     Node *auxParam = params;
@@ -343,6 +349,7 @@ Code *generateFunctionCallCode(char *functionName, Node *params)
     Code *storeReturnPosition = createCode(STOREAI, NULL, returnPositionRegister, NULL, NULL, RSP, "0", NULL);
     Code *jumpToFunction = createCode(JUMPI, NULL, NULL, NULL, NULL, functionEntry->ILOCLabel, NULL, NULL);
     Code *loadReturnValue = createCode(LOADAI, NULL, RSP, "4", NULL, functionCallRegister, NULL, NULL);
+    loadReturnValue->type =function_return_load_code;
 
     storeRSP->res = functionCallRegister;
 

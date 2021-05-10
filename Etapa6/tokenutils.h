@@ -46,6 +46,16 @@ typedef enum
     CMP_NE
 } Operation;
 
+typedef enum CodeType {
+    normal_code = 0,
+    function_call_preparation_code = 1,
+    function_return_load_code,
+    function_return_code,
+    function_exit_code,
+    main_function_exit_code, // só porque está sendo feito diferente
+    param_add_code,
+} CodeType;
+
 typedef struct t_code
 {
     char *label;
@@ -59,9 +69,20 @@ typedef struct t_code
     char *dest2;
     struct t_code *next;
     struct t_code *prev;
+    CodeType type;
 } Code;
 
 
+
+//typedef enum CodeType {
+//    code_normal = 0,
+//    code_preparacao_chamada = 1,
+//    code_load_retorno_funcao,
+//    code_returno_funcao,
+//    code_saida_funcao,
+//    code_saida_fun_main, // só porque está sendo feito diferente
+//    code_adiciona_parametro,
+//} CodeType;
 
 
 typedef enum
