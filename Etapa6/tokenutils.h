@@ -52,7 +52,7 @@ typedef enum CodeType {
     function_return_load_code,
     function_return_code,
     function_exit_code,
-    main_function_exit_code, // só porque está sendo feito diferente
+    main_function_exit_code,
     param_add_code,
 } CodeType;
 
