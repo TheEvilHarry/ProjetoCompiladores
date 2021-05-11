@@ -22,5 +22,5 @@ memory           read:    0 write:    2
        rsp        0
 
     memory    value
-00000000        2
-00000012        0
+00000004        0
+00000016        2
