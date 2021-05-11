@@ -186,7 +186,7 @@ Code *generateReturnCode(Node *child)
     }
 
     Code *saveReturnValue = createCode(STOREAI, NULL, child->code->res, NULL, NULL, RFP, "4", NULL);
-    savedReturnValue->type = function_return_code;
+    saveReturnValue->type = function_return_code;
 
     if (strcmp(currentFunction, "main") == 0)
     {
