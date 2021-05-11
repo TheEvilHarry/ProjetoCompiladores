@@ -9,12 +9,17 @@ void initialCodePrint()
     printf("\t.text\n");
 }
 
-void globalInfoPrint() {
-   SymbolTableEntry *entry = getGlobalStack()->top;
-    while(entry!=NULL){
-        if (entry->nature == NATURE_variable){
+void globalInfoPrint()
+{
+    SymbolTableEntry *entry = getGlobalStack()->top;
+    while (entry != NULL)
+    {
+        if (entry->nature == NATURE_variable)
+        {
             printf("\t.comm\t%s,4\n", entry->key);
-        } else if (entry->nature == NATURE_function){
+        }
+        else if (entry->nature == NATURE_function)
+        {
             printf("\t.globl\t%s\n", entry->key);
             printf("\t.type\t%s, @function\n", entry->key);
         }
@@ -90,48 +95,39 @@ void conditionalJumpAssembly(char *jump_cond, char *label)
 
 void printLoadAiAssembly(Code *c)
 {
-     if (isSpecialRegister(c->dest1) == 1)
-     {
-         if (strcmp(c->arg1, RBSS) == 0)
-             printf("\tmovl\t%s(%%rip), %%%s\n", getKeyFromOffset(atoi(c->arg2)), registerConversion(c->dest1));
-         else
-             printf("\tmovl\t%s(%%%s), %%%s\n", c->arg2, registerConversion(c->arg1), registerConversion(c->dest1));
-     }
-     else
-     {
-         if (strcmp(c->arg1, RBSS) == 0)
-             printf("\tmovl\t%s(%%rip), %%eax\n", getKeyFromOffset(atoi(c->arg2)));
-         else
-             printf("\tmovl\t%s(%%%s), %%eax\n", c->arg2, registerConversion(c->arg1));
-         push();
-     }
+    if (isSpecialRegister(c->dest1) == 1)
+    {
+        if (strcmp(c->arg1, RBSS) == 0)
+            printf("\tmovl\t%s(%%rip), %%%s\n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
+        else
+            printf("\tmovl\t%s(%%%s), %%%s\n", c->arg2, registerConversion(c->arg1), registerConversion(c->dest1));
+    }
+    else
+    {
+        if (strcmp(c->arg1, RBSS) == 0)
+            printf("\tmovl\t%s(%%rip), %%eax\n", getKeyFromOffset(atoi(c->arg2)));
+        else
+            printf("\tmovl\t%s(%%%s), %%eax\n", c->arg2, registerConversion(c->arg1));
+        push();
+    }
 }
 
-char * getKeyFromOffset(int offset){
-    SymbolTableEntry *entry = findEntryInTableByOffset(getGlobalStack()->top, offset);
-    while(entry!=NULL){
-        if(entry->entryOffset == offset){
-           return entry->key;
-           }
+char *getKeyFromOffset(int offset)
+{
+    SymbolTableEntry *entry = findEntryInTableByOffset(getGlobalScopeTable(getGlobalStack())->top, offset);
 
-        entry = entry->nextEntry;
-
-        }
-
-        return "";
-
-    }
-
+    return entry->key;
+}
 
 void printStoreAiAssembly(Code *c)
 {
 
-     pop("eax");
-     // Store
-     if (strcmp(c->dest1, RBSS) == 0)
-         printf("\tmovl\t%%eax, %s(%%rip)\n", getKeyFromOffset(atoi(c->dest2)));
-     else
-         printf("\tmovl\t%%eax, %s(%%%s)\n", c->dest2, registerConversion(c->dest1));
+    pop("eax");
+    // Store
+    if (strcmp(c->dest1, RBSS) == 0)
+        printf("\tmovl\t%%eax, %s(%%rip)\n", getKeyFromOffset(atoi(c->dest2)));
+    else
+        printf("\tmovl\t%%eax, %s(%%%s)\n", c->dest2, registerConversion(c->dest1));
 }
 
 void callFunction_Asm(char *label_fun)
@@ -236,7 +232,7 @@ void printAssembly(Code *c)
         print_division_op_assembly("idivl");
         break;
     case ADDI:
-        if (strcmp(c->arg1, RPC)==0)
+        if (strcmp(c->arg1, RPC) == 0)
         {
             callFunction_Asm(c->next->next->dest1); // <=========
             c = c->next->next;
@@ -307,6 +303,8 @@ void printAssembly(Code *c)
 void handleRootCodeExport(Node *root)
 {
     Code *code = getFirstCode(root->code);
-    exportCodeList(addCodeToNode(root, getFirstCode(joinCodes(generateInitialInstructions(code), code)))->code);
-    generateAssembly(root->code);
+    Code *fullCode = getFirstCode(joinCodes(generateInitialInstructions(code), code));
+    Node *rootWithCode = addCodeToNode(root, fullCode);
+    exportCodeList(rootWithCode->code);
+    generateAssembly(fullCode);
 }

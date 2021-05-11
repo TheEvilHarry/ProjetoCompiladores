@@ -50,6 +50,7 @@ SymbolTableEntry *findEntryInTable(SymbolTableEntry *table, char *key);
 SymbolTableEntry *findEntryInTableByOffset(SymbolTableEntry *topStack, int offset);
 SymbolTableStack *findEntryTable(SymbolTableStack *topStack, char *key);
 SymbolTableEntry *findLiteralEntryInTable(SymbolTableEntry *table, char *key);
+SymbolTableEntry *findEntryInStackByOffset(SymbolTableStack *stack, int offset);
 void addEntryToTopScopeTable(SymbolTableEntry *entry);
 void addEntryToTable(SymbolTableEntry *table, SymbolTableEntry *entry);
 void freeSymbolTable(SymbolTableEntry *table);
@@ -67,6 +68,7 @@ void createGlobalScope();
 int getNumberOfStackedScopes();
 SymbolTableEntry *getCurrentScope();
 SymbolTableStack *getGlobalStack();
+SymbolTableStack *getGlobalScopeTable(SymbolTableStack *stack);
 
 // Criaçao de entradas da tabela
 void createLiteralTableEntry(int line, Type type, TokenData *token);

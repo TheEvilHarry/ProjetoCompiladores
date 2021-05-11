@@ -230,6 +230,39 @@ SymbolTableEntry *findEntryInStack(SymbolTableStack *stack, char *key)
   return NULL;
 };
 
+SymbolTableEntry *findEntryInStackByOffset(SymbolTableStack *stack, int offset)
+{
+  SymbolTableStack *currentStackElement = NULL;
+  SymbolTableEntry *entry = NULL;
+
+  for (currentStackElement = stack; currentStackElement != NULL; currentStackElement = currentStackElement->rest)
+  {
+    entry = findEntryInTableByOffset(currentStackElement->top, offset);
+    if (entry != NULL && entry->nature != NATURE_literal)
+    {
+      return entry;
+    }
+  }
+
+  return NULL;
+};
+
+SymbolTableStack *getGlobalScopeTable(SymbolTableStack *stack)
+{
+  SymbolTableStack *currentStack = stack;
+
+  while (currentStack->rest != NULL)
+  {
+    if (currentStack->isGlobal == 1)
+    {
+      return currentStack;
+    }
+    currentStack = currentStack->rest;
+  }
+
+  return NULL;
+}
+
 SymbolTableStack *findEntryTable(SymbolTableStack *topStack, char *key)
 {
   SymbolTableStack *currentStackElement = NULL;
