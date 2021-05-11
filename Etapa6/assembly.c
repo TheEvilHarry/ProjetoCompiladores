@@ -93,16 +93,35 @@ void printLoadAiAssembly(Code *c)
      if (isSpecialRegister(c->dest1) == 1)
      {
          if (strcmp(c->arg1, RBSS) == 0)
-             printf("\tmovl\t%s(%%rip), %%%s\n", getKeyFromOffset(atoi(c->arg2)), registerConversion(c->dest1));
+             printf("\tmovl\t%s(%%rip), %%%s \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
          else
-             printf("\tmovl\t%s(%%%s), %%%s\n", c->arg2, registerConversion(c->arg1), registerConversion(c->dest1));
+             printf("\tmovl\t%s(%%%s), %%%s \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
      }
      else
      {
          if (strcmp(c->arg1, RBSS) == 0)
-             printf("\tmovl\t%s(%%rip), %%eax\n", getKeyFromOffset(atoi(c->arg2)));
+             printf("\tmovl\t%s(%%rip), %%eax\n ", getKeyFromOffset(atoi(c->arg2)));
          else
-             printf("\tmovl\t%s(%%%s), %%eax\n", c->arg2, registerConversion(c->arg1));
+             printf("\tmovl\t%s(%%%s), %%eax \n", c->arg1, registerConversion(c->arg1));
+         push();
+     }
+}
+
+void printLoadIAssembly(Code *c)
+{
+     if (isSpecialRegister(c->dest1) == 1)
+     {
+         if (strcmp(c->arg1, RBSS) == 0)
+             printf("\tmovl\t$%s(%%rip), %%%s \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
+         else
+             printf("\tmovl\t$%s(%%%s), %%%s \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
+     }
+     else
+     {
+         if (strcmp(c->arg1, RBSS) == 0)
+             printf("\tmovl\t$%s(%%rip), %%eax\n ", getKeyFromOffset(atoi(c->arg2)));
+         else
+             printf("\tmovl\t$%s(%%%s), %%eax \n", c->arg1, registerConversion(c->arg1));
          push();
      }
 }
@@ -257,7 +276,7 @@ void printAssembly(Code *c)
     case DIVI:
         break;
     case LOADI:
-        printLoadAiAssembly(c);
+        printLoadIAssembly(c);
         break;
     case LOADAI:
         printLoadAiAssembly(c);
