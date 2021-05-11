@@ -22,7 +22,7 @@ memory           read:    2 write:    4
         r3      456
         r4     1379
         r5        0
-      rbss        0
+      rbss    32000
        rfp        0
        rpc        4
        rsp        4
@@ -30,3 +30,4 @@ memory           read:    2 write:    4
     memory    value
 00000000     1379
 00000004        0
+00032000      923

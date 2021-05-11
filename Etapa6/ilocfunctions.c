@@ -186,12 +186,12 @@ Code *generateReturnCode(Node *child)
     }
 
     Code *saveReturnValue = createCode(STOREAI, NULL, child->code->res, NULL, NULL, RFP, "4", NULL);
-    savedReturnValue->type = function_return_code;
+    saveReturnValue->type = function_return_code;
 
     if (strcmp(currentFunction, "main") == 0)
     {
         Code *mainReturnCode = createCode(JUMPI, NULL, NULL, NULL, NULL, "L0", NULL, NULL);
-        mainReturnCode->type =main_function_exit_code;
+        mainReturnCode->type = main_function_exit_code;
         return joinCodes(child->code, joinCodes(saveReturnValue, mainReturnCode));
     }
 
@@ -349,7 +349,7 @@ Code *generateFunctionCallCode(char *functionName, Node *params)
     Code *storeReturnPosition = createCode(STOREAI, NULL, returnPositionRegister, NULL, NULL, RSP, "0", NULL);
     Code *jumpToFunction = createCode(JUMPI, NULL, NULL, NULL, NULL, functionEntry->ILOCLabel, NULL, NULL);
     Code *loadReturnValue = createCode(LOADAI, NULL, RSP, "4", NULL, functionCallRegister, NULL, NULL);
-    loadReturnValue->type =function_return_load_code;
+    loadReturnValue->type = function_return_load_code;
 
     storeRSP->res = functionCallRegister;
 
@@ -467,7 +467,6 @@ Code *generateI2ICode(char *r1, char *r2)
 Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
 {
 
-
     char *label1 = generateLabelName();
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
@@ -486,9 +485,8 @@ Code *generateTernaryCode(Node *expr, Node *exprTrue, Node *exprFalse)
     Code *jumpCode = generateTrueConditionalJump(label3);
     Code *labelCode2 = generateLabelCode(label2);
 
-
-    i2iCode = joinCodes(i2iCode,jumpCode);
-    i2iCode = joinCodes(i2iCode,labelCode2);
+    i2iCode = joinCodes(i2iCode, jumpCode);
+    i2iCode = joinCodes(i2iCode, labelCode2);
 
     cbr = joinCodes(cbr, i2iCode);
     cbr = joinCodes(cbr, exprFalse->code);

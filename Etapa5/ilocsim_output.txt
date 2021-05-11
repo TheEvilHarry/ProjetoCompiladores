@@ -3,7 +3,7 @@ Change of rsp ignored (strict mode)
 Change of rbss ignored (strict mode)
 count	instruction
    31	loadAI
-   22	loadI
+   21	loadI
    19	storeAI
    14	add
     9	jumpI
@@ -11,11 +11,10 @@ count	instruction
     8	cbr
     2	addI
     1	i2i
-    1	sub
     1	halt
 
-instructions executed:  116
-register         read:  126 write:  192
+instructions executed:  114
+register         read:  124 write:  188
 memory           read:   31 write:   19
 
   register    value
@@ -27,9 +26,7 @@ memory           read:   31 write:   19
        r15        1
        r16        7
        r17        7
-       r18       -7
-       r19        0
-       r20       99
+       r18       99
         r5        7
         r6        0
         r7        0
@@ -41,7 +38,7 @@ memory           read:   31 write:   19
        rsp       28
 
     memory    value
-00000000       -7
+00000000        7
 00000004       99
 00000008        7
 00000016        7

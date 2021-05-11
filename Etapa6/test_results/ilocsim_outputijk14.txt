@@ -16,17 +16,18 @@ register         read:   14 write:   26
 memory           read:    2 write:    4
 
   register    value
-        r0      923
-        r1      456
-        r2      923
-        r3      456
-        r4     1379
+        r0      393
+        r1      393
+        r2      393
+        r3        1
+        r4      394
         r5        0
-      rbss        0
+      rbss    32000
        rfp        0
        rpc        4
        rsp        4
 
     memory    value
-00000000     1379
+00000000      394
 00000004        0
+00032000      393

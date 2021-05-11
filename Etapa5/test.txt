@@ -19,7 +19,7 @@ int main()
 	//i < 3 ? l = 1 : l = 2;
 	//x = k > 5 ? foo() : 4;
 
-	x = -k;
+	x = +k;
 
 	return 99;
 }
