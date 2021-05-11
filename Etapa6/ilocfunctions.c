@@ -185,7 +185,11 @@ Code *generateReturnCode(Node *child)
         printf("Return code for child %s with code %s\n", child->data->label, child->code == NULL ? "NULL" : generateILOCFromCode(child->code));
     }
 
-    Code *saveReturnValue = createCode(STOREAI, NULL, child->code->res, NULL, NULL, RFP, "4", NULL);
+    int globalOffset = getGlobalStack()->tableOffset;
+    char globalOffsetAsString[10];
+    sprintf(globalOffsetAsString, "%d", globalOffset);
+
+    Code *saveReturnValue = createCode(STOREAI, NULL, child->code->res, NULL, NULL, RFP, globalOffsetAsString, NULL);
     saveReturnValue->type = function_return_code;
 
     if (strcmp(currentFunction, "main") == 0)
@@ -345,10 +349,14 @@ Code *generateFunctionCallCode(char *functionName, Node *params)
     char *functionCallRegister = generateRegisterName();
     char *returnPositionRegister = generateRegisterName();
 
+    int globalOffset = getGlobalStack()->tableOffset;
+    char globalOffsetAsString[10];
+    sprintf(globalOffsetAsString, "%d", globalOffset);
+
     Code *returnPosition = createCode(ADDI, NULL, RPC, "3", NULL, returnPositionRegister, NULL, NULL);
     Code *storeReturnPosition = createCode(STOREAI, NULL, returnPositionRegister, NULL, NULL, RSP, "0", NULL);
     Code *jumpToFunction = createCode(JUMPI, NULL, NULL, NULL, NULL, functionEntry->ILOCLabel, NULL, NULL);
-    Code *loadReturnValue = createCode(LOADAI, NULL, RSP, "4", NULL, functionCallRegister, NULL, NULL);
+    Code *loadReturnValue = createCode(LOADAI, NULL, RSP, globalOffsetAsString, NULL, functionCallRegister, NULL, NULL);
     loadReturnValue->type = function_return_load_code;
 
     storeRSP->res = functionCallRegister;

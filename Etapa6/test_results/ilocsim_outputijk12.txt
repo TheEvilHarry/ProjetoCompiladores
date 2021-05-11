@@ -34,4 +34,4 @@ memory           read:    0 write:    2
 
     memory    value
 00000000       20
-00000004        0
+00000016        0

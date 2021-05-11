@@ -18,7 +18,7 @@ memory           read:    4 write:    6
   register    value
         r0       99
         r1       20
-        r2       99
+        r2       20
         r3       20
         r4        0
       rbss    32000
@@ -31,4 +31,4 @@ memory           read:    4 write:    6
 00000008       20
 00000012       99
 00000020        8
-00032000       99
+00032000       20

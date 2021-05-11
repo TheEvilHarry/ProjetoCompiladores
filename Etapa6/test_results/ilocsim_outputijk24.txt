@@ -20,11 +20,11 @@ memory           read:    4 write:    5
         r2       98
         r4       22
       rbss    32000
-       rfp        0
+       rfp       98
        rpc       14
        rsp        8
 
     memory    value
 00000008       98
-00000012       98
+00000016       98
 00000020        8

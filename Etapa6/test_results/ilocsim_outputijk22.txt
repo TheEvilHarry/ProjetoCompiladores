@@ -21,12 +21,12 @@ memory           read:    4 write:    6
         r3      456
         r5       24
       rbss    32000
-       rfp        0
+       rfp       99
        rpc       14
        rsp        8
 
     memory    value
 00000000      456
 00000008       99
-00000012       99
+00000016       99
 00000020        8
