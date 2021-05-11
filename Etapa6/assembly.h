@@ -9,3 +9,4 @@ void print_binary_op_assembly(char *op);
 void push();
 void pop(char *reg);
 char * getKeyFromOffset(int offset);
+void handleRootCodeExport(Node *root);

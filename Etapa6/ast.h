@@ -1,5 +1,6 @@
 #include "symbolTable.h"
 
+
 Node *createNode(TokenData *data, Type type);
 
 Node *createCustomLabelNode(char *label, int line, Type type);

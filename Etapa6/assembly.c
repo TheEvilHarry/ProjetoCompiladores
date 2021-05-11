@@ -9,7 +9,7 @@ void initialCodePrint()
     printf("\t.text\n");
 }
 
-void print_global_info() {
+void globalInfoPrint() {
    SymbolTableEntry *entry = getGlobalStack()->top;
     while(entry!=NULL){
         if (entry->nature == NATURE_variable){
@@ -25,7 +25,7 @@ void print_global_info() {
 void generateAssembly(Code *code)
 {
     initialCodePrint();
-    //    globalInfoPrint();
+    globalInfoPrint();
     printAssembly(code);
 }
 
@@ -181,7 +181,7 @@ void printAssembly(Code *c)
         // pop_from_return_function = load_parameters(c->label);
         // }
         // else
-        printf(".L%s:\n", c->label);
+        printf(".%s:\n", c->label);
     }
 
     if (c->type == function_call_preparation_code)
@@ -296,10 +296,17 @@ void printAssembly(Code *c)
     // case op_jump:
     //     break;
     case JUMPI:
-        printf("\tjmp\t.L%s\n", c->dest1);
+        printf("\tjmp\t.%s\n", c->dest1);
         break;
     default:
         break;
     }
     printAssembly(c->next);
+}
+
+void handleRootCodeExport(Node *root)
+{
+    Code *code = getFirstCode(root->code);
+    exportCodeList(addCodeToNode(root, getFirstCode(joinCodes(generateInitialInstructions(code), code)))->code);
+    generateAssembly(root->code);
 }

@@ -89,7 +89,5 @@ void exportCodeList(Code *code);
 
 Code *addToGlobalCodeList(Code *code);
 
-void handleRootCodeExport(Node *root);
-
 void updateCurrentFunction(char *function);
 char *getCurrentFunction();

@@ -997,8 +997,4 @@ void exportCodeList(Code *code)
     }
 }
 
-void handleRootCodeExport(Node *root)
-{
-    Code *code = getFirstCode(root->code);
-    exportCodeList(addCodeToNode(root, getFirstCode(joinCodes(generateInitialInstructions(code), code)))->code);
-}
+
