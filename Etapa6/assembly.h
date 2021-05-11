@@ -8,3 +8,4 @@ void print_division_op_assembly(char *op);
 void print_binary_op_assembly(char *op);
 void push();
 void pop(char *reg);
+char * getKeyFromOffset(int offset);

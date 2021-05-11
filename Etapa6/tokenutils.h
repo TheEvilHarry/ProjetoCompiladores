@@ -72,19 +72,6 @@ typedef struct t_code
     CodeType type;
 } Code;
 
-
-
-//typedef enum CodeType {
-//    code_normal = 0,
-//    code_preparacao_chamada = 1,
-//    code_load_retorno_funcao,
-//    code_returno_funcao,
-//    code_saida_funcao,
-//    code_saida_fun_main, // só porque está sendo feito diferente
-//    code_adiciona_parametro,
-//} CodeType;
-
-
 typedef enum
 {
     TYPE_UNDEFINED = 0,

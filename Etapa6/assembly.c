@@ -1,4 +1,6 @@
 #include "assembly.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void initialCodePrint()
@@ -7,18 +9,18 @@ void initialCodePrint()
     printf("\t.text\n");
 }
 
-//void print_global_info() {
-//    struct elem_table *elemento = stack->topo;
-//    while(elemento!=NULL){
-//        if (elemento->natureza == NAT_variavel){
-//            printf("\t.comm\t%s,4\n", elemento->key);
-//        } else if (elemento->natureza == NAT_funcao){
-//            printf("\t.globl\t%s\n", elemento->key);
-//            printf("\t.type\t%s, @function\n", elemento->key);
-//        }
-//        elemento = elemento->next_elem;
-//    }
-//}
+void print_global_info() {
+   SymbolTableEntry *entry = getGlobalStack()->top;
+    while(entry!=NULL){
+        if (entry->nature == NATURE_variable){
+            printf("\t.comm\t%s,4\n", entry->key);
+        } else if (entry->nature == NATURE_function){
+            printf("\t.globl\t%s\n", entry->key);
+            printf("\t.type\t%s, @function\n", entry->key);
+        }
+        entry = entry->nextEntry;
+    }
+}
 
 void generateAssembly(Code *code)
 {
@@ -88,33 +90,48 @@ void conditionalJumpAssembly(char *jump_cond, char *label)
 
 void printLoadAiAssembly(Code *c)
 {
-    // //TODO:
-    // if (isSpecialRegister(c->dest1) == 1)
-    // {
-    //     if (strcmp(c->arg1, RBSS) == 0)
-    //         printf("\tmovl\t%s(%%rip), %%%s\n", var_globl_desloc(c->arg2), registerConversion(c->dest1));
-    //     else
-    //         printf("\tmovl\t%s(%%%s), %%%s\n", c->arg2, registerConversion(c->arg1), registerConversion(c->dest1));
-    // }
-    // else
-    // {
-    //     if (strcmp(c->arg1, RBSS) == 0)
-    //         printf("\tmovl\t%s(%%rip), %%eax\n", var_globl_desloc(c->arg2));
-    //     else
-    //         printf("\tmovl\t%s(%%%s), %%eax\n", c->arg2, registerConversion(c->arg1));
-    //     push_Asm();
-    // }
+     if (isSpecialRegister(c->dest1) == 1)
+     {
+         if (strcmp(c->arg1, RBSS) == 0)
+             printf("\tmovl\t%s(%%rip), %%%s\n", getKeyFromOffset(atoi(c->arg2)), registerConversion(c->dest1));
+         else
+             printf("\tmovl\t%s(%%%s), %%%s\n", c->arg2, registerConversion(c->arg1), registerConversion(c->dest1));
+     }
+     else
+     {
+         if (strcmp(c->arg1, RBSS) == 0)
+             printf("\tmovl\t%s(%%rip), %%eax\n", getKeyFromOffset(atoi(c->arg2)));
+         else
+             printf("\tmovl\t%s(%%%s), %%eax\n", c->arg2, registerConversion(c->arg1));
+         push();
+     }
 }
+
+char * getKeyFromOffset(int offset){
+    SymbolTableEntry *entry = findEntryInTableByOffset(getGlobalStack()->top, offset);
+    while(entry!=NULL){
+        if(entry->entryOffset == offset){
+           return entry->key;
+           }
+
+        entry = entry->nextEntry;
+
+        }
+
+        return "";
+
+    }
+
 
 void printStoreAiAssembly(Code *c)
 {
-    // //TODO:
-    // pop("eax");
-    // // Store
-    // if (strcmp(c->dest1, RBSS) == 0)
-    //     printf("\tmovl\t%%eax, %s(%%rip)\n", var_globl_desloc(c->dest2));
-    // else
-    //     printf("\tmovl\t%%eax, %s(%%%s)\n", c->dest2, registerConversion(c->dest1));
+
+     pop("eax");
+     // Store
+     if (strcmp(c->dest1, RBSS) == 0)
+         printf("\tmovl\t%%eax, %s(%%rip)\n", getKeyFromOffset(atoi(c->dest2)));
+     else
+         printf("\tmovl\t%%eax, %s(%%%s)\n", c->dest2, registerConversion(c->dest1));
 }
 
 void callFunction_Asm(char *label_fun)
@@ -158,7 +175,7 @@ void printAssembly(Code *c)
 
     if (c->label != NULL)
     {
-        //TODO:
+
         // if (printa_label_fun(c->label))
         // { // <========= CHECK THIS LATER
         // pop_from_return_function = load_parameters(c->label);
@@ -219,7 +236,7 @@ void printAssembly(Code *c)
         print_division_op_assembly("idivl");
         break;
     case ADDI:
-        if (c->arg1 == RPC)
+        if (strcmp(c->arg1, RPC)==0)
         {
             callFunction_Asm(c->next->next->dest1); // <=========
             c = c->next->next;
