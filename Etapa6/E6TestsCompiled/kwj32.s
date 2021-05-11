@@ -1,10 +1,10 @@
-L102: loadI 1024 => rfp
-L101: loadI 1024 => rsp
-L100: loadI 98 => rbss
-L99: jumpI  => L63
+L104: loadI 1024 => rfp
+L103: loadI 1024 => rsp
+L102: loadI 98 => rbss
+L101: jumpI  => L63
 L0: halt  => 
 L1: i2i rsp => rfp
-L13: addI rsp, 8 => rsp
+L13: addI rsp, 0 => rsp
 L3: loadAI rfp, 20 => r0
 L4: loadAI rfp, 16 => r1
 L5: mult r0, r1 => r2
@@ -16,7 +16,7 @@ L10: loadAI rfp, 12 => rsp
 L11: loadAI rfp, 8 => rfp
 L12: jump  => r4
 L14: i2i rsp => rfp
-L62: addI rsp, 12 => rsp
+L62: addI rsp, 4 => rsp
 L27: storeAI rsp => rsp, 12
 L28: storeAI rfp => rsp, 8
 L18: storeAI rsp => rsp, 12
@@ -64,62 +64,60 @@ L59: loadAI rfp, 12 => rsp
 L60: loadAI rfp, 8 => rfp
 L61: jump  => r21
 L63: i2i rsp => rfp
-L98: addI rsp, 16 => rsp
-L66: loadI 2019 => r22
-L67: storeAI r22 => rbss, 0
-L68: loadI 2 => r23
-L69: storeAI r23 => rfp, 16
-L70: loadI 2 => r24
-L71: storeAI r24 => rfp, 20
-L84: storeAI rsp => rsp, 12
-L85: storeAI rfp => rsp, 8
-L72: loadAI rfp, 16 => r25
-L73: loadI 3 => r26
-L74: mult r25, r26 => r27
-L86: storeAI r27 => rsp, 16
-L75: loadAI rfp, 16 => r28
-L76: loadI 4 => r29
-L77: mult r28, r29 => r30
-L87: storeAI r30 => rsp, 20
-L78: loadAI rfp, 20 => r31
-L79: loadI 2 => r32
-L80: mult r31, r32 => r33
-L88: storeAI r33 => rsp, 24
-L81: loadAI rfp, 20 => r34
-L82: loadI 2 => r35
-L83: mult r34, r35 => r36
-L89: storeAI r36 => rsp, 28
-L90: addI rpc, 3 => r38
-L91: storeAI r38 => rsp, 0
-L92: jumpI  => L14
-L93: loadAI rsp, 4 => r37
-L94: storeAI r37 => rbss, 4
-L95: loadI 0 => r39
-L96: storeAI r39 => rfp, 4
-L97: jumpI  => L0
+L100: addI rsp, 8 => rsp
+L68: loadI 2019 => r22
+L69: storeAI r22 => rfp, 16
+L70: loadI 2 => r23
+L71: storeAI r23 => rfp, 24
+L72: loadI 2 => r24
+L73: storeAI r24 => rfp, 28
+L86: storeAI rsp => rsp, 12
+L87: storeAI rfp => rsp, 8
+L74: loadAI rfp, 24 => r25
+L75: loadI 3 => r26
+L76: mult r25, r26 => r27
+L88: storeAI r27 => rsp, 16
+L77: loadAI rfp, 24 => r28
+L78: loadI 4 => r29
+L79: mult r28, r29 => r30
+L89: storeAI r30 => rsp, 20
+L80: loadAI rfp, 28 => r31
+L81: loadI 2 => r32
+L82: mult r31, r32 => r33
+L90: storeAI r33 => rsp, 24
+L83: loadAI rfp, 28 => r34
+L84: loadI 2 => r35
+L85: mult r34, r35 => r36
+L91: storeAI r36 => rsp, 28
+L92: addI rpc, 3 => r38
+L93: storeAI r38 => rsp, 0
+L94: jumpI  => L14
+L95: loadAI rsp, 4 => r37
+L96: storeAI r37 => rfp, 20
+L97: loadAI rfp, 20 => r39
+L98: storeAI r39 => rfp, 4
+L99: jumpI  => L0
 	.file	"programa.c"
 	.text
-	.comm	x,4
-	.comm	K,4
 	.globl	f
 	.type	f, @function
 	.globl	mult
 	.type	mult, @function
 	.globl	main
 	.type	main, @function
-.L102:
+.L104:
 	movl	(null)(%), %RBP
-.L101:
+.L103:
 	movl	(null)(%), %rsp
-.L100:
+.L102:
 	movl	(null)(%), %rip
-.L99:
+.L101:
 	jmp	.L63
 .L0:
 .L1:
 	movq	%rsp, %RBP
 .L13:
-	addq	$8, %rsp
+	addq	$0, %rsp
 .L3:
 	movl	20(%RBP), %eax
 	subq	$4, %rsp
@@ -154,7 +152,7 @@ L97: jumpI  => L0
 .L14:
 	movq	%rsp, %RBP
 .L62:
-	addq	$12, %rsp
+	addq	$4, %rsp
 .L27:
 .L18:
 .L16:
@@ -256,16 +254,8 @@ L97: jumpI  => L0
 .L61:
 .L63:
 	movq	%rsp, %RBP
-.L98:
-	addq	$16, %rsp
-.L66:
-	movl	(null)(%), %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
-.L67:
-	movl	(%rsp), %eax
-	addq	$4, %rsp
-	movl	%eax, x(%rip)
+.L100:
+	addq	$8, %rsp
 .L68:
 	movl	(null)(%), %eax
 	subq	$4, %rsp
@@ -281,57 +271,25 @@ L97: jumpI  => L0
 .L71:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 20(%RBP)
-.L84:
+	movl	%eax, 24(%RBP)
 .L72:
-	movl	16(%RBP), %eax
+	movl	(null)(%), %eax
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L73:
-	movl	(null)(%), %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
-.L74:
-	movl	(%rsp), %edx
-	addq	$4, %rsp
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	imull	%edx, %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
+	movl	%eax, 28(%RBP)
 .L86:
-	movl	(%rsp), %eax
-	addq	$4, %rsp
-	movl	%eax, 16(%rsp)
+.L74:
+	movl	24(%RBP), %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
 .L75:
-	movl	16(%RBP), %eax
+	movl	(null)(%), %eax
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L76:
-	movl	(null)(%), %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
-.L77:
-	movl	(%rsp), %edx
-	addq	$4, %rsp
-	movl	(%rsp), %eax
-	addq	$4, %rsp
-	imull	%edx, %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
-.L87:
-	movl	(%rsp), %eax
-	addq	$4, %rsp
-	movl	%eax, 20(%rsp)
-.L78:
-	movl	20(%RBP), %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
-.L79:
-	movl	(null)(%), %eax
-	subq	$4, %rsp
-	movl	%eax, (%rsp)
-.L80:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
 	movl	(%rsp), %eax
@@ -342,16 +300,16 @@ L97: jumpI  => L0
 .L88:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 24(%rsp)
-.L81:
-	movl	20(%RBP), %eax
+	movl	%eax, 16(%rsp)
+.L77:
+	movl	24(%RBP), %eax
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
-.L82:
+.L78:
 	movl	(null)(%), %eax
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
-.L83:
+.L79:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
 	movl	(%rsp), %eax
@@ -362,22 +320,62 @@ L97: jumpI  => L0
 .L89:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 28(%rsp)
-.L90:
-.L93:
+	movl	%eax, 20(%rsp)
+.L80:
+	movl	28(%RBP), %eax
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
-.L94:
+.L81:
+	movl	(null)(%), %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
+.L82:
+	movl	(%rsp), %edx
+	addq	$4, %rsp
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, K(%rip)
-.L95:
+	imull	%edx, %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
+.L90:
+	movl	(%rsp), %eax
+	addq	$4, %rsp
+	movl	%eax, 24(%rsp)
+.L83:
+	movl	28(%RBP), %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
+.L84:
 	movl	(null)(%), %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
+.L85:
+	movl	(%rsp), %edx
+	addq	$4, %rsp
+	movl	(%rsp), %eax
+	addq	$4, %rsp
+	imull	%edx, %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
+.L91:
+	movl	(%rsp), %eax
+	addq	$4, %rsp
+	movl	%eax, 28(%rsp)
+.L92:
+.L95:
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L96:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
+	movl	%eax, 20(%RBP)
 .L97:
+	movl	20(%RBP), %eax
+	subq	$4, %rsp
+	movl	%eax, (%rsp)
+.L98:
+	movl	(%rsp), %eax
+	addq	$4, %rsp
+.L99:
 	leave
 	ret

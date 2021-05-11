@@ -1,0 +1,1 @@
+Erro sintático na linha 39 com a instrução ( .file "programa.c" )
