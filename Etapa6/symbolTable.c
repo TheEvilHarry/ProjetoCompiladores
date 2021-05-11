@@ -149,6 +149,20 @@ SymbolTableEntry *findEntryInTable(SymbolTableEntry *table, char *key)
   return NULL;
 };
 
+SymbolTableEntry *findEntryInTableByOffset(SymbolTableEntry *table, int offset)
+{
+  SymbolTableEntry *currentEntry;
+  for (currentEntry = table; currentEntry != NULL; currentEntry = currentEntry->nextEntry)
+  {
+    if (currentEntry->entryOffset == offset)
+    {
+      return currentEntry;
+    }
+  }
+
+  return NULL;
+};
+
 SymbolTableEntry *findLiteralEntryInTable(SymbolTableEntry *table, char *key)
 {
   SymbolTableEntry *currentEntry;

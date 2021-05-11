@@ -59,7 +59,7 @@ int isSpecialRegister(char *address){
     else return 0;
 
     }
-    
+
 char *registerConversion(char *reg) {
 
     if(strcmp(reg,RBSS) == 0)
