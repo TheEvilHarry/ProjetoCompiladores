@@ -208,10 +208,8 @@ void printAssembly(Code *c)
 
     if (c->label != NULL)
     {
-        if (printFunctionLabel(c->label) == 1)
-        {
-            printf(".%s:\n", c->label);
-        }
+        printFunctionLabel(c->label);
+        printf(".%s:\n", c->label);
     }
 
     if (c->type == function_call_preparation_code)
