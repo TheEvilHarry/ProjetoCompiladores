@@ -16,6 +16,8 @@
 .L8:
 	addq	$0, %rsp
 .L3:
+	subq	$4, %rsp
+	movl	$2, (%rsp)
 .L4:
 	movl	(%rsp), %eax
 	addq	$4, %rsp

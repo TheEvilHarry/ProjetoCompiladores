@@ -25,7 +25,7 @@ else
         file_name="${full_file_name%.*}"
         mkdir E6TestsCompiled
         ./etapa6 <${test_file_name} >./E6TestsCompiled/${file_name}.s
-        gcc ./E6TestsCompiled/${file_name}.s -o ./E6TestsCompiled/${file_name}
+        gcc -m32 ./E6TestsCompiled/${file_name}.s -o ./E6TestsCompiled/${file_name}
         ./E6TestsCompiled/${file_name}
         echo $? >./E6TestResults/gcc_output${file_name}.txt
       done

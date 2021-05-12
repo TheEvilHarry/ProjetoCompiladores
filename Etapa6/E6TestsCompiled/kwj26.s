@@ -18,6 +18,8 @@
 .L11:
 	addq	$0, %rsp
 .L3:
+	subq	$4, %rsp
+	movl	$9, (%rsp)
 .L4:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
@@ -51,6 +53,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L22:
+	subq	$4, %rsp
+	movl	$1, (%rsp)
 .L23:
 	movl	(%rsp), %edx
 	addq	$4, %rsp

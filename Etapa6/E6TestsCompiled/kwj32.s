@@ -158,16 +158,22 @@
 .L100:
 	addq	$8, %rsp
 .L68:
+	subq	$4, %rsp
+	movl	$2019, (%rsp)
 .L69:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
 	movl	%eax, 16(%RBP)
 .L70:
+	subq	$4, %rsp
+	movl	$2, (%rsp)
 .L71:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
 	movl	%eax, 24(%RBP)
 .L72:
+	subq	$4, %rsp
+	movl	$2, (%rsp)
 .L73:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
@@ -178,6 +184,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L75:
+	subq	$4, %rsp
+	movl	$3, (%rsp)
 .L76:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
@@ -195,6 +203,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L78:
+	subq	$4, %rsp
+	movl	$4, (%rsp)
 .L79:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
@@ -212,6 +222,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L81:
+	subq	$4, %rsp
+	movl	$2, (%rsp)
 .L82:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
@@ -229,6 +241,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L84:
+	subq	$4, %rsp
+	movl	$2, (%rsp)
 .L85:
 	movl	(%rsp), %edx
 	addq	$4, %rsp

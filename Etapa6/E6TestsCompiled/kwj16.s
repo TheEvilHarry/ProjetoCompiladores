@@ -16,11 +16,15 @@
 .L23:
 	addq	$0, %rsp
 .L4:
+	subq	$4, %rsp
+	movl	$1, (%rsp)
 .L5:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
 	movl	%eax, 16(%RBP)
 .L6:
+	subq	$4, %rsp
+	movl	$2, (%rsp)
 .L7:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
@@ -30,6 +34,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L9:
+	subq	$4, %rsp
+	movl	$0, (%rsp)
 .L10:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
@@ -39,6 +45,8 @@
 	jle	.L16
 .L15:
 .L11:
+	subq	$4, %rsp
+	movl	$3, (%rsp)
 .L12:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
@@ -47,6 +55,8 @@
 	jmp	.L17
 .L16:
 .L13:
+	subq	$4, %rsp
+	movl	$4, (%rsp)
 .L14:
 	movl	(%rsp), %eax
 	addq	$4, %rsp

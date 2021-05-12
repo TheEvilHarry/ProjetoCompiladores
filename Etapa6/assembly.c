@@ -85,6 +85,12 @@ char *registerConversion(char *reg)
         return "";
 }
 
+void pushValue(char *value)
+{
+    printf("\tsubq\t$4, %%rsp\n");
+    printf("\tmovl\t$%s, (%%rsp)\n", value);
+}
+
 void conditionalJumpAssembly(char *jump_cond, char *label)
 {
     pop("edx");
@@ -120,7 +126,7 @@ void printLoadIAssembly(Code *c)
     }
     else
     {
-        // push_val(c->arg1);
+        pushValue(c->arg1);
     }
 }
 
