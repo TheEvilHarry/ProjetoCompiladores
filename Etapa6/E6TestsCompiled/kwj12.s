@@ -11,7 +11,9 @@
 .L17:
 	jmp	.L1
 .L0:
-.L1:
+main:
+	endbr64
+	pushq	%rbp
 	movq	%rsp, %rbp
 .L16:
 	addq	$0, %rsp

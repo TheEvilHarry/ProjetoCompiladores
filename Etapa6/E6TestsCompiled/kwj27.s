@@ -13,7 +13,9 @@
 .L36:
 	jmp	.L14
 .L0:
-.L1:
+mult:
+	endbr64
+	pushq	%rbp
 	movq	%rsp, %rbp
 .L13:
 	addq	$0, %rsp
@@ -48,7 +50,9 @@
 	leave
 	ret
 .L12:
-.L14:
+main:
+	endbr64
+	pushq	%rbp
 	movq	%rsp, %rbp
 .L35:
 	addq	$4, %rsp

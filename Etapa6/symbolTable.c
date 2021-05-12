@@ -260,7 +260,7 @@ SymbolTableStack *getGlobalScopeTable(SymbolTableStack *stack)
     currentStack = currentStack->rest;
   }
 
-  return NULL;
+  return currentStack;
 }
 
 SymbolTableStack *findEntryTable(SymbolTableStack *topStack, char *key)

@@ -106,7 +106,7 @@ void printLoadAiAssembly(Code *c)
         if (strcmp(c->arg1, RBSS) == 0)
             printf("\tmovl\t%s(%%rip), (%%%s) \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
         else
-            printf("\tmovl\t%s(%%%s), %(%%s) \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
+            printf("\tmovl\t%s(%%%s), (%%%s) \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
     }
     else
     {
@@ -182,6 +182,25 @@ void intOperation(char *op, Code *c)
     }
 }
 
+int printFunctionLabel(char *label)
+{
+    SymbolTableEntry *table = getGlobalScopeTable(getGlobalStack())->top;
+    SymbolTableEntry *currentEntry;
+
+    for (currentEntry = table; currentEntry != NULL; currentEntry = currentEntry->nextEntry)
+    {
+        if (strcmp(currentEntry->ILOCLabel, label) == 0)
+        {
+            printf("%s:\n", currentEntry->key);
+            printf("\tendbr64\n");
+            printf("\tpushq\t%%rbp\n");
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 void printAssembly(Code *c)
 {
     if (c == NULL)
@@ -189,13 +208,12 @@ void printAssembly(Code *c)
 
     if (c->label != NULL)
     {
-
-        // if (printa_label_fun(c->label))
-        // { // <========= CHECK THIS LATER
-        // pop_from_return_function = load_parameters(c->label);
-        // }
-        // else
-        printf(".%s:\n", c->label);
+        if (printFunctionLabel(c->label))
+        { // <========= CHECK THIS LATER
+            // pop_from_return_function = load_parameters(c->label);
+        }
+        else
+            printf(".%s:\n", c->label);
     }
 
     if (c->type == function_call_preparation_code)

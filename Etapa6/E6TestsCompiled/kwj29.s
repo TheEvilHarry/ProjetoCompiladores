@@ -15,7 +15,9 @@
 .L106:
 	jmp	.L79
 .L0:
-.L1:
+f:
+	endbr64
+	pushq	%rbp
 	movq	%rsp, %rbp
 .L13:
 	addq	$0, %rsp
@@ -50,7 +52,9 @@
 	leave
 	ret
 .L12:
-.L14:
+mult:
+	endbr64
+	pushq	%rbp
 	movq	%rsp, %rbp
 .L78:
 	addq	$4, %rsp
@@ -243,7 +247,9 @@
 	leave
 	ret
 .L77:
-.L79:
+main:
+	endbr64
+	pushq	%rbp
 	movq	%rsp, %rbp
 .L105:
 	addq	$8, %rsp

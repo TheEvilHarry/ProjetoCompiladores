@@ -26,49 +26,43 @@ main:
 	movl	%eax, 16(%rbp)
 .L6:
 	subq	$4, %rsp
-	movl	$6, (%rsp)
+	movl	$2, (%rsp)
 .L7:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
 	movl	%eax, 20(%rbp)
-.L15:
 .L8:
 	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L9:
-	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
-	movl	%eax, (%rsp)
+	movl	$0, (%rsp)
 .L10:
 	movl	(%rsp), %edx
 	addq	$4, %rsp
 	movl	(%rsp), %eax
 	addq	$4, %rsp
 	cmpl	%edx, %eax
-	jge	.L17
-.L16:
+	jle	.L16
+.L15:
 .L11:
-	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
-	movl	%eax, (%rsp)
+	movl	$3, (%rsp)
 .L12:
-	subq	$4, %rsp
-	movl	$1, (%rsp)
-.L13:
-	movl	(%rsp), %edx
-	addq	$4, %rsp
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	addl	%edx, %eax
+	movl	%eax, 20(%rbp)
+.L19:
+	jmp	.L17
+.L16:
+.L13:
 	subq	$4, %rsp
-	movl	%eax, (%rsp)
+	movl	$4, (%rsp)
 .L14:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 16(%rbp)
-.L19:
-	jmp	.L15
+	movl	%eax, 20(%rbp)
 .L17:
 .L20:
 	movl	rfp(%rbp), %eax 
