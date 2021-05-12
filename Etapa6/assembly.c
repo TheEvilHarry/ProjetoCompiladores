@@ -116,18 +116,11 @@ void printLoadIAssembly(Code *c)
 {
     if (isSpecialRegister(c->dest1) == 1)
     {
-        if (strcmp(c->arg1, RBSS) == 0)
-            printf("\tmovl\t$%s(%%rip), %%%s \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
-        else
-            printf("\tmovl\t$%s(%%%s), %%%s \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
+        printf("\tmovl\t$%s, %%%s\n", c->arg1, registerConversion(c->dest1));
     }
     else
     {
-        if (strcmp(c->arg1, RBSS) == 0)
-            printf("\tmovl\t$%s(%%rip), %%eax\n ", getKeyFromOffset(atoi(c->arg2)));
-        else
-            printf("\tmovl\t$%s(%%%s), %%eax \n", c->arg1, registerConversion(c->arg1));
-        push();
+        // push_val(c->arg1);
     }
 }
 
@@ -324,6 +317,6 @@ void handleRootCodeExport(Node *root)
     Code *code = getFirstCode(root->code);
     Code *fullCode = getFirstCode(joinCodes(generateInitialInstructions(code), code));
     Node *rootWithCode = addCodeToNode(root, fullCode);
-    exportCodeList(rootWithCode->code);
+    // exportCodeList(rootWithCode->code);
     generateAssembly(fullCode);
 }
