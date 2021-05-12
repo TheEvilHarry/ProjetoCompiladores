@@ -82,7 +82,7 @@ char *registerConversion(char *reg)
     else if (strcmp(reg, RSP) == 0)
         return RSP;
     else
-        return "";
+        return reg;
 }
 
 void pushValue(char *value)
@@ -106,14 +106,14 @@ void printLoadAiAssembly(Code *c)
         if (strcmp(c->arg1, RBSS) == 0)
             printf("\tmovl\t%s(%%rip), (%%%s) \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
         else
-            printf("\tmovl\t%s(%%%s), (%%%s) \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
+            printf("\tmovl\t%s(%%%s), (%%%s) \n", c->arg2, registerConversion(c->arg1), registerConversion(c->dest1));
     }
     else
     {
         if (strcmp(c->arg1, RBSS) == 0)
             printf("\tmovl\t%s(%%rip), %%eax\n ", getKeyFromOffset(atoi(c->arg1)));
         else
-            printf("\tmovl\t%s(%%%s), %%eax \n", c->arg1, registerConversion(c->arg1));
+            printf("\tmovl\t%s(%%%s), %%eax \n", c->arg2, registerConversion(c->arg1));
         push();
     }
 }
@@ -208,12 +208,10 @@ void printAssembly(Code *c)
 
     if (c->label != NULL)
     {
-        if (printFunctionLabel(c->label))
-        { // <========= CHECK THIS LATER
-            // pop_from_return_function = load_parameters(c->label);
-        }
-        else
+        if (printFunctionLabel(c->label) == 1)
+        {
             printf(".%s:\n", c->label);
+        }
     }
 
     if (c->type == function_call_preparation_code)
