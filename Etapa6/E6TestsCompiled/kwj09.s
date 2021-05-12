@@ -16,11 +16,15 @@
 .L22:
 	addq	$0, %rsp
 .L5:
+	subq	$4, %rsp
+	movl	$15, (%rsp)
 .L6:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
 	movl	%eax, 20(%rbp)
 .L7:
+	subq	$4, %rsp
+	movl	$3, (%rsp)
 .L8:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
@@ -66,6 +70,8 @@
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L16:
+	subq	$4, %rsp
+	movl	$10, (%rsp)
 .L17:
 	movl	(%rsp), %edx
 	addq	$4, %rsp

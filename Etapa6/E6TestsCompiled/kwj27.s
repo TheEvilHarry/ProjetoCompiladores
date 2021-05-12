@@ -53,6 +53,8 @@
 .L35:
 	addq	$4, %rsp
 .L17:
+	subq	$4, %rsp
+	movl	$3, (%rsp)
 .L18:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
