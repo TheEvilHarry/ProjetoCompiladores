@@ -2,8 +2,8 @@ echo "Cleaning..."
 make clean
 echo "Compiling..."
 make
-echo "Running test from test.txt and saving output to output.txt..."
 if [ "$1" = "debug" ]; then
+  echo "Running test from test.txt..."
   ./etapa6 <test.txt
 else
   if [ "$1" = "valgrind" ]; then
