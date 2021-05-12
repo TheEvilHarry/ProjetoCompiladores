@@ -187,12 +187,15 @@ int printFunctionLabel(char *label)
 
     for (currentEntry = table; currentEntry != NULL; currentEntry = currentEntry->nextEntry)
     {
-        if (strcmp(currentEntry->ILOCLabel, label) == 0)
+        if (currentEntry->nature == NATURE_function)
         {
-            printf("%s:\n", currentEntry->key);
-            printf("\tendbr64\n");
-            printf("\tpushq\t%%rbp\n");
-            return 1;
+            if (strcmp(currentEntry->ILOCLabel, label) == 0)
+            {
+                printf("%s:\n", currentEntry->key);
+                printf("\tendbr64\n");
+                printf("\tpushq\t%%rbp\n");
+                return 1;
+            }
         }
     }
 
