@@ -78,7 +78,7 @@ char *registerConversion(char *reg)
     if (strcmp(reg, RBSS) == 0)
         return "rip";
     else if (strcmp(reg, RFP) == 0)
-        return "RBP";
+        return "rbp";
     else if (strcmp(reg, RSP) == 0)
         return RSP;
     else
@@ -98,14 +98,14 @@ void printLoadAiAssembly(Code *c)
     if (isSpecialRegister(c->dest1) == 1)
     {
         if (strcmp(c->arg1, RBSS) == 0)
-            printf("\tmovl\t%s(%%rip), %%%s \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
+            printf("\tmovl\t%s(%%rip), (%%%s) \n", getKeyFromOffset(atoi(c->arg1)), registerConversion(c->dest1));
         else
-            printf("\tmovl\t%s(%%%s), %%%s \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
+            printf("\tmovl\t%s(%%%s), %(%%s) \n", c->arg1, registerConversion(c->arg1), registerConversion(c->dest1));
     }
     else
     {
         if (strcmp(c->arg1, RBSS) == 0)
-            printf("\tmovl\t%s(%%rip), %%eax\n ", getKeyFromOffset(atoi(c->arg2)));
+            printf("\tmovl\t%s(%%rip), %%eax\n ", getKeyFromOffset(atoi(c->arg1)));
         else
             printf("\tmovl\t%s(%%%s), %%eax \n", c->arg1, registerConversion(c->arg1));
         push();
@@ -116,7 +116,7 @@ void printLoadIAssembly(Code *c)
 {
     if (isSpecialRegister(c->dest1) == 1)
     {
-        printf("\tmovl\t$%s, %%%s\n", c->arg1, registerConversion(c->dest1));
+        printf("\tmovl\t$%s, (%%%s)\n", c->arg1, registerConversion(c->dest1));
     }
     else
     {
@@ -278,11 +278,11 @@ void printAssembly(Code *c)
             printf("\tmovq\t%%%s, %%%s\n", registerConversion(c->arg1), registerConversion(c->dest1));
         break;
     case CMP_LT:
-        conditionalJumpAssembly("jge", c->next->dest2); //<======
+        conditionalJumpAssembly("jge", c->next->dest2);
         c = c->next;
         break;
     case CMP_LE:
-        conditionalJumpAssembly("jg", c->next->dest2); //<======
+        conditionalJumpAssembly("jg", c->next->dest2);
         c = c->next;
         break;
     case CMP_EQ:

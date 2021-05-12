@@ -5,24 +5,24 @@
 	.globl	main
 	.type	main, @function
 .L39:
-	movl	$1024, %RBP
+	movl	$1024, (%rbp)
 .L38:
-	movl	$1024, %rsp
+	movl	$1024, (%rsp)
 .L37:
-	movl	$36, %rip
+	movl	$36, (%rip)
 .L36:
 	jmp	.L14
 .L0:
 .L1:
-	movq	%rsp, %RBP
+	movq	%rsp, %rbp
 .L13:
 	addq	$0, %rsp
 .L3:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L4:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L5:
@@ -36,9 +36,9 @@
 .L6:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 20(%RBP)
+	movl	%eax, 20(%rbp)
 .L7:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L8:
@@ -49,17 +49,17 @@
 	ret
 .L12:
 .L14:
-	movq	%rsp, %RBP
+	movq	%rsp, %rbp
 .L35:
 	addq	$4, %rsp
 .L17:
 .L18:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 16(%RBP)
+	movl	%eax, 16(%rbp)
 .L20:
 .L19:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L22:
@@ -73,13 +73,13 @@
 .L27:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 20(%RBP)
+	movl	%eax, 20(%rbp)
 .L28:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L29:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L30:
@@ -93,9 +93,9 @@
 .L31:
 	movl	(%rsp), %eax
 	addq	$4, %rsp
-	movl	%eax, 20(%RBP)
+	movl	%eax, 20(%rbp)
 .L32:
-	movl	rfp(%RBP), %eax 
+	movl	rfp(%rbp), %eax 
 	subq	$4, %rsp
 	movl	%eax, (%rsp)
 .L33:
