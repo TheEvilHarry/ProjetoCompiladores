@@ -36,21 +36,21 @@ void generateAssembly(Code *code)
 
 void pop(char *reg)
 {
-    printf("\tmovl\t(%%rsp), %%%s\n", reg); // Tira da pilha
+    printf("\tmovl\t(%%rsp), %%%s\n", reg);
     printf("\taddq\t$4, %%rsp\n");
 }
 
 void push()
 {
     printf("\tsubq\t$4, %%rsp\n");
-    printf("\tmovl\t%%eax, (%%rsp)\n"); // Bota na pilha
+    printf("\tmovl\t%%eax, (%%rsp)\n");
 }
 
 void print_binary_op_assembly(char *op)
 {
     pop("edx");
     pop("eax");
-    printf("\t%s\t%%edx, %%eax\n", op); // OP
+    printf("\t%s\t%%edx, %%eax\n", op);
     push();
 }
 
@@ -58,8 +58,8 @@ void print_division_op_assembly(char *op)
 {
     pop("ebx");
     pop("eax");
-    printf("\tcdq\n");           // Extende sinal
-    printf("\t%s\t%%ebx\n", op); // OP
+    printf("\tcdq\n");
+    printf("\t%s\t%%ebx\n", op);
     push();
 }
 
@@ -141,23 +141,21 @@ void printStoreAiAssembly(Code *c)
 {
 
     pop("eax");
-    // Store
     if (strcmp(c->dest1, RBSS) == 0)
         printf("\tmovl\t%%eax, %s(%%rip)\n", getKeyFromOffset(atoi(c->dest2)));
     else
         printf("\tmovl\t%%eax, %s(%%%s)\n", c->dest2, registerConversion(c->dest1));
 }
 
-void callFunction_Asm(char *label_fun)
+void functionCall(char *label_fun)
 {
     //TODO:
-    // printf("\tcall\t%s\n", get_function_name(label_fun));
 }
 
 void intOperation(char *op, Code *c)
 {
     if (strcmp(c->arg1, c->dest1) == 0 && isSpecialRegister(c->arg1) == 1)
-    { // Sendo utilizado para inicio de funcao
+    {
         printf("\t%sq\t$%s, %%%s\n", op, c->arg2, registerConversion(c->arg1));
     }
     else
@@ -168,7 +166,7 @@ void intOperation(char *op, Code *c)
         }
         else
         {
-            // pop_Asm("eax");
+            // pop("eax");
         }
         printf("\t%sl\t$%s, %%eax\n", op, c->arg2);
         if (isSpecialRegister(c->dest1) == 1)
@@ -214,7 +212,7 @@ void printAssembly(Code *c)
 
     if (c->type == function_call_preparation_code)
     {
-        // Ignora store de RSP e RFP
+
         printAssembly(c->next->next);
         return;
     }
@@ -238,7 +236,7 @@ void printAssembly(Code *c)
     {
         printf("\tleave\n");
         printf("\tret\n");
-        return; // Fim do programa - sem nada depois da main
+        return;
     }
 
     if (c->type == function_exit_code)
@@ -266,11 +264,11 @@ void printAssembly(Code *c)
     case ADDI:
         if (strcmp(c->arg1, RPC) == 0)
         {
-            callFunction_Asm(c->next->next->dest1); // <=========
+            functionCall(c->next->next->dest1);
             c = c->next->next;
         }
         else
-            intOperation("add", c); // <=========
+            intOperation("add", c);
         break;
     case SUBI:
         intOperation("sub", c);
@@ -321,8 +319,6 @@ void printAssembly(Code *c)
         conditionalJumpAssembly("je", c->next->dest2);
         c = c->next;
         break;
-    // case op_jump:
-    //     break;
     case JUMPI:
         printf("\tjmp\t.%s\n", c->dest1);
         break;
@@ -337,6 +333,5 @@ void handleRootCodeExport(Node *root)
     Code *code = getFirstCode(root->code);
     Code *fullCode = getFirstCode(joinCodes(generateInitialInstructions(code), code));
     Node *rootWithCode = addCodeToNode(root, fullCode);
-    // exportCodeList(rootWithCode->code);
     generateAssembly(fullCode);
 }

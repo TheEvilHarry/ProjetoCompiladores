@@ -1,11 +1,3 @@
-// TODO:
-// Functions signed with the TO DO sign;
-// Treatment of new variable Local in Node object
-
-// WE MUST HAVE A REGISTER IN EACH NODE OR TABLE ENTRY SPECIFYING THE LOCAL OF THE CODE, NOT THE SAME
-// AS THE : LOCAL : VAR WE ARE USING TO DELIMIT THE DATA AREA
-//FIND OUT WHERE THIS REGISTER SHOULD BE GENERATED
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,13 +81,6 @@ int getNumberOfInstructions(Code *code)
     return i;
 }
 
-int setOffset(char *symbol, int *scope)
-{
-    //TODO;
-    //NOT DONE BECAUSE I DIDNT KNOW HOW TO TEST THE SCOPE AND I'M TOO SLEEPY TO TRY.
-    return 0;
-}
-
 Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3, char *dest1, char *dest2, char *label)
 {
     Code *code = (Code *)malloc(sizeof(Code));
@@ -119,7 +104,7 @@ Code *createCode(Operation op, char *pointer, char *arg1, char *arg2, char *arg3
     }
 
     return code;
-} //CHECK WITH PEDRO IF THIS IS RIGHT?!
+}
 
 Code *generateEmptyCode(char *pointer)
 {
@@ -249,16 +234,8 @@ Code *generateAttributionCode(TokenData *identifier, Node *exp)
     }
     else
     {
-        if (DEBUG == 1)
-        {
-            // printf("Scope is not global\n");
-        }
         char *entryOffsetAsString = malloc(4);
         sprintf(entryOffsetAsString, "%d", entry->entryOffset);
-        if (DEBUG == 1)
-        {
-            // printf("Before function call\n");
-        }
         code = createCode(STOREAI, RFP, exp->code->res, NULL, NULL, RFP, entryOffsetAsString, NULL);
     }
 
@@ -271,8 +248,7 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
-    //TODO:
-    //Where are we getting the result of if expressions?
+
     char *reg = expr->code->res;
     Code *ifCode = createCBRCode(expr, reg, label1, label2, label1, trueExpr);
 
@@ -286,7 +262,7 @@ Code *generateIfCode(Node *expr, Node *trueExpr, Node *falseExpr)
     if (falseExpr != NULL)
     {
         labelCode3 = joinCodes(falseExpr->code, labelCode3);
-        // printf("else code is %s\n", generateILOCFromCode(falseExpr->code));
+
     }
 
     return joinCodes(ifCode, labelCode3);
@@ -311,12 +287,6 @@ Code *generateFunctionCode(Node *header, char *identifier, Node *commands)
     sprintf(functionEntryOffset, "%d", functionEntry->entryOffset);
     Code *updateRFP = createCode(I2I, NULL, RSP, NULL, NULL, RFP, NULL, functionEntry->ILOCLabel);
     Code *updateRSP = createCode(ADDI, NULL, RSP, functionEntryOffset, NULL, RSP, NULL, NULL);
-
-    if (DEBUG == 1)
-    {
-        // printf("Final code generated for function %s:\n", identifier);
-        // exportCodeList(getFirstCode(updateRFP));
-    }
 
     return joinCodes(updateRFP, joinCodes(updateRSP, commands->code));
 }
@@ -527,14 +497,6 @@ Code *generateWhileCode(Node *expr, Node *commands)
     char *label2 = generateLabelName();
     char *label3 = generateLabelName();
 
-    if (DEBUG == 1)
-    {
-        printf("generating while code with expression %s and commands staring with %s\n", expr->data->label, commands->data->label);
-    }
-
-    //TODO:
-    //Where are we getting the result of if expressions?
-
     Code *labelCode = generateLabelCode(label1);
     labelCode = joinCodes(labelCode, expr->code);
 
@@ -552,12 +514,6 @@ Code *generateWhileCode(Node *expr, Node *commands)
     Code *labelCode3 = generateLabelCode(label3);
     labelCode3 = joinCodes(jumpCode, labelCode3);
 
-    // printf("Adding to global code list\n");
-
-    // addToGlobalCodeList(labelCode3);
-
-    // exportCodeList(getGlobalCodeList());
-
     return labelCode3;
 }
 
@@ -572,8 +528,6 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
     start->code = joinCodes(start->code, labelCode);
     start->code = joinCodes(start->code, expr->code);
 
-    //TODO:
-    //Where are we getting the result of if expressions?
     char *reg = expr->code->res;
     Code *conditionCode = createCode(CBR, NULL, reg, NULL, NULL, label2, label3, NULL);
     start->code = joinCodes(start->code, conditionCode);
@@ -593,10 +547,7 @@ Code *generateForCode(Node *start, Node *expr, Node *incr, Node *commands)
 
 Code *generateLocalVarCode(Node *identifier, Node *init, int initialized)
 {
-    if (DEBUG == 1)
-    {
-        printf("Generating local var code for %s\n", identifier->data->label);
-    }
+
     Code *updatesRSP = createCode(ADDI, NULL, RSP, "4", NULL, RSP, NULL, NULL);
 
     if (initialized == 1)
@@ -619,13 +570,10 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
     char *result = generateRegisterName();
     Operation operation = getOperation(binaryOperator);
 
-    if (DEBUG == 1)
-    {
-        printf("Generating binary expression for operator %s and nodes %s and %s\n", binaryOperator, child1->code->res, child2->code->res);
-    }
+
 
     char test[20] = " This should be it";
-    //Code *code = createCode(operation, NULL, strcat(reg1, test), reg2, NULL, result, NULL, NULL);
+
     Code *code = createCode(operation, NULL, reg1, reg2, NULL, result, NULL, NULL);
 
     if (operation != AND && operation != OR)
@@ -633,16 +581,16 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         parent->code = joinCodes(child1->code, child2->code);
         parent->code = joinCodes(parent->code, code);
 
-        //Code *joined = joinCodes(child1->code, joinCodes(child2->code, code));
+
 
         if (DEBUG == 1)
         {
             printf("Code generated for binary expression %s: \n", binaryOperator);
-            // exportCodeList(joined);
+
             printf("\n\n");
         }
 
-        // return joined;
+
     }
     else if (operation == AND)
     {
@@ -662,23 +610,7 @@ Code *generateBinaryExpression(char *binaryOperator, Node *parent, Node *child1,
         parent->code = joinCodes(parent->code, code);
         parent->code = joinCodes(parent->code, labelJumpCode);
 
-        //       Code *labelDontJumpCode = generateLabelCode(dontJumpLabel);
 
-        //        labelDontJumpCode = joinCodes(cbrCode, labelDontJumpCode);
-        //
-        //        Code *labelJump = generateLabelCode(jumpLabel);
-        //
-        //        parent->code = joinCodes(child1->code, labelDontJumpCode);
-        //
-        //        if (DEBUG == 1)
-        //        {
-        //            printf("Code generated for binary expression %s: \n", binaryOperator);
-        //            exportCodeList(parent->code);
-        //            printf("\n\n");
-        //        }
-        //
-
-        //            return joinCodes(child1->code, joinCodes(child2->code, code));
     }
     else if (operation == OR)
     {
